@@ -1,0 +1,155 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=1016432&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 1016432
+|-
+! scope="row"| ItemID
+| 16089
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/1016432
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/1016432
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/1016432
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/1016432
+|-
+|}
+===OCR Text===
+{| class="wikitable"
+|PREFACE TO THE SECOND EDITION. The author desires to express his obligation to the teachers  whose approval has made necessary, thus early, a second edi-  tion of the work. The success of any text is, on last analysis,  due to the insight of the teacher who uses it. The writer will  be glad to welcome, from teachers, suggestions for later  editions. The new edition makes it possible to remove some typo-  graphical and other errors, and to make certain minor changes  and additions which it is hoped will render the book more  acceptable. A slight change is made in the title; and the publishers  announce a reduction in the price. T. W. GALLOWAY. 
+|-
+|}
+===Taxa Found in Page===
+Name(s): 0<br />
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|-
+|}
+===Page Numbers===
+===Item Summary===
+{| class="wikitable"
+|-
+! scope="row"| ItemID
+| 16089
+|-
+! scope="row"| PrimaryTitleID
+| 1249
+|-
+! scope="row"| ThumbnailPageID
+| 1016430
+|-
+! scope="row"| Source
+| Internet Archive
+|-
+! scope="row"| SourceIdentifier
+| zoologytextbookf00gall
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| Contributor
+| MBLWHOI Library
+|-
+! scope="row"| Sponsor
+| MBLWHOI Library
+|-
+! scope="row"| Language
+| English
+|-
+! scope="row"| LicenseUrl
+| 
+|-
+! scope="row"| Rights
+| 
+|-
+! scope="row"| DueDiligence
+| 
+|-
+! scope="row"| CopyrightStatus
+| NOT_IN_COPYRIGHT
+|-
+! scope="row"| CopyrightRegion
+| US
+|-
+! scope="row"| ExternalUrl
+| 
+|-
+! scope="row"| ItemUrl
+| http://www.biodiversitylibrary.org/item/16089
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/1249
+|-
+! scope="row"| ItemThumbUrl
+| http://www.biodiversitylibrary.org/pagethumb/1016430
+|-
+|}
+===Title Summary===
+{| class="wikitable"
+|-
+! scope="row"| TitleID
+| 1249
+|-
+! scope="row"| BibliographicLevel
+| Monograph/Item
+|-
+! scope="row"| FullTitle
+| Zoology; a text-book for secondary schools, normal schools and colleges, by Thomas Walton Galloway.
+|-
+! scope="row"| ShortTitle
+| Zoology;
+|-
+! scope="row"| SortTitle
+| Zoology; text-book for secondary schools, normal schools and
+|-
+! scope="row"| PartNumber
+| 
+|-
+! scope="row"| PartName
+| 
+|-
+! scope="row"| CallNumber
+| QL47 .G18
+|-
+! scope="row"| Edition
+| 2d ed., rev., with 240 illustrations.
+|-
+! scope="row"| PublisherPlace
+| Philadelphia,
+|-
+! scope="row"| PublisherName
+| P. Blakiston,
+|-
+! scope="row"| PublicationDate
+| 1909.
+|-
+! scope="row"| PublicationFrequency
+| 
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/1249
+|-
+|}

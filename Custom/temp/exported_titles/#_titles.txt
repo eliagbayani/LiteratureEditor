@@ -1,0 +1,129 @@
+96937	#1757-#1975, Mary Agnes Chase expedition to Brazil, 1924-1925
+105403	#587-#778; #1316A-#1448 A. A. S. Hitchcock : British Guiana, 1919-1920, Washington, D.C., including SI and Rock Creek Park; Cuba; Colorado and Wyoming, 1918
+105406	#1976-#2351. A. S. Hitchcock : Oregon, Washington, California, 1927; Newfoundland and Labrador, 1928, Africa, 1929
+105215	#782-#1118, A. S. Hitchcock: Asia, 1921, Georgia and Florida, Panama and Ecuador, 1923, includes photographs of Floyd A. McClure
+98047	#1a, Apl. 27-30, 1901, dr 3787 - dr 3790, Hyd 4033 - Hyd 4034
+98048	#15 Hawaiian explorations, dr 4035-4051, hy 4484-4516, July 9th - July 14th, 1902
+98049	#11 Hawaiian explorations, dr 3968-3976, hy 4351-4392, May 27 - June 1, 1902
+98050	#2 California coast, dr 4320 to dr 4336,  Mch 7th to 10th, 1904
+98051	#13 Hawaiian explorations, dr 3988-4004, hy 4431-4463, June 11th - 17th, 1902
+98052	#1 Alaska, 1903, dr 4191-4217, hy 4721-4742, June 19th - July 1st, '03
+98054	#16 Hawaiian explorations, dr 4052-4060, hy 4517-4557, July 14th - July 17th, 1902
+98055	#8 Hawaiian explorations, dr 3946 - dr 3948, hy 4215 - hy 4260, May 19th - 21st, 1902
+98056	#22 Hawaiian explorations, dr 4174-4190, hy 4694-4720, August 11th - 27th, 1902
+98057	#4 California coast, dr 4356 to dr 4382, hy 4791 to hy 4796, Mch 15th to 18th 1904
+98058	#12 Hawaiian explorations, dr 3977-3987, hy 4393-4430, June 2d - 11th, 1902
+98061	#3 Alaska, 1903, dr 4246-4276, hy 4763-4778, July 11 - August 6, 1903
+98065	#18 Hawaiian explorations, dr 4071-4109, hy 4598-4608, July 19th - July 24th, 1902
+98083	#5 California coast, dr 4383 to dr 4408, hy 4797 to hy 4803, Mch 18th to Apl 9th 1904
+98084	#6 Hawaiian explorations, dr 3902 - dr 3927, hy 4164 - hy 4186, April 30 - May 11, 1902
+98086	#2 Hawaiian explorations, dr 3820 - dr 3846, hy 4053 - hy 4073, Mch 31 - Apl 8, 1902
+98087	#21 Hawaiian explorations, dr 4162-4173, hy 4657-4693, August 7th - 11th, 1902
+98088	#19 Hawaiian explorations, dr 4110 - dr 4137, hy 4609 - hy 4630, July 24th - August 1st, 1902
+98089	#10 Hawaiian explorations, hy 4291 - hy 4350, May 24 - 27, 1902
+98092	#7 California coast, dr 4450 to dr 4499, hy, May 11th to 19th 1904
+98096	#4 Alaska, 1903, dr 4277-4302, hy 4779-4788, August 6-24, 1903
+98097	#1 California coast, dr 4303 to dr 4319, hy 4789-4790, Mch 1st to 7th, 1904
+98100	#5 Hawaiian explorations, dr 3887 - dr 3901, hy 4131 - hy 4163, April 17th - 29th, 1902
+98101	#3 Hawaiian explorations, dr 3847 - dr 3873, hy 4074 - hy 4095, Apl 8th - 12th, 1902
+98104	#4 Hawaiian explorations, dr 3874 - dr 3886, hy 4096 - hy 4130, April 12 - 17, 1902
+98105	#17 Hawaiian explorations, dr 4061-4070, hy 4558-4597, July 17th - July 19th, 1902
+98106	#2 Alaska, 1903, dr 4218-4245, hy 4743-4762, July 1 - 11, 1903
+98113	#20 Hawaiian explorations, dr 4138 - dr 4161, hy 4631 - hy 4656, August 1st - 7th, 1902
+98114	#14 Hawaiian explorations, dr 4005-4034, hy 4464-4483, June 17th - July 9th, 1902
+98115	#6 California coast, dr 4409 to dr 4449, hy, Apl 9th to May 11th 1904
+98116	#9 Hawaiian explorations, dr 3949 - dr 3967, hy 4261 - hy 4290, May 21st - 24th, 1902
+98117	#7 Hawaiian explorations, dr 3928 - dr 3945, hy 4187 - hy 4214, May 12th - 19th, 1902
+98195	#3 California coast, dr 4337 to dr 4355, hy, Mch 10th to 14th 1904
+98279	#2 eastern Pacific, dr 4623 to dr 4672, Oct'r 21st to Nov 21st 1904
+98282	#5 eastern Pacific, dr 4740 to dr 4743, Feb'y 7 to Feb'y 24th 1905
+98283	#4 eastern Pacific, dr 4703 to dr 4739, Dec'r 27th 1904 to Feb'y 6 1905
+98290	#8 California coast, dr 4500 to dr 4548, hy, May 19th to June 7th 1904
+98291	#9 California coast, #1 eastern Pacific, dr 4549 to dr 4622, hy 4804 to hy, June 7th to Oct'r 24th 1904
+98294	#3 eastern Pacific, dr 4672 to dr 4702, Nov 21st to Dec'r 26th 1904
+96937	#1757-#1975, Mary Agnes Chase expedition to Brazil, 1924-1925
+105403	#587-#778; #1316A-#1448 A. A. S. Hitchcock : British Guiana, 1919-1920, Washington, D.C., including SI and Rock Creek Park; Cuba; Colorado and Wyoming, 1918
+105406	#1976-#2351. A. S. Hitchcock : Oregon, Washington, California, 1927; Newfoundland and Labrador, 1928, Africa, 1929
+105215	#782-#1118, A. S. Hitchcock: Asia, 1921, Georgia and Florida, Panama and Ecuador, 1923, includes photographs of Floyd A. McClure
+98047	#1a, Apl. 27-30, 1901, dr 3787 - dr 3790, Hyd 4033 - Hyd 4034
+98048	#15 Hawaiian explorations, dr 4035-4051, hy 4484-4516, July 9th - July 14th, 1902
+98049	#11 Hawaiian explorations, dr 3968-3976, hy 4351-4392, May 27 - June 1, 1902
+98050	#2 California coast, dr 4320 to dr 4336,  Mch 7th to 10th, 1904
+98051	#13 Hawaiian explorations, dr 3988-4004, hy 4431-4463, June 11th - 17th, 1902
+98052	#1 Alaska, 1903, dr 4191-4217, hy 4721-4742, June 19th - July 1st, '03
+98054	#16 Hawaiian explorations, dr 4052-4060, hy 4517-4557, July 14th - July 17th, 1902
+98055	#8 Hawaiian explorations, dr 3946 - dr 3948, hy 4215 - hy 4260, May 19th - 21st, 1902
+98056	#22 Hawaiian explorations, dr 4174-4190, hy 4694-4720, August 11th - 27th, 1902
+98057	#4 California coast, dr 4356 to dr 4382, hy 4791 to hy 4796, Mch 15th to 18th 1904
+98058	#12 Hawaiian explorations, dr 3977-3987, hy 4393-4430, June 2d - 11th, 1902
+98061	#3 Alaska, 1903, dr 4246-4276, hy 4763-4778, July 11 - August 6, 1903
+98065	#18 Hawaiian explorations, dr 4071-4109, hy 4598-4608, July 19th - July 24th, 1902
+98083	#5 California coast, dr 4383 to dr 4408, hy 4797 to hy 4803, Mch 18th to Apl 9th 1904
+98084	#6 Hawaiian explorations, dr 3902 - dr 3927, hy 4164 - hy 4186, April 30 - May 11, 1902
+98086	#2 Hawaiian explorations, dr 3820 - dr 3846, hy 4053 - hy 4073, Mch 31 - Apl 8, 1902
+98087	#21 Hawaiian explorations, dr 4162-4173, hy 4657-4693, August 7th - 11th, 1902
+98088	#19 Hawaiian explorations, dr 4110 - dr 4137, hy 4609 - hy 4630, July 24th - August 1st, 1902
+98089	#10 Hawaiian explorations, hy 4291 - hy 4350, May 24 - 27, 1902
+98092	#7 California coast, dr 4450 to dr 4499, hy, May 11th to 19th 1904
+98096	#4 Alaska, 1903, dr 4277-4302, hy 4779-4788, August 6-24, 1903
+98097	#1 California coast, dr 4303 to dr 4319, hy 4789-4790, Mch 1st to 7th, 1904
+98100	#5 Hawaiian explorations, dr 3887 - dr 3901, hy 4131 - hy 4163, April 17th - 29th, 1902
+98101	#3 Hawaiian explorations, dr 3847 - dr 3873, hy 4074 - hy 4095, Apl 8th - 12th, 1902
+98104	#4 Hawaiian explorations, dr 3874 - dr 3886, hy 4096 - hy 4130, April 12 - 17, 1902
+98105	#17 Hawaiian explorations, dr 4061-4070, hy 4558-4597, July 17th - July 19th, 1902
+98106	#2 Alaska, 1903, dr 4218-4245, hy 4743-4762, July 1 - 11, 1903
+98113	#20 Hawaiian explorations, dr 4138 - dr 4161, hy 4631 - hy 4656, August 1st - 7th, 1902
+98114	#14 Hawaiian explorations, dr 4005-4034, hy 4464-4483, June 17th - July 9th, 1902
+98115	#6 California coast, dr 4409 to dr 4449, hy, Apl 9th to May 11th 1904
+98116	#9 Hawaiian explorations, dr 3949 - dr 3967, hy 4261 - hy 4290, May 21st - 24th, 1902
+98117	#7 Hawaiian explorations, dr 3928 - dr 3945, hy 4187 - hy 4214, May 12th - 19th, 1902
+98195	#3 California coast, dr 4337 to dr 4355, hy, Mch 10th to 14th 1904
+98279	#2 eastern Pacific, dr 4623 to dr 4672, Oct'r 21st to Nov 21st 1904
+98282	#5 eastern Pacific, dr 4740 to dr 4743, Feb'y 7 to Feb'y 24th 1905
+98283	#4 eastern Pacific, dr 4703 to dr 4739, Dec'r 27th 1904 to Feb'y 6 1905
+98290	#8 California coast, dr 4500 to dr 4548, hy, May 19th to June 7th 1904
+98291	#9 California coast, #1 eastern Pacific, dr 4549 to dr 4622, hy 4804 to hy, June 7th to Oct'r 24th 1904
+98294	#3 eastern Pacific, dr 4672 to dr 4702, Nov 21st to Dec'r 26th 1904
+96937	#1757-#1975, Mary Agnes Chase expedition to Brazil, 1924-1925
+105403	#587-#778; #1316A-#1448 A. A. S. Hitchcock : British Guiana, 1919-1920, Washington, D.C., including SI and Rock Creek Park; Cuba; Colorado and Wyoming, 1918
+105406	#1976-#2351. A. S. Hitchcock : Oregon, Washington, California, 1927; Newfoundland and Labrador, 1928, Africa, 1929
+105215	#782-#1118, A. S. Hitchcock: Asia, 1921, Georgia and Florida, Panama and Ecuador, 1923, includes photographs of Floyd A. McClure
+98047	#1a, Apl. 27-30, 1901, dr 3787 - dr 3790, Hyd 4033 - Hyd 4034
+98048	#15 Hawaiian explorations, dr 4035-4051, hy 4484-4516, July 9th - July 14th, 1902
+98049	#11 Hawaiian explorations, dr 3968-3976, hy 4351-4392, May 27 - June 1, 1902
+98050	#2 California coast, dr 4320 to dr 4336,  Mch 7th to 10th, 1904
+98051	#13 Hawaiian explorations, dr 3988-4004, hy 4431-4463, June 11th - 17th, 1902
+98052	#1 Alaska, 1903, dr 4191-4217, hy 4721-4742, June 19th - July 1st, '03
+98054	#16 Hawaiian explorations, dr 4052-4060, hy 4517-4557, July 14th - July 17th, 1902
+98055	#8 Hawaiian explorations, dr 3946 - dr 3948, hy 4215 - hy 4260, May 19th - 21st, 1902
+98056	#22 Hawaiian explorations, dr 4174-4190, hy 4694-4720, August 11th - 27th, 1902
+98057	#4 California coast, dr 4356 to dr 4382, hy 4791 to hy 4796, Mch 15th to 18th 1904
+98058	#12 Hawaiian explorations, dr 3977-3987, hy 4393-4430, June 2d - 11th, 1902
+98061	#3 Alaska, 1903, dr 4246-4276, hy 4763-4778, July 11 - August 6, 1903
+98065	#18 Hawaiian explorations, dr 4071-4109, hy 4598-4608, July 19th - July 24th, 1902
+98083	#5 California coast, dr 4383 to dr 4408, hy 4797 to hy 4803, Mch 18th to Apl 9th 1904
+98084	#6 Hawaiian explorations, dr 3902 - dr 3927, hy 4164 - hy 4186, April 30 - May 11, 1902
+98086	#2 Hawaiian explorations, dr 3820 - dr 3846, hy 4053 - hy 4073, Mch 31 - Apl 8, 1902
+98087	#21 Hawaiian explorations, dr 4162-4173, hy 4657-4693, August 7th - 11th, 1902
+98088	#19 Hawaiian explorations, dr 4110 - dr 4137, hy 4609 - hy 4630, July 24th - August 1st, 1902
+98089	#10 Hawaiian explorations, hy 4291 - hy 4350, May 24 - 27, 1902
+98092	#7 California coast, dr 4450 to dr 4499, hy, May 11th to 19th 1904
+98096	#4 Alaska, 1903, dr 4277-4302, hy 4779-4788, August 6-24, 1903
+98097	#1 California coast, dr 4303 to dr 4319, hy 4789-4790, Mch 1st to 7th, 1904
+98100	#5 Hawaiian explorations, dr 3887 - dr 3901, hy 4131 - hy 4163, April 17th - 29th, 1902
+98101	#3 Hawaiian explorations, dr 3847 - dr 3873, hy 4074 - hy 4095, Apl 8th - 12th, 1902
+98104	#4 Hawaiian explorations, dr 3874 - dr 3886, hy 4096 - hy 4130, April 12 - 17, 1902
+98105	#17 Hawaiian explorations, dr 4061-4070, hy 4558-4597, July 17th - July 19th, 1902
+98106	#2 Alaska, 1903, dr 4218-4245, hy 4743-4762, July 1 - 11, 1903
+98113	#20 Hawaiian explorations, dr 4138 - dr 4161, hy 4631 - hy 4656, August 1st - 7th, 1902
+98114	#14 Hawaiian explorations, dr 4005-4034, hy 4464-4483, June 17th - July 9th, 1902
+98115	#6 California coast, dr 4409 to dr 4449, hy, Apl 9th to May 11th 1904
+98116	#9 Hawaiian explorations, dr 3949 - dr 3967, hy 4261 - hy 4290, May 21st - 24th, 1902
+98117	#7 Hawaiian explorations, dr 3928 - dr 3945, hy 4187 - hy 4214, May 12th - 19th, 1902
+98195	#3 California coast, dr 4337 to dr 4355, hy, Mch 10th to 14th 1904
+98279	#2 eastern Pacific, dr 4623 to dr 4672, Oct'r 21st to Nov 21st 1904
+98282	#5 eastern Pacific, dr 4740 to dr 4743, Feb'y 7 to Feb'y 24th 1905
+98283	#4 eastern Pacific, dr 4703 to dr 4739, Dec'r 27th 1904 to Feb'y 6 1905
+98290	#8 California coast, dr 4500 to dr 4548, hy, May 19th to June 7th 1904
+98291	#9 California coast, #1 eastern Pacific, dr 4549 to dr 4622, hy 4804 to hy, June 7th to Oct'r 24th 1904
+98294	#3 eastern Pacific, dr 4672 to dr 4702, Nov 21st to Dec'r 26th 1904

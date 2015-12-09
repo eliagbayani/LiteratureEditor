@@ -1,0 +1,160 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=30637180&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 30637180
+|-
+! scope="row"| ItemID
+| 96330
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/30637180
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/30637180
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/30637180
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/30637180
+|}
+===OCR Text===
+{| class="wikitable"
+|LIBRAIR IE FÉLIX ALCAN  BIBLIOTHÈQUE FRANCE-AMÉRIQUE HISTOIRE DES NATIONS AMÉRICAINES Histoire du Canada, par F.-X. Garneau. Cinquième édition, revue,  annotée et publiée avec un avant-propos pafr son petit-fils, Hector Gar-  neau. Préface de M.Gabriel Hanotaux, de l'Académie française, président  du Comité France-Amérique. 2 forts volumes in-S"*. Tome I (1534-1744). i vol. in-8"^ av. portrait de l'Auteur, 1913. 10 fr. »  ÏOME II. I vol. in-80 avec portrait de l'auteur. 1920 10 fr. » La France et la Guerre de llndépendance Américaine (1776 1783),  par J. Merlant, professeur à l'Université de Montpellier, i vol. in-8*^, avec  6 planches et ^ carte hors texte. 1918 3 fr. 50 Histoire des États-Unis (1787-1917), par G. AVeill, professeur à l'Uni-  versité de Caen. i vol. in-8'^, avec 7 pi et i carte hors texte. 1919- 5 fr. » Histoire de la Colombie et du Venezuela, par J. Humbert, agrégé  d'histoire, docteur es lettres, i vol. in-8° [sous presse). Histoire du Paraguay, par le D'' Cecilio Baez, Ministre plénipotentiaire  du Paiaguay. i vol. in-8°, avec 8 gravures et planches [sous presse). Histoire de la Bolivie, par Alcides Arguedas. i volume in-8'^, avec  planches [soiis presse). PAYS D'AMÉRIQUE La République de Costa Rica. Son avenir économique et le Canal de  Panama, par le comte Maurice de Périgny. Préface de M. Martinenche,  professeur à l'Université de Paris, i vol. in-8'^ avec 10 planches et une  carte hors texte, 1918 5 fr. » LITTÉRATURE ET ARTS D'AMÉRIQUE Les Etats-Unis et la France, par E. Boutroux, P.-W. Bartlett, J. M.  Baldwin, L. Bénédite, W. V. R. Berry, d'Estournelles de Constant,  L, GiLLET, D. J. HiLL, J. H. Hyde, Morton Fullerton. I vol. in-S'^, avec  18 planches hors texte. 1914 5 fr. » Pages choisies de José Enrique Rodô. choix et introduction de M. Hugo  D. Barbagelata. I vol. in-8'^, avec un portrait hors texte, 1918. . . 3 fr. 50 Pages choisies de Rubén Dario, choix et introduction de M. VEiifTURA  Garcia Calderon. i vol. in-S*^, avec un portrait hors texte, 1918. 3 fr. 50 QUESTIONS AMÉRICAINES Les Promesses de la Vie américaine, par H. Croly. Traduit de l'an-  glais par FiRMiN Roz et Fenard, introduction par Firmin Roz. i vol.  in-8'^. 1913 3 fr. 50 L'Allemagne et l'Amérique latine Souvenirs d'un voyageur natura-  liste, par Emilr-R. Wagner. Préface de M. Edmond Perrier, Membre de  rinstitut, Directeur du Muséum, i vol. ih-S*^ avec carte, 1918 ... 3 fr. 50 A travers la forêt brésilienne. De l'Amazone aux Andes, par le même.  I vol. in-S'^ avec 8 planches, 1919 5 fr. » De la sympathie à la fraternité d'armes. Les États-Unis dans la  guerre, par Maurice Barrés, de l'Académie française. Une brochure in-80.  1919 I fr. 70 Le Devoir des Neutres, par Ruy Barbosa. Avant-propos : La Sentence  du Juge, par Graça Aranha. Traduit du portugais par Cardozo de Bethex-  couRT. Une broch. in-8"^, avec une planche hors texte. 2'^ édit., 1917. 2 fr. » Le Chili et la Guerre, par C. Silva Vildôs'ola, ancien directeur du Mer-  curio de Santiago du Chili. Traduit de l'espagnol par Cardozo de Bethen-  couRT. Une brochure in-B'^, 1917 i fr. 80 Le secours américpinen France [American Aid in France), par William  G. SriARP et Gabriel Hanotaux. Une brochure in-80. 1915 ... i fr. » La France et la Guerre. Opinions d'un Américain, par James Mark  Baldwix. Une brochure in-B*^. 1915 i fr. » LUnioa des États-Unis et de la France, par G. Hanotaux, de l'Académie  française, président du Comité France-Amérique, (texte français et texte  anglais, traduit par W. Morton-Fullerton). I brochure in-8, 1918 . o fr. 90 
+|}
+===Taxa Found in Page===
+Name(s): 3<br />
+{| class="wikitable"
+|-
+! scope="col"|NameBankID   ||! scope="col"|EOLID ||! scope="col"|NameFound ||! scope="col"|NameConfirmed
+|-
+|2994423   ||48430  ||Alcides  ||Alcides
+|-
+|   ||  ||Dario choix  ||
+|-
+|   ||107704  ||Garcia  ||Garcia Vahl
+|}
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|}
+===Page Numbers===
+===Item Summary===
+{| class="wikitable"
+|-
+! scope="row"| ItemID
+| 96330
+|-
+! scope="row"| PrimaryTitleID
+| 44358
+|-
+! scope="row"| ThumbnailPageID
+| 30637179
+|-
+! scope="row"| Source
+| Internet Archive
+|-
+! scope="row"| SourceIdentifier
+| traverslafor00wagn
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| Contributor
+| University of British Columbia Library (archive.org)
+|-
+! scope="row"| Sponsor
+| University of British Columbia Library
+|-
+! scope="row"| Language
+| French
+|-
+! scope="row"| LicenseUrl
+| 
+|-
+! scope="row"| Rights
+| 
+|-
+! scope="row"| DueDiligence
+| 
+|-
+! scope="row"| CopyrightStatus
+| 
+|-
+! scope="row"| CopyrightRegion
+| 
+|-
+! scope="row"| ExternalUrl
+| 
+|-
+! scope="row"| ItemUrl
+| http://www.biodiversitylibrary.org/item/96330
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/44358
+|-
+! scope="row"| ItemThumbUrl
+| http://www.biodiversitylibrary.org/pagethumb/30637179
+|}
+===Title Summary===
+{| class="wikitable"
+|-
+! scope="row"| TitleID
+| 44358
+|-
+! scope="row"| BibliographicLevel
+| Monograph/Item
+|-
+! scope="row"| FullTitle
+| À travers la forêt brésilienne : De l'Amazone aux Andes / Par Émile-R. Wagner ..
+|-
+! scope="row"| ShortTitle
+| À travers la forêt brésilienne :
+|-
+! scope="row"| SortTitle
+| À travers la forêt brésilienne : De l'Amazone aux Andes / Pa
+|-
+! scope="row"| PartNumber
+| 
+|-
+! scope="row"| PartName
+| 
+|-
+! scope="row"| CallNumber
+| SD27 .W12
+|-
+! scope="row"| Edition
+| 
+|-
+! scope="row"| PublisherPlace
+| Paris :
+|-
+! scope="row"| PublisherName
+| F. Alcan,
+|-
+! scope="row"| PublicationDate
+| 1919.
+|-
+! scope="row"| PublicationFrequency
+| 
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/44358
+|}

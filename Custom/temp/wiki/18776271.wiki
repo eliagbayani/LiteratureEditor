@@ -1,0 +1,44 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=18776271&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 18776271
+|-
+! scope="row"| ItemID
+| 62194
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/18776271
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/18776271
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/18776271
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/18776271
+|}
+===OCR Text===
+{| class="wikitable"
+|PREFACE THIS book is the outgrowth of instruction in chem-  istry given in the School of Agriculture of the  University of Minnesota since 1891. At first the classes  were small and individual work with blackboard exercises  and references to the literature in the school library was  possible. With increased numbers of students, mimeo-  graphed notes were supplied until finally the size of the  classes, and the volume of the notes have necessitated  their publication in book form. The work was first  given, in 1891, to a class of seven students, while twelve  years later they numbered nearly one hundred fifty. The class of students to whom this instruction has  been given have been mostly earnest workers who at-  tended school largely from personal choice and who de-  sired to make as much progress as possible. Numerous  questions have been asked by them relating to the ap-  plication of chemistry to farm and every-day life, and for  a number of years the author kept a question box in  which were placed the more important questions asked in  class, and the difficulties experienced in the laboratory  work, and in developing the work from year to year  these questions and difficulties have been considered. This work was originally outlined as Agricultural  Chemistry, but as special features have been developed  and published, as the "Chemistry of Soils and Fertil-  izers," and "The Chemistry of Dairying," this part of  the subject has gradually developed into "The Chemistry 
+|}
+===Taxa Found in Page===
+Name(s): 0<br />
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|}

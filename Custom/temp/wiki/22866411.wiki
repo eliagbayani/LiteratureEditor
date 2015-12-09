@@ -1,0 +1,150 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=22866411&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 22866411
+|-
+! scope="row"| ItemID
+| 74001
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/22866411
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/22866411
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/22866411
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/22866411
+|}
+===OCR Text===
+{| class="wikitable"
+|BOOKS ON BOTANY. In 16rao. with Illustrative Woodcuts, price 3s. 6d. THE RUDIMENTS OF BOTANY. A familiar Introduction to the Study of  Plants. By ARTHUR HENFREY, F.R.S., F.L.S., Professor of Botany in  King's College, London. " Admirably adapted for general use in Collegiate Institutions, and, indeed, for all those  who are commencing the study of Botany." Pharmaceutical Journal. " Designed to furnish the beginner with a simple and practical introduction to the study  of plants, and admirably adapted for their purpose." Medico- Chirurgical Review. " Written in simple language, so as to be easily understood by those who are totally  without botanical knowledge." Annals of Natural History. By the same Author. OUTLINES OF STRUCTURAL AND PHYSIOLOGICAL BOTANY. With  18 plates, fcap. 8vo. 10s. 6d. A SET OF SIX COLOURED DIAGRAMS ILLUSTRATIVE OF THE  RUDIMENTS OF BOTANY ; for Schools and Lectures, price 15s. VEGETATION OF EUROPE, its Conditions and Causes. With a Map.  Foolscap 8vo. 5s. PRINCIPLES OF THE ANATOMY AND PHYSIOLOGY OF THE VEGETABLE CELL. By HUGO VON MOHL. Translated, with the Author's permission, by Professor HENFREY. 8vo. with an Illustrative Plate and numerous Woodcuts, 7s. &d. " It is an invaluable treatise, extremely well translated." The Gardener's Chronicle. ON THE GROWTH OF PLANTS IN CLOSELY GLAZED CASES. By  N. B. WARD, F.R.S., F.L.S. Second Edition, post 8vo. price 6s. illustrated.  "The great beauty of the vegetation in Ward's Cases, and their real use, which is be-  coming daily more and more acknowledged, render a history of this curious invention, and  remarks as to its various modes of use, at once valuable and desirable. Hence the entertain-  ing volume before us." The Guardian, WALKS AFTER WILD FLOWERS; or, The Botany of the Bohereens. By  RICHARD DOWDEN (RICHARD). Foolscap 8vo. price 4s. 6d. " His volume is redolent of genius throughout, and is certainly one of the most charm-  ing works on Botany we have ever met with." English Review. A MANUAL OF THE BRITISH MARINE ALOE; containing Generic  and Specific Descriptions of all the known British Species of Sea-weeds.  With Plates to illustrate all the Genera.- By W. H. HARVEY, M.D., M.R.I.A.,  Keeper of the Herbarium of the University of Dublin, and Professor of  Botany to the Royal Dublin Society. In 8vo. price 21s. (coloured copies,  1 1U.64L) THE SEA-WEED COLLECTOR'S GUIDE ; containing Plain Instructions  for Collecting and Preserving, and a List of all the known Species and  Localities in Great Britain. By J. COCKS, M.D., Devonport. Fcap. 8vo. 2s. 6d. A HISTORY OF BRITISH FOREST TREES. By PRIDEAUX JOHN SELBY  of Twizell, Esq. With nearly 200 engravings, price 28s. TERRA LINDISFARNENSIS. The Natural History of the Eastern Borders. By GEORGE JOHNSTON, M.D.&c.&c. This volume embraces the Topography arid Botany ; and gives the Popular Names and Uses of the Plants, and the Customs and Beliefs which have been associated with them. 8vo. 10s. 6d. " If any one should ask for what class of readers this volume is adapted, we answer, that, with exception of the very cold-hearted and worldly, it is difficult to say for whom it is not adapted." Scottish Ecclesiastical Journal. JOHN VAN VOORST, 1 Paternoster Row. 
+|}
+===Taxa Found in Page===
+Name(s): 0<br />
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|}
+===Page Numbers===
+===Item Summary===
+{| class="wikitable"
+|-
+! scope="row"| ItemID
+| 74001
+|-
+! scope="row"| PrimaryTitleID
+| 30344
+|-
+! scope="row"| ThumbnailPageID
+| 22866414
+|-
+! scope="row"| Source
+| Internet Archive
+|-
+! scope="row"| SourceIdentifier
+| manualofbritishb00babirich
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| Contributor
+| University of California Libraries (archive.org)
+|-
+! scope="row"| Sponsor
+| MSN
+|-
+! scope="row"| Language
+| English
+|-
+! scope="row"| LicenseUrl
+| 
+|-
+! scope="row"| Rights
+| 
+|-
+! scope="row"| DueDiligence
+| 
+|-
+! scope="row"| CopyrightStatus
+| NOT_IN_COPYRIGHT
+|-
+! scope="row"| CopyrightRegion
+| US
+|-
+! scope="row"| ExternalUrl
+| 
+|-
+! scope="row"| ItemUrl
+| http://www.biodiversitylibrary.org/item/74001
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/30344
+|-
+! scope="row"| ItemThumbUrl
+| http://www.biodiversitylibrary.org/pagethumb/22866414
+|}
+===Title Summary===
+{| class="wikitable"
+|-
+! scope="row"| TitleID
+| 30344
+|-
+! scope="row"| BibliographicLevel
+| Monograph/Item
+|-
+! scope="row"| FullTitle
+| Manual of British botany : containing the flowering plants and ferns arranged according to the natural orders / by Charles Cardale Babington.
+|-
+! scope="row"| ShortTitle
+| Manual of British botany :
+|-
+! scope="row"| SortTitle
+| Manual of British botany : containing the flowering plants a
+|-
+! scope="row"| PartNumber
+| 
+|-
+! scope="row"| PartName
+| 
+|-
+! scope="row"| CallNumber
+| 
+|-
+! scope="row"| Edition
+| 4th ed., with many additions and corrections. 
+|-
+! scope="row"| PublisherPlace
+| London :
+|-
+! scope="row"| PublisherName
+| John Van Voorst,
+|-
+! scope="row"| PublicationDate
+| 1856.
+|-
+! scope="row"| PublicationFrequency
+| 
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/30344
+|}

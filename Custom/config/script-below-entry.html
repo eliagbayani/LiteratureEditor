@@ -1,0 +1,144 @@
+<script>
+
+// <!--
+// $("#Table1").styleTable();
+// -->
+
+// <!--
+// $( "#accordion" ).accordion();
+// -->
+$("#accordion").accordion({ collapsible: true,
+                            header: "h3",
+                            active: false
+                         });
+
+$("#accordion_open").accordion({ collapsible: true,
+                                 header: "h3",
+                              });
+
+
+var availableTags = [
+	"ActionScript",
+	"AppleScript",
+	"Asp",
+	"BASIC",
+	"C",
+	"C++",
+	"Clojure",
+	"COBOL",
+	"ColdFusion",
+	"Erlang",
+	"Fortran",
+	"Groovy",
+	"Haskell",
+	"Java",
+	"JavaScript",
+	"Lisp",
+	"Perl",
+	"PHP",
+	"Python",
+	"Ruby",
+	"Scala",
+	"Scheme"
+];
+$( "#autocomplete" ).autocomplete({
+	source: availableTags
+});
+
+
+
+$( "#button" ).button();
+$( "#button_search_book" ).button();
+$( "#button_search_item" ).button();
+$( "#button_search_title" ).button();
+$( "#button_search_page" ).button();
+$( "#button_search_taxa" ).button();
+
+$( "#radioset" ).buttonset();
+
+
+// <!-- orig not used
+// // $( "#tabs" ).tabs();
+// -->
+
+$( "#tabs_main" ).tabs();
+$( "#tabs" ).tabs();
+$( "#tabs1" ).tabs();
+$( "#tabs2" ).tabs();
+$( "#tabs3" ).tabs();
+$( "#tabs4" ).tabs();
+$( "#tabs5" ).tabs();
+
+
+$( "#dialog" ).dialog({
+	autoOpen: false,
+	width: 400,
+	buttons: [
+		{
+			text: "Ok",
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		},
+		{
+			text: "Cancel",
+			click: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	]
+});
+
+// Link to open the dialog
+$( "#dialog-link" ).click(function( event ) {
+	$( "#dialog" ).dialog( "open" );
+	event.preventDefault();
+});
+
+
+
+$( "#datepicker" ).datepicker({
+	inline: true
+});
+
+
+
+$( "#slider" ).slider({
+	range: true,
+	values: [ 17, 67 ]
+});
+
+
+
+$( "#progressbar" ).progressbar({
+	value: 20
+});
+
+
+
+$( "#spinner" ).spinner();
+
+
+
+$( "#menu" ).menu();
+
+
+
+$( "#tooltip" ).tooltip();
+
+
+
+$( "#selectmenu" ).selectmenu();
+
+
+// Hover states on the static widgets
+$( "#dialog-link, #icons li" ).hover(
+	function() {
+		$( this ).addClass( "ui-state-hover" );
+	},
+	function() {
+		$( this ).removeClass( "ui-state-hover" );
+	}
+);
+</script>
+

@@ -1,0 +1,150 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=45908770&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 45908770
+|-
+! scope="row"| ItemID
+| 172341
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/45908770
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/45908770
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/45908770
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/45908770
+|}
+===OCR Text===
+{| class="wikitable"
+|Historic, Archive Document Do not assume content reflects current  scientific knowledge, policies, or practices. 
+|}
+===Taxa Found in Page===
+Name(s): 0<br />
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Cover
+|}
+===Page Numbers===
+===Item Summary===
+{| class="wikitable"
+|-
+! scope="row"| ItemID
+| 172341
+|-
+! scope="row"| PrimaryTitleID
+| 94662
+|-
+! scope="row"| ThumbnailPageID
+| 45908772
+|-
+! scope="row"| Source
+| Internet Archive
+|-
+! scope="row"| SourceIdentifier
+| CAT31283321
+|-
+! scope="row"| Volume
+| 1898
+|-
+! scope="row"| Year
+| 1898
+|-
+! scope="row"| Contributor
+| U.S. Department of Agriculture, National Agricultural Library
+|-
+! scope="row"| Sponsor
+| U.S. Department of Agriculture, National Agricultural Library
+|-
+! scope="row"| Language
+| English
+|-
+! scope="row"| LicenseUrl
+| 
+|-
+! scope="row"| Rights
+| 
+|-
+! scope="row"| DueDiligence
+| 
+|-
+! scope="row"| CopyrightStatus
+| 
+|-
+! scope="row"| CopyrightRegion
+| 
+|-
+! scope="row"| ExternalUrl
+| 
+|-
+! scope="row"| ItemUrl
+| http://www.biodiversitylibrary.org/item/172341
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/94662
+|-
+! scope="row"| ItemThumbUrl
+| http://www.biodiversitylibrary.org/pagethumb/45908772
+|}
+===Title Summary===
+{| class="wikitable"
+|-
+! scope="row"| TitleID
+| 94662
+|-
+! scope="row"| BibliographicLevel
+| Monograph/Item
+|-
+! scope="row"| FullTitle
+| T.V. Munson & Son's Nurseries.
+|-
+! scope="row"| ShortTitle
+| T.V. Munson & Son's Nurseries.
+|-
+! scope="row"| SortTitle
+| T.V. Munson & Son's Nurseries.
+|-
+! scope="row"| PartNumber
+| 
+|-
+! scope="row"| PartName
+| 
+|-
+! scope="row"| CallNumber
+| 
+|-
+! scope="row"| Edition
+| 
+|-
+! scope="row"| PublisherPlace
+| Denison, Tex. :
+|-
+! scope="row"| PublisherName
+| T.V. Munson & Son,
+|-
+! scope="row"| PublicationDate
+| 1898.
+|-
+! scope="row"| PublicationFrequency
+| 
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/94662
+|}

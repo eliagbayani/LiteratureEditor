@@ -1,0 +1,150 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=20586208&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 20586208
+|-
+! scope="row"| ItemID
+| 67304
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/20586208
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/20586208
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/20586208
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/20586208
+|}
+===OCR Text===
+{| class="wikitable"
+|R3 LANDSCAPE ARCH. LIBRARY PREFACE. The skeleton of this book has for eleven years formed a supplement to the  " California Flora," which describes only the plants of the coast region between  Monterey and Ukiah. Since it is not practicable to fill out this skeleton in the  way originally intended, it has been put into the improved form here described.  The "Flora" of the old manual has been replaced by descriptions of all the  orders whose species on this coast have conspicuous flowers. This part of the  book also contains descriptions of near two hundred and fifty species which are  mostly new, and over fifty generic names which in Greene's "Botany of the San  Francisco Bay Region" displace names used in this book. These synonyms will  be very helpful to those who use the former manual with this or other floras.  A complete glossary of the botanical terms and specific names found in this book,  and a glossary of generic names in connection with the index will materially aid  students. An analytical key leads the student to a description of the order to  which the plant in hand belongs. At the close of that description he is referred  to the page of the second part where keys lead to the genus and species. Return-  ing to the first part, the' new matter there is consulted before making a final  decision. This seemingly awkward prominence of addenda is perhaps advanta-  geous to the student, who is thus led to realize the progress of botanical work.  Moreover there is encouragement in the thought that the discovery of so many  new plants in the ten years just ended proves that there are species yet unde-  scribed which sharp-eyed seekers may find. Since the descriptions here given are for the most part abbreviations of the  originals, their shortcomings should be charged to the compiler of this book. In  some cases, particularly in difficult genera, new species have not been given.  Many of Prof. Greene's new species are placed under generic names which he  does not approve. Most of these, however, were described by him under the  discarded names, and it is proper that his name should follow that of the species 
+|}
+===Taxa Found in Page===
+Name(s): 0<br />
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|}
+===Page Numbers===
+===Item Summary===
+{| class="wikitable"
+|-
+! scope="row"| ItemID
+| 67304
+|-
+! scope="row"| PrimaryTitleID
+| 25583
+|-
+! scope="row"| ThumbnailPageID
+| 20586206
+|-
+! scope="row"| Source
+| Internet Archive
+|-
+! scope="row"| SourceIdentifier
+| westcoastbotanya00rattrich
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| Contributor
+| University of California Libraries (archive.org)
+|-
+! scope="row"| Sponsor
+| MSN
+|-
+! scope="row"| Language
+| English
+|-
+! scope="row"| LicenseUrl
+| 
+|-
+! scope="row"| Rights
+| 
+|-
+! scope="row"| DueDiligence
+| 
+|-
+! scope="row"| CopyrightStatus
+| NOT_IN_COPYRIGHT
+|-
+! scope="row"| CopyrightRegion
+| US
+|-
+! scope="row"| ExternalUrl
+| 
+|-
+! scope="row"| ItemUrl
+| http://www.biodiversitylibrary.org/item/67304
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/25583
+|-
+! scope="row"| ItemThumbUrl
+| http://www.biodiversitylibrary.org/pagethumb/20586206
+|}
+===Title Summary===
+{| class="wikitable"
+|-
+! scope="row"| TitleID
+| 25583
+|-
+! scope="row"| BibliographicLevel
+| Monograph/Item
+|-
+! scope="row"| FullTitle
+| West Coast botany : an analytical key to the flora of the Pacific Coast in which are described over eighteen hundred species of flowering plants growing west of the Sierra Nevada and Cascade crests, from San Diego to Puget Sound /
+|-
+! scope="row"| ShortTitle
+| West Coast botany :
+|-
+! scope="row"| SortTitle
+| West Coast botany : an analytical key to the flora of the Pa
+|-
+! scope="row"| PartNumber
+| 
+|-
+! scope="row"| PartName
+| 
+|-
+! scope="row"| CallNumber
+| 
+|-
+! scope="row"| Edition
+| 
+|-
+! scope="row"| PublisherPlace
+| San Francisco :
+|-
+! scope="row"| PublisherName
+| Whitaker & Ray,
+|-
+! scope="row"| PublicationDate
+| 1898.
+|-
+! scope="row"| PublicationFrequency
+| 
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/25583
+|}

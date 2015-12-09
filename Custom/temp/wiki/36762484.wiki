@@ -1,0 +1,156 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=36762484&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 36762484
+|-
+! scope="row"| ItemID
+| 113186
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/36762484
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/36762484
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/36762484
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/36762484
+|}
+===OCR Text===
+{| class="wikitable"
+|ift«^aasf?i-»>igfts.*t'ifiSJi»83^tfife***^^r^iHi.  iftfeo jSWffi3B!«lfti6^*S#*»W^lfi;; 'eW*g*»Jifi^*#*» af5ij^^iBfflst*ftflfi*i ! s*riff^jaw, te'ew^«rM3Mr* %%nEk&mifc 1,000 &^^*fts 1,500 i&jawwfiifsifj M£ 2,000 ^j^wniKcia-s* *^mjH. 3&— ffiK^Wifc^-hJMfc^ 1,800 5r^.S 2,400 ^/iMSi • 290 • 
+|}
+===Taxa Found in Page===
+Name(s): 0<br />
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|}
+===Page Numbers===
+{| class="wikitable"
+|-
+! scope="col"|Prefix   ||! scope="col"|Number
+|-
+|Page   ||290
+|}
+===Item Summary===
+{| class="wikitable"
+|-
+! scope="row"| ItemID
+| 113186
+|-
+! scope="row"| PrimaryTitleID
+| 53215
+|-
+! scope="row"| ThumbnailPageID
+| 36762189
+|-
+! scope="row"| Source
+| Internet Archive
+|-
+! scope="row"| SourceIdentifier
+| xibiliyazirandil00miha
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| Contributor
+| Institute of Botany, Chinese Academy of Sciences
+|-
+! scope="row"| Sponsor
+| Institute of Botany, CAS and Internet Archive
+|-
+! scope="row"| Language
+| Chinese
+|-
+! scope="row"| LicenseUrl
+| 
+|-
+! scope="row"| Rights
+| 
+|-
+! scope="row"| DueDiligence
+| 
+|-
+! scope="row"| CopyrightStatus
+| 
+|-
+! scope="row"| CopyrightRegion
+| 
+|-
+! scope="row"| ExternalUrl
+| 
+|-
+! scope="row"| ItemUrl
+| http://www.biodiversitylibrary.org/item/113186
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/53215
+|-
+! scope="row"| ItemThumbUrl
+| http://www.biodiversitylibrary.org/pagethumb/36762189
+|}
+===Title Summary===
+{| class="wikitable"
+|-
+! scope="row"| TitleID
+| 53215
+|-
+! scope="row"| BibliographicLevel
+| 
+|-
+! scope="row"| FullTitle
+| xi bi li ya:zi ran di li gai shu 西伯利亚:自然地理概述
+|-
+! scope="row"| ShortTitle
+| xi bi li ya:zi ran di li gai shu 西伯利亚:自然地理概述
+|-
+! scope="row"| SortTitle
+| xi bi li ya:zi ran di li gai shu 西伯利亚:自然地理概述
+|-
+! scope="row"| PartNumber
+| 
+|-
+! scope="row"| PartName
+| 
+|-
+! scope="row"| CallNumber
+| 
+|-
+! scope="row"| Edition
+| 
+|-
+! scope="row"| PublisherPlace
+| 
+|-
+! scope="row"| PublisherName
+| shang wu yin shu guan 商务印书馆
+|-
+! scope="row"| PublicationDate
+| 
+|-
+! scope="row"| PublicationFrequency
+| 
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/53215
+|}

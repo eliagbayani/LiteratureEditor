@@ -1,0 +1,150 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=3096805&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 3096805
+|-
+! scope="row"| ItemID
+| 22220
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/3096805
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/3096805
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/3096805
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/3096805
+|}
+===OCR Text===
+{| class="wikitable"
+|OFFICERS FOR THE YEAR 1905 President of the Institution  Robert S. Woodward Trustees John S. BiIvWngs, Chairman  Elihu Root, Vice-Chairman  Charles D. Walcott, Seoetary Alexander Agassiz  John S. Billings  John L. Cadwalader  Cleveland H. Dodge  William N. Frew  IvYMAN J. Gage  Daniel C. Oilman  John Hav Henry L. Higginson  E. A. Hitchcock  William Wirt Howe  Chas. L. Hutchinson  S. P. L,angley  William Lindsay SETH IvOW Wayne MacVeagh D. o. Mills  S. Weir Mitchell  William W. Morrow  Elihu Root  John C. Spooner  Charles D. Walcott  Andrew D. White  Carroll D. Wright Executive Committee Carroll D. Wright, Chairman  * Charles D. Walcott, Secretary  John S. Billings John Hay Elihu Root Daniel C. Oilman S. Weir Mitchell * Robert S. Woodward L/YMAN J. Gage Finance Committee  Henry L,. Higginson D. O. Mills * Ex-officio member 
+|}
+===Taxa Found in Page===
+Name(s): 0<br />
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|}
+===Page Numbers===
+===Item Summary===
+{| class="wikitable"
+|-
+! scope="row"| ItemID
+| 22220
+|-
+! scope="row"| PrimaryTitleID
+| 3936
+|-
+! scope="row"| ThumbnailPageID
+| 3096647
+|-
+! scope="row"| Source
+| Internet Archive
+|-
+! scope="row"| SourceIdentifier
+| yearbookcarnegie03carn
+|-
+! scope="row"| Volume
+| n. 3 (1904)
+|-
+! scope="row"| Year
+| 1904
+|-
+! scope="row"| Contributor
+| MBLWHOI Library
+|-
+! scope="row"| Sponsor
+| MBLWHOI Library
+|-
+! scope="row"| Language
+| English
+|-
+! scope="row"| LicenseUrl
+| 
+|-
+! scope="row"| Rights
+| 
+|-
+! scope="row"| DueDiligence
+| 
+|-
+! scope="row"| CopyrightStatus
+| NOT_IN_COPYRIGHT
+|-
+! scope="row"| CopyrightRegion
+| 
+|-
+! scope="row"| ExternalUrl
+| 
+|-
+! scope="row"| ItemUrl
+| http://www.biodiversitylibrary.org/item/22220
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/3936
+|-
+! scope="row"| ItemThumbUrl
+| http://www.biodiversitylibrary.org/pagethumb/3096647
+|}
+===Title Summary===
+{| class="wikitable"
+|-
+! scope="row"| TitleID
+| 3936
+|-
+! scope="row"| BibliographicLevel
+| Serial
+|-
+! scope="row"| FullTitle
+| Year book - Carnegie Institution of Washington.  
+|-
+! scope="row"| ShortTitle
+| Year book - Carnegie Institution of Washington.
+|-
+! scope="row"| SortTitle
+| Year book - Carnegie Institution of Washington.
+|-
+! scope="row"| PartNumber
+| 
+|-
+! scope="row"| PartName
+| 
+|-
+! scope="row"| CallNumber
+| AS32 .A3
+|-
+! scope="row"| Edition
+| 
+|-
+! scope="row"| PublisherPlace
+| Washington,
+|-
+! scope="row"| PublisherName
+| Carnegie Institution of Washington
+|-
+! scope="row"| PublicationDate
+| 
+|-
+! scope="row"| PublicationFrequency
+| Annual
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/3936
+|}

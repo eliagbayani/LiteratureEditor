@@ -1,0 +1,158 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=33892722&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 33892722
+|-
+! scope="row"| ItemID
+| 105725
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/33892722
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/33892722
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/33892722
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/33892722
+|}
+===OCR Text===
+{| class="wikitable"
+|ILLINOIS BIOLOGICAL MONOGRAPHS Volumes 1 through 24 contained four issues each and were available  through subscription. Beginning with number 25 (issued in 1957), each  publication is numbered consecutively. No subscriptions are available,  but standing orders are accepted for forthcoming numbers. The title  listed below is still in print. It may be purchased from the University  of Illinois Press, Urbana, Illinois 61801. Out-of-print titles in the Illi-  nois Biological Monographs are available from University Microfilms,  Inc., 300 North Zeeb Road, Ann Arbor, Michigan 48106. Koch, Stephen D. (1974) : The Eragrostis-pectinacea-pilosa Complex  in North and Central America (Gramineae: Eragrostoideae) . 14 figs.  8 plates. No. 48. $5.95. 
+|}
+===Taxa Found in Page===
+Name(s): 2<br />
+{| class="wikitable"
+|-
+! scope="col"|NameBankID   ||! scope="col"|EOLID ||! scope="col"|NameFound ||! scope="col"|NameConfirmed
+|-
+|   ||  ||Eragrostoideae  ||Eragrostoideae Pilg., 1954
+|-
+|605526   ||2906320  ||Gramineae  ||Gramineae
+|}
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|}
+===Page Numbers===
+===Item Summary===
+{| class="wikitable"
+|-
+! scope="row"| ItemID
+| 105725
+|-
+! scope="row"| PrimaryTitleID
+| 50104
+|-
+! scope="row"| ThumbnailPageID
+| 33892719
+|-
+! scope="row"| Source
+| Internet Archive
+|-
+! scope="row"| SourceIdentifier
+| kangarooratsintr49nade
+|-
+! scope="row"| Volume
+| 49
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| Contributor
+| University Library, University of Illinois Urbana Champaign
+|-
+! scope="row"| Sponsor
+| University of Illinois Urbana-Champaign
+|-
+! scope="row"| Language
+| English
+|-
+! scope="row"| LicenseUrl
+| 
+|-
+! scope="row"| Rights
+| 
+|-
+! scope="row"| DueDiligence
+| 
+|-
+! scope="row"| CopyrightStatus
+| 
+|-
+! scope="row"| CopyrightRegion
+| 
+|-
+! scope="row"| ExternalUrl
+| 
+|-
+! scope="row"| ItemUrl
+| http://www.biodiversitylibrary.org/item/105725
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/50104
+|-
+! scope="row"| ItemThumbUrl
+| http://www.biodiversitylibrary.org/pagethumb/33892719
+|}
+===Title Summary===
+{| class="wikitable"
+|-
+! scope="row"| TitleID
+| 50104
+|-
+! scope="row"| BibliographicLevel
+| Monograph/Item
+|-
+! scope="row"| FullTitle
+| Kangaroo rats : intraspecific variation in Dipodomys spectabilis Merriam and Dipodomys deserti Stephens /
+|-
+! scope="row"| ShortTitle
+| Kangaroo rats :
+|-
+! scope="row"| SortTitle
+| Kangaroo rats : intraspecific variation in Dipodomys spectab
+|-
+! scope="row"| PartNumber
+| 
+|-
+! scope="row"| PartName
+| 
+|-
+! scope="row"| CallNumber
+| QL737.R66 N33
+|-
+! scope="row"| Edition
+| 
+|-
+! scope="row"| PublisherPlace
+| Urbana :
+|-
+! scope="row"| PublisherName
+| University of Illinois Press,
+|-
+! scope="row"| PublicationDate
+| c1978.
+|-
+! scope="row"| PublicationFrequency
+| 
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/50104
+|}

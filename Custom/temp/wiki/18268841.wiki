@@ -1,0 +1,166 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=18268841&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 18268841
+|-
+! scope="row"| ItemID
+| 60753
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/18268841
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/18268841
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/18268841
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/18268841
+|}
+===OCR Text===
+{| class="wikitable"
+|22 NEW YORK STATE MUSEUM three forked veins are followed by three typically simple veins,  the first, second and third anal veins, which occupy the smaller  area of the hind angle of the wing. There is much variability  in this region in the different genera, and it is highly important  that these three veins be certainly recognized ; to do this it is  only necessary to count off the three longitudinal veins of the  cUbitus the two branches (Cu and Cu 2 ) and the bisector of the  culbital fork back of the media, and these three will be the three  best developed veins remaining. In the keys the short, incon-  stant interpolated longitudinal veins are called inter -calaries, and  that whether they become attached to principal veins or branches  or remain independent; and the irregular veins about the margin Fig. 3 Venation of the fore wing of E p h e m er a of the wing are called veinlets. The length of the media is meas-  ured on vein M. 2 . The fore wing is meant in the key except where  the hind wing is specified. Fig.3 shows the unilateral forking of  the cubital vein and the divergence of the cu(bital and first anal  veins at base, characteristic of the subfamily Ephemerinae. KEY TO THE GENERA OF MAYFLIES OF NORTH AMERICA Images  a The cubital and first anal veins strongly divergent at the base (fig.3). Venation never greatly reduced Ephemerinae 6 The fork of the median vein very deep, almost reaching the wing  base; two long simple intercalaries between the first and second  anal veins. In the hind wing the vein R 5 separates from vein R a  close beside and therefore is little longer than the next branch of the radial sector Campsurus 66 The median vein forked for not more than three fourths of its length ;  in the hind wing the vein R 5 arises much in advance of other  branches of the sector, being much longer than any of them 
+|}
+===Taxa Found in Page===
+Name(s): 2<br />
+{| class="wikitable"
+|-
+! scope="col"|NameBankID   ||! scope="col"|EOLID ||! scope="col"|NameFound ||! scope="col"|NameConfirmed
+|-
+|2622649   ||102479  ||Campsurus  ||Campsurus
+|-
+|   ||  ||Ephemerinae  ||Ephemerinae
+|}
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|-
+|Illustration
+|}
+===Page Numbers===
+{| class="wikitable"
+|-
+! scope="col"|Prefix   ||! scope="col"|Number
+|-
+|Page   ||22
+|}
+===Item Summary===
+{| class="wikitable"
+|-
+! scope="row"| ItemID
+| 60753
+|-
+! scope="row"| PrimaryTitleID
+| 20757
+|-
+! scope="row"| ThumbnailPageID
+| 18268881
+|-
+! scope="row"| Source
+| Internet Archive
+|-
+! scope="row"| SourceIdentifier
+| mayfliesmidgesof00needrich
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| Contributor
+| University of California Libraries (archive.org)
+|-
+! scope="row"| Sponsor
+| MSN
+|-
+! scope="row"| Language
+| English
+|-
+! scope="row"| LicenseUrl
+| 
+|-
+! scope="row"| Rights
+| 
+|-
+! scope="row"| DueDiligence
+| 
+|-
+! scope="row"| CopyrightStatus
+| NOT_IN_COPYRIGHT
+|-
+! scope="row"| CopyrightRegion
+| US
+|-
+! scope="row"| ExternalUrl
+| 
+|-
+! scope="row"| ItemUrl
+| http://www.biodiversitylibrary.org/item/60753
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/20757
+|-
+! scope="row"| ItemThumbUrl
+| http://www.biodiversitylibrary.org/pagethumb/18268881
+|}
+===Title Summary===
+{| class="wikitable"
+|-
+! scope="row"| TitleID
+| 20757
+|-
+! scope="row"| BibliographicLevel
+| Monograph/Item
+|-
+! scope="row"| FullTitle
+| May flies and midges of New York. Third report on aquatic insects. A study conducted at the entomologic field station, Ithaca, N. Y., under the direction of Ephraim Porter Felt. By James G. Needham, Kenneth J. Morton [and] O. A. Johannsen.
+|-
+! scope="row"| ShortTitle
+| May flies and midges of New York.
+|-
+! scope="row"| SortTitle
+| May flies and midges of New York. Third report on aquatic in
+|-
+! scope="row"| PartNumber
+| 
+|-
+! scope="row"| PartName
+| 
+|-
+! scope="row"| CallNumber
+| Q11 .N82 no. 86
+|-
+! scope="row"| Edition
+| 
+|-
+! scope="row"| PublisherPlace
+| Albany,
+|-
+! scope="row"| PublisherName
+| New York State Education Department,
+|-
+! scope="row"| PublicationDate
+| 1905.
+|-
+! scope="row"| PublicationFrequency
+| 
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/20757
+|}

@@ -1,0 +1,56 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=42194844&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 42194844
+|-
+! scope="row"| ItemID
+| 132928
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/42194844
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/42194844
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/42194844
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/42194844
+|}
+===OCR Text===
+{| class="wikitable"
+|liev. L. Guilding's Account of Margarodes. 117 under which some families of ants had established receptacles  for their broods. Many lay near the surface, while others,  buried at the depth of many inches, would require (even aided  by their strong fossorious legs) the favourable opportunity of a  shower to enable them to penetrate to the surface, and attack  the congregated larvae of the ant. Though armed with a noble  microscope, I cannot satisfy myself as to the form of the foramen  in the anterior claws, through which the liquid food is pumped,  as in the mandibles of the larvaj of the Myrmeleonida. I do not  remember any other perfect insect in which the mouth is alto-  gether wanting, and the food is absorbed by tubes ending in a  foramen ; and it will probably be found necessary to constitute  a new order for its reception. It is curious, too, that the tubes  for feeding should be seated in the anterior legs. It is well  known that the raptorious legs of the Scolopendridce are tubular,  but this structure is only applied to the injection of the deaden-  ing poison by which they kill or stupefy their prey. I once thought that the ground pearls were the ova of some  insect ; but from the great diversity in their size and shape it was  impossible to maintain this opinion : the ova of the same insect  rarely differing in any very sensible degree. It was moreover  easy to trace on the greater number of specimens, when cleaned,  a rostriform projection {tab. l'2.f.5.a.), with several minute and  obliterated spots, which seem to mark the position of the legs, or  rather, perhaps, the spiracula of the larvae : the anal portion of  the pearl is also remarkable for five minute and regular spots, two  placed in a line, and three {tab. 12./. 6.) smaller ones in a triangle  between them. The pearl is irregular in its outline, the smaller  specimens are roundish, while the larger ones are swollen on the  sides, with the anal termination often bent upwards {tab. 12./. 5.).  The whole puparium is covered with large caducous scales,  which strongly effervesce and disappear in nitric and muriatic acids, 
+|}
+===Taxa Found in Page===
+Name(s): 1<br />
+{| class="wikitable"
+|-
+! scope="col"|NameBankID   ||! scope="col"|EOLID ||! scope="col"|NameFound ||! scope="col"|NameConfirmed
+|-
+|4936759   ||22493  ||Margarodes  ||Margarodes
+|}
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|}
+===Page Numbers===
+{| class="wikitable"
+|-
+! scope="col"|Prefix   ||! scope="col"|Number
+|-
+|Page   ||117

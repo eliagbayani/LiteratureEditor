@@ -1,0 +1,156 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=1016433&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable"
+|-
+! scope="row"| PageID
+| 1016433
+|-
+! scope="row"| ItemID
+| 16089
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/1016433
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/1016433
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/1016433
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/1016433
+|}
+===OCR Text===
+{| class="wikitable"
+|PREFACE TO FIRST EDITION Many attempts have been made in recent years to determine  what presentation of Zoology (and Botany) is suitable for a  first course, especially in the secondary schools. The follow-  ing- principles may be said to represent the main points of  agreement among teachers : 1. The work done in a first course is primarily for pupils  who do not take a second course. This first course should be  handled, therefore, as a life-training rather than as satisfying  an admission requirement. 2. Laboratory work and field work are essential, both to  proper interest and to proper results, and should not be merely  illustrative of text or lecture work, but as far as possible should  be the foundation and point of departure of the lectures and  the text. No instrumentality open to the teacher is better than  the laboratory as a means of securing mental growth for the  pupils. 3. On the other hand it is equally important that the work  shall not be confined to the field and the laboratory. " There  are many things in the infinite concourse of particulars which  we cannot afford to verify by experiment." The end of labo-  ratory work is gained for the elementary student when he  comes to appreciate the method and spirit by which sound in-  vestigation proceeds, has acquired enough technical skill to fol-  low elementary investigation on his own behalf, and has  learned how to appreciate, and if necessary to verify, the state-  ments of others. It is as easy to waste time in the laboratory  as in reading text-books. 4. Laboratory directions in texts should be suggestive rather  than exhaustive. They should arouse the interest of the stu-  dent and direct his investigations rather than give him the  information which he seeks. 
+|}
+===Taxa Found in Page===
+Name(s): 0<br />
+===Page Types===
+{| class="wikitable"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|}
+===Page Numbers===
+{| class="wikitable"
+|-
+! scope="col"|Prefix   ||! scope="col"|Number
+|-
+|Page   ||vi
+|}
+===Item Summary===
+{| class="wikitable"
+|-
+! scope="row"| ItemID
+| 16089
+|-
+! scope="row"| PrimaryTitleID
+| 1249
+|-
+! scope="row"| ThumbnailPageID
+| 1016430
+|-
+! scope="row"| Source
+| Internet Archive
+|-
+! scope="row"| SourceIdentifier
+| zoologytextbookf00gall
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| Contributor
+| MBLWHOI Library
+|-
+! scope="row"| Sponsor
+| MBLWHOI Library
+|-
+! scope="row"| Language
+| English
+|-
+! scope="row"| LicenseUrl
+| 
+|-
+! scope="row"| Rights
+| 
+|-
+! scope="row"| DueDiligence
+| 
+|-
+! scope="row"| CopyrightStatus
+| NOT_IN_COPYRIGHT
+|-
+! scope="row"| CopyrightRegion
+| US
+|-
+! scope="row"| ExternalUrl
+| 
+|-
+! scope="row"| ItemUrl
+| http://www.biodiversitylibrary.org/item/16089
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/1249
+|-
+! scope="row"| ItemThumbUrl
+| http://www.biodiversitylibrary.org/pagethumb/1016430
+|}
+===Title Summary===
+{| class="wikitable"
+|-
+! scope="row"| TitleID
+| 1249
+|-
+! scope="row"| BibliographicLevel
+| Monograph/Item
+|-
+! scope="row"| FullTitle
+| Zoology; a text-book for secondary schools, normal schools and colleges, by Thomas Walton Galloway.
+|-
+! scope="row"| ShortTitle
+| Zoology;
+|-
+! scope="row"| SortTitle
+| Zoology; text-book for secondary schools, normal schools and
+|-
+! scope="row"| PartNumber
+| 
+|-
+! scope="row"| PartName
+| 
+|-
+! scope="row"| CallNumber
+| QL47 .G18
+|-
+! scope="row"| Edition
+| 2d ed., rev., with 240 illustrations.
+|-
+! scope="row"| PublisherPlace
+| Philadelphia,
+|-
+! scope="row"| PublisherName
+| P. Blakiston,
+|-
+! scope="row"| PublicationDate
+| 1909.
+|-
+! scope="row"| PublicationFrequency
+| 
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/1249
+|}

@@ -1,0 +1,179 @@
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=42194845&search_type=pagesearch Back to BHL API result page]</span>
+===Page Summary===
+{| class="wikitable" name="Page Summary"
+|-
+! scope="row"| PageID
+| 42194845
+|-
+! scope="row"| ItemID
+| 132928
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Issue
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| PageUrl
+| http://www.biodiversitylibrary.org/page/42194845
+|-
+! scope="row"| ThumbnailUrl
+| http://www.biodiversitylibrary.org/pagethumb/42194845
+|-
+! scope="row"| FullSizeImageUrl
+| http://www.biodiversitylibrary.org/pageimage/42194845
+|-
+! scope="row"| OcrUrl
+| http://www.biodiversitylibrary.org/pageocr/42194845
+|-
+|}
+===OCR Text===
+{| class="wikitable" name="OCR Text"
+|118 Rev. L. Guilding's Account of Margarodes, acids, while sulphuric turns them black. Vinegar slowly decom-  poses them. Exposed to flame they bubble and burn like horn. A most remarkable circumstance in the history of these ani-  mals is, the power which the puparia possess, when placed in  too dry a spot, to throw out gradually certain filiform and very  long organs, for the purpose of preventing the drying and de-  struction of the animal within by obtaining moisture by capil-  lary attraction. These organs I have named Siphones {fila ah-  sorbentia), a term, 1 believe, not already selected by Mr. Kirby.  They appear tubular, and are composed of parallel friable fibres.  At first I readily accounted for their appearance, by supposing  that they were delicate filiform fungi which had sprung up on  the pearls ; but on further investigation it proved that, contrary  to the law observed by Fungi, they were thrown out when placed  in a very dry camphorated box, or on dry soil ; and that they  only sprung from the half-obliterated spots which seem to mark  the position of the spiracula of the larva. There can, therefore, be  little doubt as to the use of these singular threads, which seem to  have no analogues in the animal kingdom, and which imitate in  so curious a manner the operation of some vegetable organs. St. Vincent, July 24, 1827. INSECTA. Ordo??*  Genus. Margarodes. Guild. Character Genericus.  Corpus obesum, moUe.  Caput evanidum.  Thorax abdomine annuloso vix distinctus. * Ordo, static, et affinitas omnino incerti. Locum monstret doctissimus amicus  Dominus Kirby. Os 
+|-
+|}
+===Taxa Found in Page===
+Name(s): 6<br />
+{| class="wikitable" name="Taxa Found in Page"
+|-
+! scope="col"|NameBankID   ||! scope="col"|EOLID ||! scope="col"|NameFound ||! scope="col"|NameConfirmed
+|-
+|   ||  ||Caput evanidum  ||
+|-
+|   ||  ||Dominus  ||
+|-
+|   ||  ||Genericus  ||
+|-
+|277217   ||344  ||Insecta  ||INSECTA
+|-
+|4936759   ||22493  ||Margarodes  ||Margarodes
+|-
+|   ||  ||Siphones fila  ||
+|-
+|}
+===Page Types===
+{| class="wikitable" name="Page Types"
+|-
+! scope="col"|PageTypeName
+|-
+|Text
+|-
+|}
+===Page Numbers===
+{| class="wikitable" name="Page Numbers"
+|-
+! scope="col"|Prefix   ||! scope="col"|Number
+|-
+|Page   ||118
+|-
+|}
+===Item Summary===
+{| class="wikitable" name="Item Summary"
+|-
+! scope="row"| ItemID
+| 132928
+|-
+! scope="row"| PrimaryTitleID
+| 66038
+|-
+! scope="row"| ThumbnailPageID
+| 42194842
+|-
+! scope="row"| Source
+| Internet Archive
+|-
+! scope="row"| SourceIdentifier
+| CUbiodiversity1124815
+|-
+! scope="row"| Volume
+| 
+|-
+! scope="row"| Year
+| 
+|-
+! scope="row"| Contributor
+| Cornell University Library
+|-
+! scope="row"| Sponsor
+| Mann Library, Cornell
+|-
+! scope="row"| Language
+| English
+|-
+! scope="row"| LicenseUrl
+| 
+|-
+! scope="row"| Rights
+| 
+|-
+! scope="row"| DueDiligence
+| 
+|-
+! scope="row"| CopyrightStatus
+| Public domain. The BHL considers that this work is no longer under copyright protection.
+|-
+! scope="row"| CopyrightRegion
+| 
+|-
+! scope="row"| ExternalUrl
+| 
+|-
+! scope="row"| ItemUrl
+| http://www.biodiversitylibrary.org/item/132928
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/66038
+|-
+! scope="row"| ItemThumbUrl
+| http://www.biodiversitylibrary.org/pagethumb/42194842
+|-
+|}
+===Title Summary===
+{| class="wikitable" name="Title Summary"
+|-
+! scope="row"| TitleID
+| 66038
+|-
+! scope="row"| BibliographicLevel
+| Monograph/Item
+|-
+! scope="row"| FullTitle
+| An account of margarodes, a new genus of insects found in the neighbourhood of ants' nests. 
+|-
+! scope="row"| ShortTitle
+| An account of margarodes, a new genus of insects found in the neighbourhood of ants' nests.
+|-
+! scope="row"| SortTitle
+| account of margarodes, a new genus of insects found in the
+|-
+! scope="row"| PartNumber
+| 
+|-
+! scope="row"| PartName
+| 
+|-
+! scope="row"| CallNumber
+| 
+|-
+! scope="row"| Edition
+| 
+|-
+! scope="row"| PublisherPlace
+| n. p.
+|-
+! scope="row"| PublisherName
+| 
+|-
+! scope="row"| PublicationDate
+| [1827]
+|-
+! scope="row"| PublicationFrequency
+| 
+|-
+! scope="row"| TitleUrl
+| http://www.biodiversitylibrary.org/bibliography/66038
+|-
+|}
