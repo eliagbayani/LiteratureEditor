@@ -253,6 +253,7 @@ require_once "$IP/extensions/Lockdown/Lockdown.php";                //added by E
 require_once("$IP/extensions/TalkRight/TalkRight.php");             //ver 1.5.1 -> This makes EoE_Member write to Talk/Discussion pages but readonly to regular pages
 require_once "$IP/extensions/ConfirmAccount/ConfirmAccount.php";    //added by Eli Sep 9
 require_once("$IP/extensions/EmailUsers/EmailUsers.php");           //added by Eli Oct 20
+wfLoadExtension( 'EmbedVideo' );
 
 
 # End of automatically generated settings.
@@ -263,7 +264,7 @@ $wgFileExtensions = array_unique($wgFileExtensions);
 // print_r($wgFileExtensions);exit;
 
 
-//=================================================
+//================================================= EoL: Literature Editor
 $wgSMTP = array('host'      => 'ssl://smtp.gmail.com',
                 'IDHost'    => 'gmail.com',
                 'port'      => 465,
@@ -271,15 +272,14 @@ $wgSMTP = array('host'      => 'ssl://smtp.gmail.com',
                 'password'  => 'erjaeol1309',
                 'auth'      => true);
 
-
+$wgEmailAuthentication  = true;
 $wgEnableEmail          = true;
+$wgAllowHTMLEmail       = true;
 $wgEnableUserEmail      = true;
-$wgEmergencyContact     = "eliagbayani@yahoo.com.ph";
-$wgPasswordSender       = "johnrees2013@yahoo.com";
+$wgEmergencyContact     = "eagbayani@eol.org";
+$wgPasswordSender       = "eagbayani@eol.org";
 $wgEnotifUserTalk       = true;
 $wgEnotifWatchlist      = true;
-$wgEmailAuthentication  = true;
-$wgAllowHTMLEmail       = true;
 
 // echo "\n" . $( '#t-emailuser' ).length ? true : false;
 //=================================================
