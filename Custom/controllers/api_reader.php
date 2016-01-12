@@ -23,10 +23,8 @@ class api_reader_controller //extends ControllerBase
         }
     }
     
-    
     public static function index()
-    {
-    }
+    {}
 
     function render_template($filename, $variables) 
     {
@@ -53,8 +51,6 @@ class api_reader_controller //extends ControllerBase
         return api_reader_controller::render_template('article-summary', $article);
     }
 
-    
-    
 }
 /*
 class dwc_validator_controller //extends ControllerBase
