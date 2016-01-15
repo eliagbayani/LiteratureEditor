@@ -62,7 +62,6 @@ if(isset($params['search_type']))
 {
     if($params['search_type'] == "titlelist") print $ctrler->render_template('titlelist-result', array('letter' => @$params['radio']));
     if($params['search_type'] == "move2wiki") print $ctrler->render_template('move2wiki-result', array('params' => @$params));
-    
 }
 
 ?>
@@ -77,7 +76,6 @@ elseif(@$params['search_type'] == 'pagetaxasearch')  print '<script>$( "#tabs_ma
 elseif(@$params['search_type'] == 'pagesearch')      print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
 elseif(@$params['search_type'] == 'titlelist')       print '<script>$( "#tabs_main" ).tabs( "option", "active", 2 );</script>';
 elseif(@$params['search_type'] == 'move2wiki')       print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
-
 ?>
 
 

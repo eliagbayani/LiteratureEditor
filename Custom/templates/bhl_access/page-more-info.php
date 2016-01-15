@@ -6,10 +6,7 @@
 // echo "<hr>";
 // print_r($page);
 
-// print_r($arr);
 $Page = json_decode($arr);
-// echo "<hr>";
-// print_r($Page);
 
 ?>
 
@@ -26,4 +23,3 @@ $Page = json_decode($arr);
         <?php print self::render_layout(array("search_type" => "pagetaxasearch", "page_id" => $Page->PageID), 'result') ?>
     </div>
 </div>
-

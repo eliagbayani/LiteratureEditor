@@ -426,9 +426,8 @@ User rights                 : sendbatchemail
 $wgEmailUsersMaxRecipients  = 5;    //: Defines the max number of recipients
 $wgEmailUsersUseJobQueue = true;    //: Use Manual:Job queue when sending mails
 
-
 //================================================
-// echo "\n$wgUser->getName()\n";
+// echo "\n" . $wgUser->getName() . "\n"; ---deprecated already
+// echo "\n" . $_COOKIE['wiki_literatureeditorUserName'] . "\n"; //was used in /Custom/controllers/bhl_access.php;
 
 // var_dump(ini_get('include_path')); //just to see the include_path
-

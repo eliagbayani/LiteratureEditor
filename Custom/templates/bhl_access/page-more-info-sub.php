@@ -1,8 +1,16 @@
 <?php
 $title_id = self::get_title_id_using_item_id($Page->ItemID);
+
+// echo "<hr>";
+// print_r($Page);
+// echo "<hr>";
+// print_r($params);
+// echo "<hr>";
+
 ?>
 <div id="tabs-1">
     <table>
+    
     <tr>
         <td>PageID</td>
         <td> : <?php echo $Page->PageID ?>
@@ -50,29 +58,36 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
     <?php
 
     $title = self::get_title_using_title_id($title_id);
-    
-    $mysqli = new mysqli("localhost", "root", "m173", "wiki_literatureeditor");
-    
-    $pass_title = mysqli_real_escape_string($mysqli, "$Page->PageID: $title");
-    $pass_title = mysqli_real_escape_string($mysqli, "$Page->PageID");
+    $pass_title = $Page->PageID;
     
     $export_url = "../bhl_access/index.php?page_id=" . $Page->PageID . "&item_id=" . $Page->ItemID . "&title_id=" . $title_id . "&pass_title=" . urlencode($pass_title) . "&search_type=move2wiki";
-    
+
     
     if(self::check_if_this_title_has_wiki($pass_title))
     {
         $wiki = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $Page->PageID;
         echo "Wiki already exists. You can view it <a href=\"$wiki\">here</a>.";
+        $submit_text = "Proceed overwrite Wiki page";
         ?>
+        <!--
         <br><br><a href="<?php echo $export_url?>">Proceed overwrite Wiki page</a>
+        -->
         <?php
     }
     else
     {
         ?>
+        <!--
         <a href="<?php echo $export_url?>">Export this to Wiki</a>
+        -->
         <?php
+        $submit_text = "Export this to Wiki";
+        
     }
+    
+    require_once("subject_menu.php");
+    
+    
     ?>
     
     </td></tr>
