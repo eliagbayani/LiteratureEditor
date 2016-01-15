@@ -52,10 +52,10 @@ array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Key", "t" => "Ident
 array("url" => "http://eol.org/schema/eol_info_items.xml#IdentificationResources", "t" => "Identification Resources"), 
 array("url" => "http://eol.org/schema/eol_info_items.xml#NucleotideSequences", "t" => "Nucleotide Sequences"));
 
-$subject = "http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription";
+$subject_type = "http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription";
 if(isset($params))
 {
-    if($val = @$params['subject']) $subject = $val;
+    if($val = @$params['subject_type']) $subject_type = $val;
 }
 ?>
 
@@ -65,12 +65,12 @@ if(isset($params))
     <input type="hidden" name="title_id" value="<?php echo $title_id ?>">
     <input type="hidden" name="pass_title" value="<?php echo urlencode($pass_title) ?>">
     <input type="hidden" name="search_type" value="move2wiki">
-    <select name="subject" id="selectmenu" width="500">
+    <select name="subject_type" id="selectmenu" width="500">
         <?php
         foreach($subjects as $s)
         {
             $selected = "";
-            if($subject == $s['url']) $selected = "selected";
+            if($subject_type == $s['url']) $selected = "selected";
             echo '<option value="' . $s['url'] . '" ' . $selected . '>' . $s['t'] . '</option>';
         }
         ?>

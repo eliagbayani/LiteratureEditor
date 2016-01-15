@@ -228,7 +228,7 @@ class bhl_access_controller //extends ControllerBase
         $status = str_ireplace("done", "done. ", $status);
         // echo "<br>$cmdline<br>";
 
-        echo "$status<br>";
+        echo "[$status]<br>";
         
         
         /* working also
@@ -250,9 +250,9 @@ class bhl_access_controller //extends ControllerBase
     {
         // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=42194842&search_type=pagesearch
         $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?page_id=" . $xml->Result->PageID . "&search_type=pagesearch";
-        $back .= "&subject=" . urlencode($params['subject']);
+        $back .= "&subject_type=" . urlencode($params['subject_type']);
        
-        fwrite($file, "<span class=\"plainlinks\">[$back Back to BHL API result page]</span>\n");
+        fwrite($file, "[[Image:Back icon.png|link=$back|Back to BHL API result page]]<span class=\"plainlinks\">[$back Back to BHL API result page]</span>\n");
 
         // fwrite($file, "[[Contributing User::{{subst:REVISIONUSER}}]]\n");
         // fwrite($file, "[[Contributing User::{{subst:USERNAME}}]]\n");
@@ -292,7 +292,6 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ThumbnailUrl\n");       fwrite($file, "| " . @$Page->ThumbnailUrl."\n");
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| FullSizeImageUrl\n");   fwrite($file, "| " . @$Page->FullSizeImageUrl."\n");
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| OcrUrl\n");             fwrite($file, "| " . @$Page->OcrUrl."\n");
-                // fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| OcrText\n");            fwrite($file, "| " . self::format_wiki($Page->OcrText)."\n");
                 fwrite($file, "|-\n");
                 fwrite($file, "|}\n");
 
@@ -306,7 +305,7 @@ class bhl_access_controller //extends ControllerBase
                 //Subject Type
                 fwrite($file, "===Subject Type===\n");
                 fwrite($file, "{| class=\"wikitable\" name=\"Subject Type\"\n");
-                fwrite($file, "|" . self::format_wiki($params['subject'])."\n");
+                fwrite($file, "|" . self::format_wiki($params['subject_type'])."\n");
                 fwrite($file, "|-\n");
                 fwrite($file, "|}\n");
 
@@ -388,8 +387,7 @@ class bhl_access_controller //extends ControllerBase
                     fwrite($file, "|}\n");
                 }
                 
-                
-            }
+            }//foreach loop ends
         }
     }
     
@@ -453,7 +451,6 @@ class bhl_access_controller //extends ControllerBase
             }
         }
     }
-
 
     function format_wiki($wiki)
     {
