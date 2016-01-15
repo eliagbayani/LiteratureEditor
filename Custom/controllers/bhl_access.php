@@ -58,7 +58,7 @@ class bhl_access_controller //extends ControllerBase
                 elseif(@$p['search_type'] == 'itemsearch')      echo self::render_template('itemsearch-result', array('xml' => $xml));
                 elseif(@$p['search_type'] == 'titlesearch')     echo self::render_template('titlesearch-result', array('xml' => $xml));
                 elseif(@$p['search_type'] == 'pagetaxasearch')  echo self::render_template('pagetaxasearch-result', array('xml' => $xml));
-                elseif(@$p['search_type'] == 'pagesearch')      echo self::render_template('pagesearch-result', array('xml' => $xml));
+                elseif(@$p['search_type'] == 'pagesearch')      echo self::render_template('pagesearch-result', array('xml' => $xml, 'params' => $p));
             }
             else
             {
@@ -204,7 +204,7 @@ class bhl_access_controller //extends ControllerBase
             $p['search_type'] = 'pagesearch';
             $p['page_id']     = $params['page_id'];
             $xml = self::search_bhl($p);
-            self::write_page_info($xml, $file);
+            self::write_page_info($xml, $file, $params);
 
             $p['search_type'] = 'itemsearch';
             $p['item_id']     = $params['item_id'];
@@ -246,11 +246,20 @@ class bhl_access_controller //extends ControllerBase
         // echo "<br>server = " . $_SERVER['SERVER_NAME'];
     }
     
-    function write_page_info($xml, $file)
+    function write_page_info($xml, $file, $params)
     {
         // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=42194842&search_type=pagesearch
         $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?page_id=" . $xml->Result->PageID . "&search_type=pagesearch";
+        $back .= "&subject=" . urlencode($params['subject']);
+       
         fwrite($file, "<span class=\"plainlinks\">[$back Back to BHL API result page]</span>\n");
+
+        // fwrite($file, "[[Contributing User::{{subst:REVISIONUSER}}]]\n");
+        // fwrite($file, "[[Contributing User::{{subst:USERNAME}}]]\n");
+        // fwrite($file, "[[Contributing User::{{subst:CURRENTUSER}}]]\n");
+        
+        $agent_url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:{$_COOKIE['wiki_literatureeditorUserName']}";
+        fwrite($file, "<br /><span class=\"plainlinks\">Contributing User: [$agent_url <b>{$_COOKIE['wiki_literatureeditorUserName']}</b>]</span>\n");
         
         /*
         fwrite($file, "===Table of Contents===" . "\n");
@@ -284,7 +293,6 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| FullSizeImageUrl\n");   fwrite($file, "| " . @$Page->FullSizeImageUrl."\n");
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| OcrUrl\n");             fwrite($file, "| " . @$Page->OcrUrl."\n");
                 // fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| OcrText\n");            fwrite($file, "| " . self::format_wiki($Page->OcrText)."\n");
-                
                 fwrite($file, "|-\n");
                 fwrite($file, "|}\n");
 
@@ -292,7 +300,13 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "===OCR Text===\n");
                 fwrite($file, "{| class=\"wikitable\" name=\"OCR Text\"\n");
                 fwrite($file, "|" . self::format_wiki($Page->OcrText)."\n");
-                
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
+
+                //Subject Type
+                fwrite($file, "===Subject Type===\n");
+                fwrite($file, "{| class=\"wikitable\" name=\"Subject Type\"\n");
+                fwrite($file, "|" . self::format_wiki($params['subject'])."\n");
                 fwrite($file, "|-\n");
                 fwrite($file, "|}\n");
 
