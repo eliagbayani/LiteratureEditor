@@ -8,8 +8,8 @@
 
 <form name="validator_form" action="index.php" method="post" enctype="multipart/form-data">
 <input type="hidden" name="search_type" value="titlelist">
-    <table>
-    <tr>
+    <table border="0">
+    <tr valign="top">
         <td>
         <div id="radioset">
         <input type="radio" id="radio1" name="radio" value="a" <?php if($radio == 'a') echo " checked=\"checked\""; ?>> <label for="radio1">A</label>
@@ -63,9 +63,10 @@
         </td>
         <td valign="top">
             <button id="button">Search Title >></button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </td>
+        <td>
             <?php $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/" ?>
-            <a href="<?php echo $back?>">Back to Wiki</a>
+            <?php self::image_with_text(array("text" => "Back to Wiki", "src" => "../images/Back_icon.png", "alt_text" => "Back to Wiki", "href" => $back));?>
         </td>
     </tr>
     </table>

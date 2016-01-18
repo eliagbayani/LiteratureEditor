@@ -131,6 +131,11 @@ class bhl_access_controller //extends ControllerBase
         */
     }
     
+    function image_with_text($options)
+    {
+        echo self::render_template('display-image', array('options' => $options));
+    }
+    
     function get_title_id_using_item_id($item_id)
     {
         $p['search_type'] = 'itemsearch';
@@ -201,20 +206,22 @@ class bhl_access_controller //extends ControllerBase
         $filename = "../temp/wiki/" . $params['page_id'] . ".wiki";
         if($file = Functions::file_open($filename, 'w'))
         {
+            $go_top = "|+ style=\"caption-side:right;\"|[[Image:arrow-up icon.png|link=#top|Go top]]";
+            
             $p['search_type'] = 'pagesearch';
             $p['page_id']     = $params['page_id'];
             $xml = self::search_bhl($p);
-            self::write_page_info($xml, $file, $params);
+            self::write_page_info($xml, $file, $params, $go_top);
 
             $p['search_type'] = 'itemsearch';
             $p['item_id']     = $params['item_id'];
             $xml = self::search_bhl($p);
-            self::write_item_info($xml, $file);
+            self::write_item_info($xml, $file, $go_top);
 
             $p['search_type'] = 'titlesearch';
             $p['title_id']     = $params['title_id'];
             $xml = self::search_bhl($p);
-            self::write_title_info($xml, $file);
+            self::write_title_info($xml, $file, $go_top);
             
             fclose($file);
         }
@@ -246,20 +253,25 @@ class bhl_access_controller //extends ControllerBase
         // echo "<br>server = " . $_SERVER['SERVER_NAME'];
     }
     
-    function write_page_info($xml, $file, $params)
+    function write_page_info($xml, $file, $params, $go_top)
     {
         // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=42194842&search_type=pagesearch
         $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?page_id=" . $xml->Result->PageID . "&search_type=pagesearch";
         $back .= "&subject_type=" . urlencode($params['subject_type']);
+        $back .= "&audience_type=" . urlencode($params['audience_type']);
+        
        
-        fwrite($file, "[[Image:Back icon.png|link=$back|Back to BHL API result page]]<span class=\"plainlinks\">[$back Back to BHL API result page]</span>\n");
+        fwrite($file, "<span class=\"plainlinks\">[$back Back to BHL API result page]</span>[[Image:Back icon.png|link=$back|Back to BHL API result page]]\n");
 
         // fwrite($file, "[[Contributing User::{{subst:REVISIONUSER}}]]\n");
         // fwrite($file, "[[Contributing User::{{subst:USERNAME}}]]\n");
         // fwrite($file, "[[Contributing User::{{subst:CURRENTUSER}}]]\n");
         
-        $agent_url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:{$_COOKIE['wiki_literatureeditorUserName']}";
-        fwrite($file, "<br /><span class=\"plainlinks\">Contributing User: [$agent_url <b>{$_COOKIE['wiki_literatureeditorUserName']}</b>]</span>\n");
+        $wiki_user = "";
+        if(isset($_COOKIE['wiki_literatureeditorUserName'])) $wiki_user = $_COOKIE['wiki_literatureeditorUserName'];
+        
+        $agent_url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:{$wiki_user}";
+        fwrite($file, "<br /><span class=\"plainlinks\">Contributing User: [$agent_url <b>{$wiki_user}</b>]</span>\n");
         
         /*
         fwrite($file, "===Table of Contents===" . "\n");
@@ -272,6 +284,7 @@ class bhl_access_controller //extends ControllerBase
         fwrite($file, "|-" . "\n");
         fwrite($file, "|}" . "\n");
         */
+
         
         if($loop = @$xml->Result)
         {
@@ -280,9 +293,50 @@ class bhl_access_controller //extends ControllerBase
                 $Page_xml = $Page;
                 $Page = json_decode(json_encode($Page)); //converting SimpleXMLElement Object to stdClass Object
 
+                //User-defined Title
+                fwrite($file, "===User-defined Title (optional)===\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"User-defined Title\"\n");
+                fwrite($file, "$go_top\n");
+                fwrite($file, "|" . "''enter title here''" . "\n");
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
+
+                //Subject Type
+                fwrite($file, "===Subject Type===\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Subject Type\"\n");
+                fwrite($file, "$go_top\n");
+                fwrite($file, "|" . self::format_wiki($params['subject_type'])."\n");
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
+
+                //Audience Type
+                fwrite($file, "===Audience Type===\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Audience Type\"\n");
+                fwrite($file, "$go_top\n");
+                fwrite($file, "|" . self::format_wiki($params['audience_type'])."\n");
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
+
+                //References
+                fwrite($file, "===User-defined References (optional)===\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"User-defined References\"\n");
+                fwrite($file, "$go_top\n");
+                fwrite($file, "|" . "\n");
+                fwrite($file, "<ref name=\"ref1\">John's Handbook, Third Edition, Doe-Roe Co., 1972.</ref><!-- Put your reference here or leave it as is. This sample won't be imported -->" . "\n");
+                fwrite($file, "<ref name=\"ref2\">[http://www.eol.org Link text], my 2nd sample reference.</ref><!-- Put your reference here or leave it as is. This sample won't be imported -->" . "\n");
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
+                // fwrite($file, "<references/><!-- Put this line \"<references/>\" elsewhere to display the reference or footnote list in that part of the wiki. -->\n");
+                fwrite($file, "<!--\n");
+                fwrite($file, "Then, if you want to add citation points at any part of your wiki, just enter: e.g.\n\n");
+                fwrite($file, "<ref name=\"ref1\"/>\n\n...and this will display the auto-numbered superscripts as link text in that part of the wiki.\n");
+                fwrite($file, "-->\n");
+                fwrite($file, "<br>\n");
+                
                 //page summary
                 fwrite($file, "===Page Summary===\n");
                 fwrite($file, "{| class=\"wikitable\" name=\"Page Summary\"\n");
+                fwrite($file, "$go_top\n");
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PageID\n");             fwrite($file, "| $Page->PageID\n");
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ItemID\n");             fwrite($file, "| $Page->ItemID\n");
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Volume\n");             fwrite($file, "| " . @$Page->Volume."\n");
@@ -298,14 +352,8 @@ class bhl_access_controller //extends ControllerBase
                 //OCR Text
                 fwrite($file, "===OCR Text===\n");
                 fwrite($file, "{| class=\"wikitable\" name=\"OCR Text\"\n");
+                fwrite($file, "$go_top\n");
                 fwrite($file, "|" . self::format_wiki($Page->OcrText)."\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-
-                //Subject Type
-                fwrite($file, "===Subject Type===\n");
-                fwrite($file, "{| class=\"wikitable\" name=\"Subject Type\"\n");
-                fwrite($file, "|" . self::format_wiki($params['subject_type'])."\n");
                 fwrite($file, "|-\n");
                 fwrite($file, "|}\n");
 
@@ -316,6 +364,7 @@ class bhl_access_controller //extends ControllerBase
                 if($total_taxa)
                 {
                     fwrite($file, "{| class=\"wikitable\" name=\"Taxa Found in Page\"\n");
+                    fwrite($file, "$go_top\n");
                     fwrite($file, "|-\n");
                     fwrite($file, "! scope=\"col\"|NameBankID   ||! scope=\"col\"|EOLID ||! scope=\"col\"|NameFound ||! scope=\"col\"|NameConfirmed\n");
                     if(count($Page_xml->Names->Name))
@@ -336,6 +385,7 @@ class bhl_access_controller //extends ControllerBase
                 if($total_page_types)
                 {
                     fwrite($file, "{| class=\"wikitable\" name=\"Page Types\"\n");
+                    fwrite($file, "$go_top\n");
                     fwrite($file, "|-\n");
                     fwrite($file, "! scope=\"col\"|PageTypeName\n");
                     if($total_page_types == 1)
@@ -364,6 +414,7 @@ class bhl_access_controller //extends ControllerBase
                 if($total_page_numbers)
                 {
                     fwrite($file, "{| class=\"wikitable\" name=\"Page Numbers\"\n");
+                    fwrite($file, "$go_top\n");
                     fwrite($file, "|-\n");
                     fwrite($file, "! scope=\"col\"|Prefix   ||! scope=\"col\"|Number\n");
                     
@@ -391,7 +442,7 @@ class bhl_access_controller //extends ControllerBase
         }
     }
     
-    function write_item_info($xml, $file)
+    function write_item_info($xml, $file, $go_top)
     {
         if($loop = @$xml->Result)
         {
@@ -399,6 +450,7 @@ class bhl_access_controller //extends ControllerBase
             {
                 fwrite($file, "===Item Summary===\n");
                 fwrite($file, "{| class=\"wikitable\" name=\"Item Summary\"\n");
+                fwrite($file, "$go_top\n");
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ItemID\n");             fwrite($file, "| $item->ItemID\n");
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PrimaryTitleID\n");     fwrite($file, "| $item->PrimaryTitleID\n");
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ThumbnailPageID\n");    fwrite($file, "| $item->ThumbnailPageID\n");
@@ -424,7 +476,7 @@ class bhl_access_controller //extends ControllerBase
         }
     }
 
-    function write_title_info($xml, $file)
+    function write_title_info($xml, $file, $go_top)
     {
         if($loop = @$xml->Result)
         {
@@ -432,6 +484,7 @@ class bhl_access_controller //extends ControllerBase
             {
                 fwrite($file, "===Title Summary===\n");
                 fwrite($file, "{| class=\"wikitable\" name=\"Title Summary\"\n");
+                fwrite($file, "$go_top\n");    
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| TitleID\n");                fwrite($file, "| $title->TitleID\n");
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| BibliographicLevel\n");     fwrite($file, "| $title->BibliographicLevel\n");
                 fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| FullTitle\n");              fwrite($file, "| $title->FullTitle\n");

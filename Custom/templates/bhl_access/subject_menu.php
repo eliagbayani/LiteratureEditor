@@ -51,11 +51,21 @@ array("url" => "http://eol.org/schema/eol_info_items.xml#CitizenScience", "t" =>
 array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Key", "t" => "Identification Resources > Key"), 
 array("url" => "http://eol.org/schema/eol_info_items.xml#IdentificationResources", "t" => "Identification Resources"), 
 array("url" => "http://eol.org/schema/eol_info_items.xml#NucleotideSequences", "t" => "Nucleotide Sequences"));
+$subject_type = "http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription"; //default value
 
-$subject_type = "http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription";
+
+$audiences = array(
+    array("value" => "Everyone",        "t" => "Everyone"),
+    array("value" => "General public",  "t" => "General public"),
+    array("value" => "Expert users",    "t" => "Expert users"),
+    array("value" => "Children",        "t" => "Children"));
+$audience_type = "Everyone"; //default value
+
+
 if(isset($params))
 {
     if($val = @$params['subject_type']) $subject_type = $val;
+    if($val = @$params['audience_type']) $audience_type = $val;
 }
 ?>
 
@@ -65,73 +75,44 @@ if(isset($params))
     <input type="hidden" name="title_id" value="<?php echo $title_id ?>">
     <input type="hidden" name="pass_title" value="<?php echo urlencode($pass_title) ?>">
     <input type="hidden" name="search_type" value="move2wiki">
-    <select name="subject_type" id="selectmenu" width="500">
-        <?php
-        foreach($subjects as $s)
-        {
-            $selected = "";
-            if($subject_type == $s['url']) $selected = "selected";
-            echo '<option value="' . $s['url'] . '" ' . $selected . '>' . $s['t'] . '</option>';
-        }
-        ?>
-    </select>
-    <br>
-    <button id="button_move2wiki"><?php echo $submit_text ?></button>
+    
+    <table border="1">
+        <tr>
+            <td>Subject Type:</td>
+            <td>
+                <select name="subject_type" id="selectmenu">
+                    <?php
+                    foreach($subjects as $s)
+                    {
+                        $selected = "";
+                        if($subject_type == $s['url']) $selected = "selected";
+                        echo '<option value="' . $s['url'] . '" ' . $selected . '>' . $s['t'] . '</option>';
+                    }
+                    ?>
+                </select>
+            </td>
+        </tr>
+        
+
+        <tr>
+            <td>Audience:</td>
+            <td>
+                <select name="audience_type" id="selectmenu_2">
+                    <?php
+                    foreach($audiences as $s)
+                    {
+                        $selected = "";
+                        if($audience_type == $s['value']) $selected = "selected";
+                        echo '<option value="' . $s['value'] . '" ' . $selected . '>' . $s['t'] . '</option>';
+                    }
+                    ?>
+                </select>
+            </td>
+        </tr>
+
+
+        
+        <tr><td colspan="2" align="center"><button id="button_move2wiki"><?php echo $submit_text ?></button></td></tr>
+    </table>
+    
 </form>
-
-
-<?php
-/*
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#TaxonBiology">Overview › Brief Summary</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Description">Overview › Comprehensive Description > Description</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription">Overview › Comprehensive Description > General Description</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Biology">Overview › Comprehensive Description > Biology</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Distribution">Overview › Distribution</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Morphology">Physical Description › Morphology</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Size">Physical Description › Size</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#DiagnosticDescription">Physical Description › Diagnostic Description</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#LookAlikes">Physical Description › Look Alikes</option>
-<option value="http://eol.org/schema/eol_info_items.xml#Development">Physical Description › Development</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Habitat">Ecology › Habitat</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Migration">Ecology › Migration</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Dispersal">Ecology › Dispersal</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#TrophicStrategy">Ecology › Trophic Strategy</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Associations">Ecology › Associations</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Diseases">Ecology › Diseases and Parasites</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#PopulationBiology">Ecology › Population Biology</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Ecology">Ecology › General Ecology</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Behaviour">Life History and Behavior › Behavior</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Cyclicity">Life History and Behavior › Cyclicity</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#LifeCycle">Life History and Behavior › Life Cycle</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#LifeExpectancy">Life History and Behavior › Life Expectancy</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Reproduction">Life History and Behavior › Reproduction</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Growth">Life History and Behavior › Growth</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Evolution">Evolution and Systematics › Evolution</option>
-<option value="http://eol.org/schema/eol_info_items.xml#FossilHistory">Evolution and Systematics › Fossil History</option>
-<option value="http://eol.org/schema/eol_info_items.xml#SystematicsOrPhylogenetics">Evolution and Systematics › Systematics or Phylogenetics</option>
-<option value="http://eol.org/schema/eol_info_items.xml#FunctionalAdaptations">Evolution and Systematics › Functional Adaptations</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Physiology">Physiology and Cell Biology › Physiology</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Cytology">Physiology and Cell Biology › Cell Biology</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Genetics">Molecular Biology and Genetics › Genetics</option>
-<option value="http://eol.org/schema/eol_info_items.xml#Genome">Molecular Biology and Genetics › Genome</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#MolecularBiology">Molecular Biology and Genetics › Molecular Biology</option>
-<option value="http://eol.org/schema/eol_info_items.xml#Barcode">Molecular Biology and Genetics › Molecular Biology > Barcode</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#ConservationStatus">Conservation › Conservation Status</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Conservation">Conservation › Conservation</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Trends">Conservation › Trends</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Procedures">Conservation › Threats > Procedures</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Threats">Conservation › Threats</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Management">Conservation › Management</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Use">Relevance to Humans and Ecosystems › Benefits</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#RiskStatement">Relevance to Humans and Ecosystems › Risks</option>
-<option value="http://eol.org/schema/eol_info_items.xml#Notes">Notes</option>
-<option value="http://eol.org/schema/eol_info_items.xml#Taxonomy">Names and Taxonomy › Taxonomy</option>
-<option value="http://eol.org/schema/eol_info_items.xml#TypeInformation">Names and Taxonomy › Type Information</option>
-<option value="http://eol.org/schema/eol_info_items.xml#EducationResources">Education Resources</option>
-<option value="http://eol.org/schema/eol_info_items.xml#Education">Education</option>
-<option value="http://eol.org/schema/eol_info_items.xml#CitizenScience">Citizen Science Links</option>
-<option value="http://rs.tdwg.org/ontology/voc/SPMInfoItems#Key">Identification Resources > Key</option>
-<option value="http://eol.org/schema/eol_info_items.xml#IdentificationResources">Identification Resources</option>
-<option value="http://eol.org/schema/eol_info_items.xml#NucleotideSequences">Nucleotide Sequences</option>
-*/
-?>

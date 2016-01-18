@@ -9,7 +9,7 @@
 
 <form name="validator_form" action="index.php" method="post" enctype="multipart/form-data">
 <input type="hidden" name="search_type" value="booksearch">
-<table>
+<table border = "0">
 
 
 
@@ -26,10 +26,11 @@
     <tr><td>Subject:</td>   <td><input type="text" size="30" name="subject"<?php if($subject) echo " value=\"$subject\""; ?>/></td></tr>
     <tr><td>Language:</td>  <td><input type="text" size="30" name="language"<?php if($language) echo " value=\"$language\""; ?>/> e.g. eng
     &nbsp;&nbsp;&nbsp; <button id="button_search_book">Search this book</button>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <?php $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/" ?>
-    <a href="<?php echo $back?>">Back to Wiki</a>
-    
-    </td></tr>
+    </td>
+    <td>
+        <?php $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/" ?>
+        <?php self::image_with_text(array("text" => "Back to Wiki", "src" => "../images/Back_icon.png", "alt_text" => "Back to Wiki", "href" => $back));?>
+    </td>
+    </tr>
 </table>
 </form>

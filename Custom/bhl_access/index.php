@@ -27,7 +27,7 @@ error_reporting(E_ALL);
 $params =& $_GET;
 if(!$params) $params =& $_POST;
 
-// print_r($params);// exit;
+print_r($params);// exit;
 
 require_once("../config/settings.php");
 require_once("../lib/Functions.php");

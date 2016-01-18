@@ -53,10 +53,8 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
     <tr><td>OcrUrl</td><td>: <?php echo Functions::format_url(@$Page->OcrUrl) ?></td></tr>
     <tr valign="top"><td>OcrText</td><td>: <?php echo @$Page->OcrText ?></td></tr>
     <tr><td colspan="2" align="center">
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    
     <?php
-
     $title = self::get_title_using_title_id($title_id);
     $pass_title = $Page->PageID;
     
@@ -66,7 +64,9 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
     if(self::check_if_this_title_has_wiki($pass_title))
     {
         $wiki = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $Page->PageID;
-        echo "Wiki already exists. You can view it <a href=\"$wiki\">here</a>.";
+        
+        self::image_with_text(array("text" => "Wiki already exists for this excerpt.", "src" => "../images/wiki-icon.png", "alt_text" => "View Wiki here", "href" => $wiki));
+        
         $submit_text = "Proceed overwrite Wiki page";
         ?>
         <!--
