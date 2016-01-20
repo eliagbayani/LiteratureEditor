@@ -609,30 +609,21 @@ class bhl_access_controller //extends ControllerBase
         {
             $title2 = trim(substr($title, 4, strlen($title)));
             $title_without_ending_period = self::remove_ending_period($title2);
-            
             foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
             {
                 if(strtolower($title2) == strtolower($titulo)) return $licensor;
                 if(strtolower($title_without_ending_period) == strtolower($titulo)) return $licensor;
             }
-            
         }
         
         //5th case: {Brigham Young University science bulletin.} vs [BYU Science Bulletin, V. 1-20]
         $title2 = str_ireplace("Brigham Young University", "BYU", $title);
-        $temp_licensor = explode("Bulletin,", $title2);
-        if(count($temp_licensor) > 1)
+        $title_without_ending_period = self::remove_ending_period($title2);
+        foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
         {
-            $partial_licensor = trim($temp_licensor[0]." Bulletin");
-            foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
-            {
-                if(stripos($licensor, $partial_licensor) !== false) //string is found
-                {
-                    return $licensor;
-                }
-            }
+            if(stripos($titulo, $title2) !== false) return $licensor;
+            if(stripos($titulo, $title_without_ending_period) !== false) return $licensor;
         }
-        
         
     }
     
