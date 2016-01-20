@@ -84,7 +84,7 @@ if(isset($params))
     <input type="hidden" name="title_id" value="<?php echo $title_id ?>">
     <input type="hidden" name="pass_title" value="<?php echo urlencode($pass_title) ?>">
     <input type="hidden" name="search_type" value="move2wiki">
-    <input type="text" name="licensor" value="<?php echo $licensor ?>">
+    <input type="hidden" name="licensor" value="<?php echo $licensor ?>">
     
     <table border="1">
         <tr>

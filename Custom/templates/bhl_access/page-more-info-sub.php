@@ -166,7 +166,10 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
         {
             ?>
             <tr><td>Prefix</td><td>: <?php echo (string) @$PageNumber->Prefix ?></td></tr>
-            <tr><td>Number</td><td>: <?php echo (string) @$PageNumber->Number ?></td></tr>
+            <tr><td>Number</td><td>: 
+            <?php 
+            echo self::string_or_object(@$PageNumber->Number);
+            ?></td></tr>
             <tr><td colspan="2">&nbsp;</td></tr>
             <?php
         }

@@ -446,7 +446,7 @@ class bhl_access_controller //extends ControllerBase
                         foreach($Page->PageNumbers->PageNumber as $PageNumber)
                         {
                             fwrite($file, "|-\n");
-                            fwrite($file, "|" . @$PageNumber->Prefix . "   ||" . @$PageNumber->Number . "\n");
+                            fwrite($file, "|" . @$PageNumber->Prefix . "   ||" . self::string_or_object(@$PageNumber->Number) . "\n");
                         }
                     }
                     fwrite($file, "|-\n");
@@ -573,7 +573,7 @@ class bhl_access_controller //extends ControllerBase
         foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
         {
             if(strtolower($title_without_ending_period) == strtolower($titulo)) return $licensor;
-            if($title == $titulo)                                               return $licensor;
+            if(strtolower($title) == strtolower($titulo))                                               return $licensor;
         }
         
         //2nd case: {Copenhagen decisions on zoological nomenclature : additions to, and modifications of, the Règles internationales de la nomenclature zoologique /}
@@ -598,6 +598,35 @@ class bhl_access_controller //extends ControllerBase
             foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
             {
                 if(stripos($titulo, $partial_title) !== false) //string is found
+                {
+                    return $licensor;
+                }
+            }
+        }
+        
+        //4th case: removing first word "The " e.g. {The Journal of the East Africa and Uganda Natural History Society. }
+        if(substr($title, 0, 4) == "The ")
+        {
+            $title2 = trim(substr($title, 4, strlen($title)));
+            $title_without_ending_period = self::remove_ending_period($title2);
+            
+            foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
+            {
+                if(strtolower($title2) == strtolower($titulo)) return $licensor;
+                if(strtolower($title_without_ending_period) == strtolower($titulo)) return $licensor;
+            }
+            
+        }
+        
+        //5th case: {Brigham Young University science bulletin.} vs [BYU Science Bulletin, V. 1-20]
+        $title2 = str_ireplace("Brigham Young University", "BYU", $title);
+        $temp_licensor = explode("Bulletin,", $title2);
+        if(count($temp_licensor) > 1)
+        {
+            $partial_licensor = trim($temp_licensor[0]." Bulletin");
+            foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
+            {
+                if(stripos($licensor, $partial_licensor) !== false) //string is found
                 {
                     return $licensor;
                 }
@@ -634,6 +663,17 @@ class bhl_access_controller //extends ControllerBase
         $str = trim($str);
         if(substr($str,-1) == ".") return trim(substr($str, 0, strlen($str)-1));
         return $str;
+    }
+    
+    function string_or_object($value)
+    {
+        if(is_string($value)) return (string) $value;
+        elseif(is_object($value))
+        {
+            echo "<br>Investigate:<br>";
+            print_r($value);
+            return "";
+        }
     }
     
 }
