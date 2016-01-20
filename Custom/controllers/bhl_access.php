@@ -29,6 +29,7 @@ class bhl_access_controller //extends ControllerBase
         $this->bhl_api_service['pagetaxasearch']  = "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetPageNames&apikey=" . BHL_API_KEY;
         $this->bhl_api_service['pagesearch']  = "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetPageMetadata&ocr=t&names=t&apikey=" . BHL_API_KEY;
         
+        $this->download_options = array('download_timeout_seconds' => 4800, 'download_wait_time' => 300000, 'expire_seconds' => false);
         
     }
     
@@ -118,8 +119,9 @@ class bhl_access_controller //extends ControllerBase
         if($qry_type == 'booksearch') echo self::render_template('booksearch', array('arr' => $arr));
         */
 
-        $xml = Functions::lookup_with_cache($url, array('expire_seconds' => false));
+        $xml = Functions::lookup_with_cache($url, array('expire_seconds' => false, 'download_timeout_seconds' => 300)); //timesout in 5 mins. = 300 secs.
         $xml = simplexml_load_string($xml);
+        // print_r($xml);
         return $xml;
 
         /* moved this in render_layout()
@@ -300,6 +302,17 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "|" . "''enter title here''" . "\n");
                 fwrite($file, "|-\n");
                 fwrite($file, "|}\n");
+                
+                if(@$params['licensor'])
+                {
+                    //Licensor
+                    fwrite($file, "===Licensor===\n");
+                    fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Licensor\"\n");
+                    fwrite($file, "$go_top\n");
+                    fwrite($file, "|" . self::format_wiki($params['licensor'])."\n");
+                    fwrite($file, "|-\n");
+                    fwrite($file, "|}\n");
+                }
 
                 //Subject Type
                 fwrite($file, "===Subject Type===\n");
@@ -332,6 +345,8 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "<ref name=\"ref1\"/>\n\n...and this will display the auto-numbered superscripts as link text in that part of the wiki.\n");
                 fwrite($file, "-->\n");
                 fwrite($file, "<br>\n");
+                
+                
                 
                 //page summary
                 fwrite($file, "===Page Summary===\n");
@@ -505,6 +520,8 @@ class bhl_access_controller //extends ControllerBase
         }
     }
 
+
+
     function format_wiki($wiki)
     {
         $wiki = str_replace(array("\n"), "", $wiki);
@@ -530,6 +547,93 @@ class bhl_access_controller //extends ControllerBase
         $xml = self::search_bhl($p);
         if($val = @$xml->Result->FullTitle) return $val;
         elseif($val = @$xml->Result->ShortTitle) return $val;
+    }
+    
+    function get_CopyrightStatus_using_item_id($item_id, $title)
+    {
+        $p['search_type'] = 'itemsearch';
+        $p['item_id']     = $item_id;
+        $xml = self::search_bhl($p);
+        if($val = @$xml->Result->CopyrightStatus) return $val;
+        
+    }
+    
+    function is_copyrightstatus_Digitized_With_Permission($status)
+    {
+        if($status == "In copyright. Digitized with the permission of the rights holder.") return true;
+        elseif($status == "In copyright. Digitized with the permission of the rights holder") return true;
+        else return false;
+    }
+    
+    function get_licensor_for_this_title($title)
+    {
+        $title_without_ending_period = self::remove_ending_period($title);
+        // echo "<br>[$title_without_ending_period]<br>"; exit;
+        $licensors = self::generate_licensor_title_list();
+        foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
+        {
+            if(strtolower($title_without_ending_period) == strtolower($titulo)) return $licensor;
+            if($title == $titulo)                                               return $licensor;
+        }
+        
+        //2nd case: {Copenhagen decisions on zoological nomenclature : additions to, and modifications of, the Règles internationales de la nomenclature zoologique /}
+        $temp = explode("/", $title);
+        if(count($temp) > 1)
+        {
+            $partial_title = trim($temp[0]);
+            foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
+            {
+                if(stripos($titulo, $partial_title) !== false) //string is found
+                {
+                    return $licensor;
+                }
+            }
+        }
+        
+        //3rd case: {International code of zoological nomenclature = Code international de nomenclature zoologique /}
+        $temp = explode(" = ", $title);
+        if(count($temp) > 1)
+        {
+            $partial_title = trim($temp[0]);
+            foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
+            {
+                if(stripos($titulo, $partial_title) !== false) //string is found
+                {
+                    return $licensor;
+                }
+            }
+        }
+        
+        
+    }
+    
+    function generate_licensor_title_list()
+    {
+        $recs = array();
+        $url = "https://docs.google.com/spreadsheets/u/1/d/1ExBu0Q9yLXsYVNzXdIrDYt2Go6blwftAEEb5kJk-dfk/pub?output=html";
+        $html = Functions::lookup_with_cache($url, array('expire_seconds' => 86400, 'download_wait_time' => 1000000)); //expires every 24 hours
+        if(preg_match_all("/<tr style\=\'height\:1px\;\'>(.*?)<\/tr>/ims", $html, $arr))
+        {
+            foreach($arr[1] as $t)
+            {
+                if(preg_match_all("/<td (.*?)<\/td>/ims", $t, $arr2))
+                {
+                    $a = $arr2[1];
+                    $temp1 = explode(">", $a[1]);
+                    $temp2 = explode(">", $a[2]);
+                    $recs[$temp2[1]] = $temp1[1];
+                }
+            }
+        }
+        // echo "\n" . count($recs) . "\n";
+        return $recs;
+    }
+    
+    function remove_ending_period($str)
+    {
+        $str = trim($str);
+        if(substr($str,-1) == ".") return trim(substr($str, 0, strlen($str)-1));
+        return $str;
     }
     
 }

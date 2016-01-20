@@ -67,6 +67,15 @@ if(isset($params))
     if($val = @$params['subject_type']) $subject_type = $val;
     if($val = @$params['audience_type']) $audience_type = $val;
 }
+
+// $copyrightstatus = self::get_CopyrightStatus_using_item_id($Page->ItemID);
+// echo "<br>[$copyrightstatus]<br>";
+
+
+// Unfortunately, BHL's CopyrightStatus field is a mess. Sometimes, it will have information about the copyright owner (e.g., see GetItemMetadata&itemid=119239), 
+// but often they only say "In copyright. Digitized with the permission of the rights holder"  (e.g., see GetItemMetadata&itemid=25335). 
+// In those cases, we should use the following workaround for the rightsOwner entry: see <a href="http://biodivlib.wikispaces.com/Permissions#In-copyright%20Titles">In-copyright Titles</a> for rights holder information.
+
 ?>
 
 <form action="../bhl_access/index.php">
@@ -75,6 +84,7 @@ if(isset($params))
     <input type="hidden" name="title_id" value="<?php echo $title_id ?>">
     <input type="hidden" name="pass_title" value="<?php echo urlencode($pass_title) ?>">
     <input type="hidden" name="search_type" value="move2wiki">
+    <input type="text" name="licensor" value="<?php echo $licensor ?>">
     
     <table border="1">
         <tr>

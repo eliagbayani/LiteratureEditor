@@ -26,7 +26,7 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
         </td>
     </tr>
     
-    <tr><td>ItemID</td>
+    <tr bgcolor="lightyellow"><td>ItemID</td>
     <td>
     <ul id="icons" class="ui-widget ui-helper-clearfix">
         <li>: <?php echo $Page->ItemID ?></li>
@@ -38,8 +38,31 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
     </td>
     </tr>
     
+    <?php
+    $title = self::get_title_using_title_id($title_id);
+    $copyrightstatus = self::get_CopyrightStatus_using_item_id($Page->ItemID, $title);
+    $licensor = false;
+    if(self::is_copyrightstatus_Digitized_With_Permission($copyrightstatus))
+    {
+        $licensor = self::get_licensor_for_this_title($title);
+    }
+    ?>
+    
+    <tr bgcolor="lightyellow"><td>CopyrightStatus</td>
+    <td>: {<?php echo $copyrightstatus ?>}</td></tr>
+    
+    <?php if($licensor)
+    {
+        ?>
+        <tr bgcolor="lightyellow"><td>Licensor</td>
+        <td>: {<?php echo $licensor ?>}</td></tr>
+        <?php
+    }
+    ?>
+    
+    
     <tr><td>TitleID</td>
-    <td>: <?php echo $title_id ?> &nbsp; {<?php echo self::get_title_using_title_id($title_id) ?>}
+    <td>: <?php echo $title_id ?> &nbsp; {<?php echo $title ?>}
     </td>
     </tr>
     
@@ -55,9 +78,8 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
     <tr><td colspan="2" align="center">
     
     <?php
-    $title = self::get_title_using_title_id($title_id);
+    // $title = self::get_title_using_title_id($title_id); -- no longer needed...
     $pass_title = $Page->PageID;
-    
     $export_url = "../bhl_access/index.php?page_id=" . $Page->PageID . "&item_id=" . $Page->ItemID . "&title_id=" . $title_id . "&pass_title=" . urlencode($pass_title) . "&search_type=move2wiki";
 
     

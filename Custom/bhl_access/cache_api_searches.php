@@ -11,15 +11,43 @@ $ctrler = new bhl_access_controller(array());
 
 // cache_title_search($ctrler, $text_file);
 
+
 /*
 $text_file = "http://localhost/cp/MediaWiki/BHL/titleidentifier.txt";
 list_cached_title_searches($ctrler, $text_file);
 */
 
-// /*
+/*
 $text_file = "http://localhost/cp/MediaWiki/BHL/title.txt";
 generate_text_files($text_file);
+*/
+
+// /* This will generate a text file (list of titles and corresponding licensors) that will be used by the LiteratureEditor project.
+$url = "https://docs.google.com/spreadsheets/u/1/d/1ExBu0Q9yLXsYVNzXdIrDYt2Go6blwftAEEb5kJk-dfk/pub?output=html";
+generate_licensor_title_list($url);
 // */
+
+function generate_licensor_title_list($url)
+{
+    /* $url = "https://docs.google.com/spreadsheets/u/1/d/1ExBu0Q9yLXsYVNzXdIrDYt2Go6blwftAEEb5kJk-dfk/pub?output=html"; */
+    $recs = array();
+    $html = Functions::lookup_with_cache($url, array('expire_seconds' => false, 'download_wait_time' => 1000000));
+    if(preg_match_all("/<tr style\=\'height\:1px\;\'>(.*?)<\/tr>/ims", $html, $arr))
+    {
+        foreach($arr[1] as $t)
+        {
+            if(preg_match_all("/<td (.*?)<\/td>/ims", $t, $arr2))
+            {
+                $a = $arr2[1];
+                $temp1 = explode(">", $a[1]);
+                $temp2 = explode(">", $a[2]);
+                $recs[$temp2[1]] = $temp1[1];
+            }
+        }
+    }
+    echo "\n" . count($recs) . "\n";
+    return $recs;
+}
 
 function cache_title_search($ctrler, $text_file)
 {
