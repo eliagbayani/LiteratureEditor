@@ -45,28 +45,19 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
     if(self::is_copyrightstatus_Digitized_With_Permission($copyrightstatus))
     {
         $licensor = self::get_licensor_for_this_title($title);
+        if(!$licensor) self::display_message(array('type' => "error", 'msg' => "Please investigate, licensor not found. OR send this message with the Page ID [$Page->PageID] to <a href=\"mailto:" . DEVELOPER_EMAIL . "\">admin</a>."));
     }
     ?>
     
-    <tr bgcolor="lightyellow"><td>CopyrightStatus</td>
-    <td>: {<?php echo $copyrightstatus ?>}</td></tr>
+    <tr bgcolor="lightyellow"><td>CopyrightStatus</td><td>: {<?php echo $copyrightstatus ?>}</td></tr>
     
     <?php if($licensor)
     {
-        ?>
-        <tr bgcolor="lightyellow"><td>Licensor</td>
-        <td>: {<?php echo $licensor ?>}</td></tr>
-        <?php
+        ?><tr bgcolor="lightyellow"><td>Licensor</td><td>: {<?php echo $licensor ?>}</td></tr><?php
     }
     ?>
     
-    
-    <tr><td>TitleID</td>
-    <td>: <?php echo $title_id ?> &nbsp; {<?php echo $title ?>}
-    </td>
-    </tr>
-    
-    
+    <tr><td>TitleID</td><td>: <?php echo $title_id ?> &nbsp; {<?php echo $title ?>}</td></tr>
     <tr><td>Volume</td><td>: <?php echo @$Page->Volume ?></td></tr>
     <tr><td>Issue</td><td>: <?php echo @$Page->Issue ?></td></tr>
     <tr><td>Year</td><td>: <?php echo @$Page->Year ?></td></tr>
@@ -75,7 +66,6 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
     <tr><td>FullSizeImageUrl</td><td>: <?php echo Functions::format_url(@$Page->FullSizeImageUrl) ?></td></tr>
     <tr><td>OcrUrl</td><td>: <?php echo Functions::format_url(@$Page->OcrUrl) ?></td></tr>
     <tr valign="top"><td>OcrText</td><td>: <?php echo @$Page->OcrText ?></td></tr>
-    <tr><td colspan="2" align="center">
     
     <?php
     // $title = self::get_title_using_title_id($title_id); -- no longer needed...
@@ -86,32 +76,20 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
     if(self::check_if_this_title_has_wiki($pass_title))
     {
         $wiki = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $Page->PageID;
-        
-        self::image_with_text(array("text" => "Wiki already exists for this excerpt.", "src" => "../images/wiki-icon.png", "alt_text" => "View Wiki here", "href" => $wiki));
-        
+        // self::image_with_text(array("text" => "Wiki already exists for this excerpt.", "src" => "../images/wiki-icon.png", "alt_text" => "View Wiki here", "href" => $wiki));
+        self::display_message(array('type' => "highlight", 'msg' => "Wiki already exists for this excerpt. <a href='$wiki'>View Wiki</a>"));
         $submit_text = "Proceed overwrite Wiki page";
-        ?>
-        <!--
-        <br><br><a href="<?php echo $export_url?>">Proceed overwrite Wiki page</a>
-        -->
-        <?php
+        // <br><br><a href="$export_url">Proceed overwrite Wiki page</a>
     }
     else
     {
-        ?>
-        <!--
-        <a href="<?php echo $export_url?>">Export this to Wiki</a>
-        -->
-        <?php
+        // <!-- <a href="$export_url">Export this to Wiki</a> -->
         $submit_text = "Export this to Wiki";
-        
     }
-    
-    require_once("subject_menu.php");
-    
-    
     ?>
-    
+
+    <tr><td colspan="2" align="center">
+    <?php require_once("subject_menu.php"); ?>
     </td></tr>
     </table>
 </div>

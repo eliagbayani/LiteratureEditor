@@ -45,6 +45,7 @@ function generate_licensor_title_list($url)
             }
         }
     }
+    print_r($recs);
     echo "\n" . count($recs) . "\n";
     return $recs;
 }

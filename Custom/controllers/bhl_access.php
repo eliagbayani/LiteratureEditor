@@ -287,6 +287,7 @@ class bhl_access_controller //extends ControllerBase
         fwrite($file, "|}" . "\n");
         */
 
+        $color_green = "color:green; background-color:#ffffcc;";
         
         if($loop = @$xml->Result)
         {
@@ -297,7 +298,7 @@ class bhl_access_controller //extends ControllerBase
 
                 //User-defined Title
                 fwrite($file, "===User-defined Title (optional)===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"User-defined Title\"\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"User-defined Title\"\n");
                 fwrite($file, "$go_top\n");
                 fwrite($file, "|" . "''enter title here''" . "\n");
                 fwrite($file, "|-\n");
@@ -560,8 +561,10 @@ class bhl_access_controller //extends ControllerBase
     
     function is_copyrightstatus_Digitized_With_Permission($status)
     {
-        if($status == "In copyright. Digitized with the permission of the rights holder.") return true;
-        elseif($status == "In copyright. Digitized with the permission of the rights holder") return true;
+        $status = trim($status);
+        $sought_status = "In copyright. Digitized with the permission of the rights holder";
+        if(stripos($status, $sought_status) !== false) return true; //string is found
+        elseif(stripos($status, $sought_status.".") !== false) return true; //string is found
         else return false;
     }
     
@@ -573,7 +576,7 @@ class bhl_access_controller //extends ControllerBase
         foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
         {
             if(strtolower($title_without_ending_period) == strtolower($titulo)) return $licensor;
-            if(strtolower($title) == strtolower($titulo))                                               return $licensor;
+            if(strtolower($title) == strtolower($titulo))                       return $licensor;
         }
         
         //2nd case: {Copenhagen decisions on zoological nomenclature : additions to, and modifications of, the Règles internationales de la nomenclature zoologique /}
@@ -617,14 +620,27 @@ class bhl_access_controller //extends ControllerBase
         }
         
         //5th case: {Brigham Young University science bulletin.} vs [BYU Science Bulletin, V. 1-20]
-        $title2 = str_ireplace("Brigham Young University", "BYU", $title);
-        $title_without_ending_period = self::remove_ending_period($title2);
-        foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
+        //6th case: {Newsletter - Hawaiian Botanical Society.} vs [Newsletter -- Hawaii Botanical Society]
+        $title2 = false;
+        if(stripos($title, "Brigham Young University") !== false) $title2 = str_ireplace("Brigham Young University", "BYU", $title);
+        if(stripos($title, " - Hawaiian ") !== false)             $title2 = str_ireplace(" - Hawaiian ", " -- Hawaii ", $title);
+        
+        if($title2)
         {
-            if(stripos($titulo, $title2) !== false) return $licensor;
-            if(stripos($titulo, $title_without_ending_period) !== false) return $licensor;
+            $title_without_ending_period = self::remove_ending_period($title2);
+            // echo "<br>[$title][$title2][$title_without_ending_period]<br>";
+            foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
+            {
+                if(stripos($titulo, $title2) !== false) return $licensor;
+                if(stripos($titulo, $title_without_ending_period) !== false) return $licensor;
+            }
         }
         
+        //manual specific
+        if(stripos($title, "Madroño") !== false) return "California Botanical Society";
+        
+        
+        return false;
     }
     
     function generate_licensor_title_list()
@@ -664,6 +680,18 @@ class bhl_access_controller //extends ControllerBase
             echo "<br>Investigate:<br>";
             print_r($value);
             return "";
+        }
+    }
+    
+    function display_message($options)
+    {   //displays Highlight or Error messages
+        if($options['type'] == "highlight")
+        {
+            echo'<div class="ui-widget"><div class="ui-state-highlight ui-corner-all" style="margin-top: 0px; padding: 0 .7em;"><p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><strong>Info:</strong>&nbsp; ' . $options['msg'] . '</p></div></div>';
+        }
+        elseif($options['type'] == "error")
+        {
+            echo'<div class="ui-widget"><div class="ui-state-error ui-corner-all" style="padding: 0 .7em;"><p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><strong>Alert:</strong>&nbsp; ' . $options['msg'] . '</p></div></div>';
         }
     }
     
