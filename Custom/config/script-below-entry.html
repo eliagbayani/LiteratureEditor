@@ -1,5 +1,4 @@
 <script>
-
 // <!--
 // $("#Table1").styleTable();
 // -->
@@ -16,20 +15,15 @@ $("#accordion_open").accordion({ collapsible: true,
                                  header: "h3",
                               });
 
-
 var availableTags = [
-	"ActionScript",
-	"AppleScript",
-	"Asp",
-	"BASIC",
-	"C",
-	"C++"
-];
+   "ActionScript",
+   "AppleScript",
+   "Asp",
+   "BASIC",
+   "C",
+   "C++"];
 $( "#autocomplete" ).autocomplete({
-	source: availableTags
-});
-
-
+   source: availableTags});
 
 $( "#button" ).button();
 $( "#button_search_book" ).button();
@@ -39,10 +33,7 @@ $( "#button_search_page" ).button();
 $( "#button_search_taxa" ).button();
 $( "#button_move2wiki" ).button();
 
-
-
 $( "#radioset" ).buttonset();
-
 
 // <!-- orig not used
 // // $( "#tabs" ).tabs();
@@ -56,77 +47,61 @@ $( "#tabs3" ).tabs();
 $( "#tabs4" ).tabs();
 $( "#tabs5" ).tabs();
 
-
 $( "#dialog" ).dialog({
-	autoOpen: false,
-	width: 400,
-	buttons: [
-		{
-			text: "Ok",
-			click: function() {
-				$( this ).dialog( "close" );
-			}
-		},
-		{
-			text: "Cancel",
-			click: function() {
-				$( this ).dialog( "close" );
-			}
-		}
-	]
+   autoOpen: false,
+   width: 400,
+   buttons: [
+      {
+         text: "Ok",
+         click: function() {
+            $( this ).dialog( "close" );
+         }
+      },
+      {
+         text: "Cancel",
+         click: function() {
+            $( this ).dialog( "close" );
+         }
+      }
+   ]
 });
 
 // Link to open the dialog
 $( "#dialog-link" ).click(function( event ) {
-	$( "#dialog" ).dialog( "open" );
-	event.preventDefault();
+   $( "#dialog" ).dialog( "open" );
+   event.preventDefault();
 });
-
-
 
 $( "#datepicker" ).datepicker({
-	inline: true
+   inline: true
 });
-
-
 
 $( "#slider" ).slider({
-	range: true,
-	values: [ 17, 67 ]
+   range: true,
+   values: [ 17, 67 ]
 });
-
-
 
 $( "#progressbar" ).progressbar({
-	value: 20
+   value: 20
 });
-
-
 
 $( "#spinner" ).spinner();
 
-
-
 $( "#menu" ).menu();
-
-
 
 $( "#tooltip" ).tooltip();
 
-
-
 $( "#selectmenu" ).selectmenu({width: 450});
 $( "#selectmenu_2" ).selectmenu();
-
+$( "#selectmenu_3" ).selectmenu();
 
 // Hover states on the static widgets
 $( "#dialog-link, #icons li" ).hover(
-	function() {
-		$( this ).addClass( "ui-state-hover" );
-	},
-	function() {
-		$( this ).removeClass( "ui-state-hover" );
-	}
+   function() {
+      $( this ).addClass( "ui-state-hover" );
+   },
+   function() {
+      $( this ).removeClass( "ui-state-hover" );
+   }
 );
 </script>
-

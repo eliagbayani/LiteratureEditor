@@ -40,16 +40,22 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
     
     <?php
     $title = self::get_title_using_title_id($title_id);
-    $copyrightstatus = self::get_CopyrightStatus_using_item_id($Page->ItemID, $title);
+    $copyrightstatus = self::get_ItemInfo_using_item_id($Page->ItemID, 'copyrightstatus');
+    $license_url = self::get_ItemInfo_using_item_id($Page->ItemID, 'license url');
+    
     $licensor = false;
     if(self::is_copyrightstatus_Digitized_With_Permission($copyrightstatus))
     {
         $licensor = self::get_licensor_for_this_title($title);
         if(!$licensor) self::display_message(array('type' => "error", 'msg' => "Please investigate, licensor not found. OR send this message with the Page ID [$Page->PageID] to <a href=\"mailto:" . DEVELOPER_EMAIL . "\">admin</a>."));
     }
+    
+    
+    
     ?>
     
     <tr bgcolor="lightyellow"><td>CopyrightStatus</td><td>: {<?php echo $copyrightstatus ?>}</td></tr>
+    <tr bgcolor="lightyellow"><td>LicenseUrl</td><td>: {<?php echo $license_url ?>}</td></tr>
     
     <?php if($licensor)
     {
@@ -76,7 +82,7 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
     if(self::check_if_this_title_has_wiki($pass_title))
     {
         $wiki = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $Page->PageID;
-        // self::image_with_text(array("text" => "Wiki already exists for this excerpt.", "src" => "../images/wiki-icon.png", "alt_text" => "View Wiki here", "href" => $wiki));
+        // self::image_with_text(array("text" => "Wiki already exists for this excerpt.", "src" => "../images/wiki-icon.png", "alt_text" => "View Wiki here", "href" => $wiki)); working script
         self::display_message(array('type' => "highlight", 'msg' => "Wiki already exists for this excerpt. <a href='$wiki'>View Wiki</a>"));
         $submit_text = "Proceed overwrite Wiki page";
         // <br><br><a href="$export_url">Proceed overwrite Wiki page</a>
@@ -86,11 +92,22 @@ $title_id = self::get_title_id_using_item_id($Page->ItemID);
         // <!-- <a href="$export_url">Export this to Wiki</a> -->
         $submit_text = "Export this to Wiki";
     }
+
+
+    if(self::is_in_copyright_OR_all_rights_reserved($copyrightstatus))
+    {
+        self::display_message(array('type' => "highlight", 'msg' => "This is IN COPYRIGHT or ALL RIGHTS RESERVED. We cannot import text into the wiki."));
+    }
+    else
+    {
+        ?>
+        <tr><td colspan="2" align="center">
+        <?php require_once("subject_menu.php"); ?>
+        </td></tr>
+        <?php
+    }
     ?>
 
-    <tr><td colspan="2" align="center">
-    <?php require_once("subject_menu.php"); ?>
-    </td></tr>
     </table>
 </div>
 

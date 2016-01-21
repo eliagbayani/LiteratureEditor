@@ -261,6 +261,7 @@ class bhl_access_controller //extends ControllerBase
         $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?page_id=" . $xml->Result->PageID . "&search_type=pagesearch";
         $back .= "&subject_type=" . urlencode($params['subject_type']);
         $back .= "&audience_type=" . urlencode($params['audience_type']);
+        $back .= "&license_type=" . urlencode($params['license_type']);
         
        
         fwrite($file, "<span class=\"plainlinks\">[$back Back to BHL API result page]</span>[[Image:Back icon.png|link=$back|Back to BHL API result page]]\n");
@@ -323,6 +324,14 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "|-\n");
                 fwrite($file, "|}\n");
 
+                //License Type
+                fwrite($file, "===License Type===\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"License Type\"\n");
+                fwrite($file, "$go_top\n");
+                fwrite($file, "|" . self::format_wiki($params['license_type'])."\n");
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
+
                 //Audience Type
                 fwrite($file, "===Audience Type===\n");
                 fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Audience Type\"\n");
@@ -346,7 +355,6 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "<ref name=\"ref1\"/>\n\n...and this will display the auto-numbered superscripts as link text in that part of the wiki.\n");
                 fwrite($file, "-->\n");
                 fwrite($file, "<br>\n");
-                
                 
                 
                 //page summary
@@ -550,13 +558,29 @@ class bhl_access_controller //extends ControllerBase
         elseif($val = @$xml->Result->ShortTitle) return $val;
     }
     
-    function get_CopyrightStatus_using_item_id($item_id, $title)
+    function get_ItemInfo_using_item_id($item_id, $sought_field)
     {
         $p['search_type'] = 'itemsearch';
         $p['item_id']     = $item_id;
         $xml = self::search_bhl($p);
-        if($val = @$xml->Result->CopyrightStatus) return $val;
         
+        if($sought_field == "copyrightstatus") {if($val = @$xml->Result->CopyrightStatus) return $val;}
+        if($sought_field == "license url") {if($val = @$xml->Result->LicenseUrl) return trim($val);}
+    }
+    
+    function get_license_type($license_url, $copyrightstatus)
+    {   /* BHL-GetItemMetadata:LicenseUrl   --  http://ns.adobe.com/xap/1.0/rights/UsageTerms
+        Still need to figure out possible values for this. There are some items in BHL that we cannot take, e.g., things that are "in copyright" or "all rights reserved." 
+        People should not be able to import text from these items into the wiki. 
+        
+        Also, I know there are a bunch of items that lack LicenseUrl information.  
+        For those, we should use "no known copyright restrictions" as the license, UNLESS their CopyrightStatus is "NOT_IN_COPYRIGHT" in which case we should use "public domain." 
+        Can you scope out all possible values of LicenseUrl?
+        */
+        if(!$license_url)
+        {
+            if(self::is_not_in_copyright($copyrightstatus)) return "http://creativecommons.org/licenses/publicdomain/";
+        }
     }
     
     function is_copyrightstatus_Digitized_With_Permission($status)
@@ -570,6 +594,10 @@ class bhl_access_controller //extends ControllerBase
     
     function get_licensor_for_this_title($title)
     {
+        //manual
+        $title = str_ireplace("Journal / Entomological Exchange and Correspondence Club.", "Journal of the Entomological Exchange and Correspondence Club", $title);
+        
+        
         $title_without_ending_period = self::remove_ending_period($title);
         // echo "<br>[$title_without_ending_period]<br>"; exit;
         $licensors = self::generate_licensor_title_list();
@@ -695,8 +723,42 @@ class bhl_access_controller //extends ControllerBase
         }
     }
     
-}
+    function is_in_copyright_OR_all_rights_reserved($status)
+    {
+        /* Still need to figure out possible values for this. There are some items in BHL that we cannot take, e.g., things that are "in copyright" or "all rights reserved." 
+        People should not be able to import text from these items into the wiki. Also, I know there are a bunch of items that lack LicenseUrl information.  
+        For those, we should use "no known copyright restrictions" as the license, UNLESS their CopyrightStatus is "NOT_IN_COPYRIGHT" in which case we should use "public domain." 
+        Can you scope out all possible values of LicenseUrl?
+        */
+        $status = strtolower(trim($status));
+        $lists = array("in copyright", "all rights reserved");
+        foreach($lists as $a) $lists[] = str_replace(" ", "_", $a);
+        foreach($lists as $a) $lists[] = $a . ".";
+        if(in_array($status, $lists)) return true;
+        else return false;
+    }
+    
+    function is_not_in_copyright($status)
+    {
+        $status = strtolower(trim($status));
+        if(!$status) return true; //blank status means NOT IN COPYRIGHT.
+        $lists = array("not in copyright", "no longer under copyright", "no copyright restriction");
+        foreach($lists as $a) $lists[] = str_replace(" ", "_", $a);
+        foreach($lists as $a) $lists[] = $a . ".";
+        // print_r($lists);
 
+        //1st test
+        if(in_array($status, $lists)) return true;
+        
+        //2nd test
+        foreach($lists as $item)
+        {
+            if(stripos($status, $item) !== false) return true; //string found
+        }
+        return false;
+    }
+    
+}
 
 /*
 class dwc_validator_controller //extends ControllerBase

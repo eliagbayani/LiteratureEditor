@@ -53,7 +53,6 @@ array("url" => "http://eol.org/schema/eol_info_items.xml#IdentificationResources
 array("url" => "http://eol.org/schema/eol_info_items.xml#NucleotideSequences", "t" => "Nucleotide Sequences"));
 $subject_type = "http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription"; //default value
 
-
 $audiences = array(
     array("value" => "Everyone",        "t" => "Everyone"),
     array("value" => "General public",  "t" => "General public"),
@@ -61,11 +60,19 @@ $audiences = array(
     array("value" => "Children",        "t" => "Children"));
 $audience_type = "Everyone"; //default value
 
+$licenses = array(
+    array("value" => "http://creativecommons.org/licenses/by/3.0/",       "t" => "CC BY"),
+    array("value" => "http://creativecommons.org/licenses/by-nc/3.0/",    "t" => "CC BY NC"),
+    array("value" => "http://creativecommons.org/licenses/by-sa/3.0/",    "t" => "CC BY SA"),
+    array("value" => "http://creativecommons.org/licenses/publicdomain/", "t" => "Puclic Domain"),
+    array("value" => "http://creativecommons.org/licenses/by-nc-sa/3.0/", "t" => "CC BY NC SA"));
+$license_type = self::get_license_type($license_url, $copyrightstatus);
 
 if(isset($params))
 {
     if($val = @$params['subject_type']) $subject_type = $val;
     if($val = @$params['audience_type']) $audience_type = $val;
+    if($val = @$params['license_type']) $license_type = $val;
 }
 
 // $copyrightstatus = self::get_CopyrightStatus_using_item_id($Page->ItemID);
@@ -84,38 +91,48 @@ if(isset($params))
     <input type="hidden" name="title_id" value="<?php echo $title_id ?>">
     <input type="hidden" name="pass_title" value="<?php echo urlencode($pass_title) ?>">
     <input type="hidden" name="search_type" value="move2wiki">
-    <input type="hidden" name="licensor" value="<?php echo $licensor ?>">
+    <input type="text" name="licensor" value="<?php echo $licensor ?>">
     
-    <table border="1">
+    <table border="0">
         <tr>
-            <td>Subject Type:</td>
+            <td>Subject:</td>
             <td>
                 <select name="subject_type" id="selectmenu">
-                    <?php
-                    foreach($subjects as $s)
+                    <?php foreach($subjects as $s)
                     {
                         $selected = "";
                         if($subject_type == $s['url']) $selected = "selected";
                         echo '<option value="' . $s['url'] . '" ' . $selected . '>' . $s['t'] . '</option>';
-                    }
-                    ?>
+                    }?>
                 </select>
             </td>
         </tr>
         
+        <tr>
+            <td>License:</td>
+            <td>
+                <select name="license_type" id="selectmenu_3">
+                    <option></option>
+                    <?php foreach($licenses as $s)
+                    {
+                        $selected = "";
+                        if($license_type == $s['value']) $selected = "selected";
+                        echo '<option value="' . $s['value'] . '" ' . $selected . '>' . $s['t'] . '</option>';
+                    }?>
+                </select>
+            </td>
+        </tr>
 
         <tr>
             <td>Audience:</td>
             <td>
                 <select name="audience_type" id="selectmenu_2">
-                    <?php
-                    foreach($audiences as $s)
+                    <?php foreach($audiences as $s)
                     {
                         $selected = "";
                         if($audience_type == $s['value']) $selected = "selected";
                         echo '<option value="' . $s['value'] . '" ' . $selected . '>' . $s['t'] . '</option>';
-                    }
-                    ?>
+                    }?>
                 </select>
             </td>
         </tr>
