@@ -541,12 +541,27 @@ class bhl_access_controller //extends ControllerBase
     {
         // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&titles=9407451&format=json
         $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&prop=revisions&rvprop=content&titles=" . urlencode($title) . "&format=json";
-        $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&titles=" . urlencode($title) . "&format=json";
+        // $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&titles=" . urlencode($title) . "&format=json";
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
         $arr = json_decode($json, true);
-        // echo"<pre>";print_r(@$arr['query']['pages'][-1]); print"</pre>";
+        // echo "<pre>";print_r(@$arr); print_r($json); print"</pre>";
         if(@$arr['query']['pages']['-1']) return false;
-        else return true;
+        else
+        {
+            $url_params = self::get_url_params_from_wiki(@$arr['query']['pages']);
+            return true;
+        }
+        
+        
+    }
+    
+    private function get_url_params_from_wiki($arr)
+    {
+        foreach($arr as $rec)
+        {
+            echo $rec['revisions'][0]['*'];
+        }
+        
     }
     
     function get_title_using_title_id($title_id)
@@ -581,6 +596,7 @@ class bhl_access_controller //extends ControllerBase
         {
             if(self::is_not_in_copyright($copyrightstatus)) return "http://creativecommons.org/licenses/publicdomain/";
         }
+        else return $license_url;
     }
     
     function is_copyrightstatus_Digitized_With_Permission($status)
