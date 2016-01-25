@@ -37,7 +37,7 @@
                             <span class="ui-icon ui-icon-search"></span>
                             <a href="../bhl_access/index.php?title_id=<?php echo $item->PrimaryTitleID?>&search_type=titlesearch">Search</a>&nbsp;&nbsp;
                         </li>
-                        <li>&nbsp; {<?php echo self::get_title_using_title_id($item->PrimaryTitleID) ?>}</li>
+                        <li>&nbsp; {<?php echo self::get_TitleInfo_using_title_id($item->PrimaryTitleID, "FullTitle") ?>}</li>
                     </ul>
                     
                     </td></tr>

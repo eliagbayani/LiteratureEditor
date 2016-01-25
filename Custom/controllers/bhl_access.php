@@ -138,14 +138,6 @@ class bhl_access_controller //extends ControllerBase
         echo self::render_template('display-image', array('options' => $options));
     }
     
-    function get_title_id_using_item_id($item_id)
-    {
-        $p['search_type'] = 'itemsearch';
-        $p['item_id'] = $item_id;
-        $xml = self::search_bhl($p);
-        return (string) $xml->Result->PrimaryTitleID;
-    }
-    
     function check_arr($arr)
     {
         if(is_array($arr))
@@ -385,13 +377,13 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "===Taxa Found in Page===\n");
                 $total_taxa = count($Page_xml->Names->Name);
                 fwrite($file, "Name(s): " . $total_taxa . "<br />\n");
-                if($total_taxa)
-                {
+                // if($total_taxa)
+                // {
                     fwrite($file, "{| class=\"wikitable\" name=\"Taxa Found in Page\"\n");
                     fwrite($file, "$go_top\n");
                     fwrite($file, "|-\n");
                     fwrite($file, "! scope=\"col\"|NameBankID   ||! scope=\"col\"|EOLID ||! scope=\"col\"|NameFound ||! scope=\"col\"|NameConfirmed\n");
-                    if(count($Page_xml->Names->Name))
+                    if($total_taxa)
                     {
                         foreach($Page_xml->Names->Name as $Name)
                         {
@@ -399,9 +391,18 @@ class bhl_access_controller //extends ControllerBase
                             fwrite($file, "|$Name->NameBankID   ||$Name->EOLID  ||$Name->NameFound  ||$Name->NameConfirmed\n");
                         }
                     }
+                    // else
+                    // {
+                        fwrite($file, "|-\n");
+                        fwrite($file, "|NameBankID1   ||EOLID1  ||NameFound1  ||NameConfirmed1 <!-- This is just sample entry, will be ignored. Overwrite to add taxon here. -->\n");
+                        fwrite($file, "|-\n");
+                        fwrite($file, "|NameBankID2   ||EOLID2  ||NameFound2  ||NameConfirmed2 <!-- This is just sample entry, will be ignored. Overwrite to add taxon here. -->\n");
+                    // }
                     fwrite($file, "|-\n");
                     fwrite($file, "|}\n");
-                }
+                    fwrite($file, "<!-- Only the field NameConfirmed is required, the other three fields (NameBankID, EOLID, NameFound) are optional. -->" . "\n");
+                    
+                // }
                 
                 //Page Types
                 fwrite($file, "===Page Types===\n");
@@ -548,29 +549,60 @@ class bhl_access_controller //extends ControllerBase
         if(@$arr['query']['pages']['-1']) return false;
         else
         {
-            $url_params = self::get_url_params_from_wiki(@$arr['query']['pages']);
+            return self::get_url_params_from_wiki(@$arr['query']['pages']);
             return true;
         }
-        
-        
     }
     
     private function get_url_params_from_wiki($arr)
     {
         foreach($arr as $rec)
         {
-            echo $rec['revisions'][0]['*'];
+            $str = $rec['revisions'][0]['*'];
+            if(preg_match("/\[(.*?) Back to BHL API result page/ims", $str, $arr))
+            {
+                $str = urldecode($arr[1]);
+                if(preg_match("/subject_type=(.*?)\&/ims", $str, $arr)) $final['subject_type'] = $arr[1];
+                if(preg_match("/audience_type=(.*?)\&/ims", $str, $arr)) $final['audience_type'] = $arr[1];
+                if(preg_match("/license_type=(.*?)xxx/ims", $str."xxx", $arr)) $final['license_type'] = $arr[1];
+                echo"<pre>"; print_r($final); echo "</pre>";
+                return $final;
+            }
         }
-        
     }
     
-    function get_title_using_title_id($title_id)
+    // function get_title_id_using_item_id($item_id) --- obsolete, can be deleted...
+    // {
+    //     $p['search_type'] = 'itemsearch';
+    //     $p['item_id']     = $item_id;
+    //     $xml = self::search_bhl($p);
+    //     return (string) $xml->Result->PrimaryTitleID;
+    // }
+
+    // function get_title_using_title_id($title_id) --- obsolete, can be deleted...
+    // {
+    //     $p['search_type'] = 'titlesearch';
+    //     $p['title_id']     = $title_id;
+    //     $xml = self::search_bhl($p);
+    //     if($val = @$xml->Result->FullTitle) return $val;
+    //     elseif($val = @$xml->Result->ShortTitle) return $val;
+    // }
+
+    function get_TitleInfo_using_title_id($title_id, $sought_field)
     {
         $p['search_type'] = 'titlesearch';
         $p['title_id']     = $title_id;
         $xml = self::search_bhl($p);
-        if($val = @$xml->Result->FullTitle) return $val;
-        elseif($val = @$xml->Result->ShortTitle) return $val;
+        
+        if($sought_field == "FullTitle")
+        {
+            if($val = @$xml->Result->FullTitle) return $val;
+            elseif($val = @$xml->Result->ShortTitle) return $val;
+        }
+        elseif($sought_field == "BibliographicLevel") {if($val = @$xml->Result->BibliographicLevel) return $val;}
+        elseif($sought_field == "all") {if($val = @$xml->Result) return $val;}
+        
+        
     }
     
     function get_ItemInfo_using_item_id($item_id, $sought_field)
@@ -581,6 +613,64 @@ class bhl_access_controller //extends ControllerBase
         
         if($sought_field == "copyrightstatus") {if($val = @$xml->Result->CopyrightStatus) return $val;}
         if($sought_field == "license url") {if($val = @$xml->Result->LicenseUrl) return trim($val);}
+        if($sought_field == "PrimaryTitleID") {if($val = @$xml->Result->PrimaryTitleID) return trim($val);}
+    }
+    
+    function get_bibliographicCitation($title_id)
+    {
+        /* IF the BibliographicLevel of the title is either "Monograph/Item" or "Monographic component part," 
+        we should be able to construct the BibliographicCitation from the GetTitleMetadata API like this:   <Authors:Creator, start with the first name and list them all, separating individual names 
+        with semicolons>. <PublicationDate>. <FullTitle>. <PublisherName>, <PublisherPlace>.  
+        
+        Unfortunately, BHL does not provide enough information for an appropriate bibliographic citation for most journal articles (BibliographicLevel of the title is "Serial" or "Serial component part).  
+        It looks like the only exceptions to this are articles that are indexed in BioStor.  Data about those appear to be listed in the <Parts> section of the GetItemMetadata response, 
+        e.g., GetItemMetadata&itemid=25335 has some. If a wiki excerpt can be tied to one of the articles listed in the <Parts> section, we can use the data there to construct the 
+        Bibliographic Citation like this:  <Authors:Creator, start with the first name and list them all, separating individual names with semicolons>. <Date>. <Title>. 
+        <ContainerTitle> <Volume>  <Series> (<Issue>):<PageRange>.  
+        
+        For journal articles that are not covered in the <Parts> section, we'll have to puzzle together a preliminary citation based on the Title and Item metadata, and editors will then have to 
+        add article level information manually. Let's do the following.  Text in square brackets is instructions to editors: [Please add authors].  
+        <GetItemMetadata:Page:Year>. [Please add article title]. <GetTitleMetadata:FullTitle> <GetItemMetadata:Page:Volume>: [please add page range]. 
+        */
+        $citation = "";
+        $rec = self::get_TitleInfo_using_title_id($title_id, "all");
+        if(self::bibliographic_level_is_monograph($rec->BibliographicLevel))
+        {
+            $authors = array();
+            foreach($rec->Authors->Creator as $Creator) $authors[] = $Creator->Name;
+            $authors = trim(implode("; ", $authors)) . ". ";
+            
+            $citation = $authors;
+            if($val = @$rec->PublicationDate) $citation .= self::format_citation_part($val);
+            if($val = @$rec->FullTitle)       $citation .= self::format_citation_part($val);
+            if($val = @$rec->PublisherName)   $citation .= self::format_citation_part($val);
+            if($val = @$rec->PublisherPlace)  $citation .= self::format_citation_part($val);
+        }
+        // echo "<br>[$citation]</br>";
+        // echo "<br>[$rec->BibliographicLevel]</br>";
+        return $citation;
+    }
+    
+    private function format_citation_part($part)
+    {
+        $part = trim($part);
+        //remove other ending chars
+        $chars = array(":", ",", ";", "/", "-");
+        foreach($chars as $char)
+        {
+            if(substr($part, -1) == $char) $part = trim(substr($part, 0, strlen($part)-1));
+        }
+        //add period if ending char is not period.
+        if(substr($part, -1) != ".") $part .= ". ";
+        else                         $part .= " ";
+        return $part;
+    }
+    
+    private function bibliographic_level_is_monograph($level)
+    {
+        if($level == "Monograph/Item")                              return true;
+        if(stripos($level, "Monographic component part") !== false) return true; //string is found
+        return false;
     }
     
     function get_license_type($license_url, $copyrightstatus)
@@ -682,7 +772,6 @@ class bhl_access_controller //extends ControllerBase
         
         //manual specific
         if(stripos($title, "Madroño") !== false) return "California Botanical Society";
-        
         
         return false;
     }

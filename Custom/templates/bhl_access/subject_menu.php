@@ -52,14 +52,22 @@ array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Key", "t" => "Ident
 array("url" => "http://eol.org/schema/eol_info_items.xml#IdentificationResources", "t" => "Identification Resources"), 
 array("url" => "http://eol.org/schema/eol_info_items.xml#NucleotideSequences", "t" => "Nucleotide Sequences"));
 $subject_type = "http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription"; //default value
-
+if(isset($url_params['subject_type']))
+{
+    if($val = $url_params['subject_type']) $subject_type = $val;
+}
+//====================================================
 $audiences = array(
     array("value" => "Everyone",        "t" => "Everyone"),
     array("value" => "General public",  "t" => "General public"),
     array("value" => "Expert users",    "t" => "Expert users"),
     array("value" => "Children",        "t" => "Children"));
 $audience_type = "Everyone"; //default value
-
+if(isset($url_params['audience_type']))
+{
+    if($val = $url_params['audience_type']) $audience_type = $val;
+}
+//====================================================
 $licenses = array(
     array("value" => "http://creativecommons.org/licenses/by/3.0/",       "t" => "CC BY"),
     array("value" => "http://creativecommons.org/licenses/by-nc/3.0/",    "t" => "CC BY NC"),
@@ -67,7 +75,14 @@ $licenses = array(
     array("value" => "http://creativecommons.org/licenses/by-nc-sa/3.0/", "t" => "CC BY NC SA"),
     array("value" => "http://creativecommons.org/licenses/publicdomain/", "t" => "Puclic Domain")
     );
-$license_type = self::get_license_type($license_url, $copyrightstatus);
+$license_type = self::get_license_type($license_url, $copyrightstatus); //default is based on specs from mapping doc.
+if(isset($url_params['license_type']))
+{
+    if($val = $url_params['license_type']) $license_type = $val;
+}
+//====================================================
+$bibliographicCitation = self::get_bibliographicCitation($title_id);
+//====================================================
 
 if(isset($params))
 {
@@ -75,15 +90,7 @@ if(isset($params))
     if($val = @$params['audience_type']) $audience_type = $val;
     if($val = @$params['license_type']) $license_type = $val;
 }
-
-// $copyrightstatus = self::get_CopyrightStatus_using_item_id($Page->ItemID);
-// echo "<br>[$copyrightstatus]<br>";
-
-
-// Unfortunately, BHL's CopyrightStatus field is a mess. Sometimes, it will have information about the copyright owner (e.g., see GetItemMetadata&itemid=119239), 
-// but often they only say "In copyright. Digitized with the permission of the rights holder"  (e.g., see GetItemMetadata&itemid=25335). 
-// In those cases, we should use the following workaround for the rightsOwner entry: see <a href="http://biodivlib.wikispaces.com/Permissions#In-copyright%20Titles">In-copyright Titles</a> for rights holder information.
-
+//====================================================
 ?>
 
 <form action="../bhl_access/index.php">
@@ -93,6 +100,7 @@ if(isset($params))
     <input type="hidden" name="pass_title" value="<?php echo urlencode($pass_title) ?>">
     <input type="hidden" name="search_type" value="move2wiki">
     <input type="hidden" name="licensor" value="<?php echo $licensor ?>">
+    <input type="hidden" name="bibliographicCitation" value="<?php echo $bibliographicCitation ?>">
     
     <table border="0">
         <tr>
@@ -138,8 +146,6 @@ if(isset($params))
             </td>
         </tr>
 
-
-        
         <tr><td colspan="2" align="center"><button id="button_move2wiki"><?php echo $submit_text ?></button></td></tr>
     </table>
     
