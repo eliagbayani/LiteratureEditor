@@ -73,15 +73,19 @@ $licenses = array(
     array("value" => "http://creativecommons.org/licenses/by-nc/3.0/",    "t" => "CC BY NC"),
     array("value" => "http://creativecommons.org/licenses/by-sa/3.0/",    "t" => "CC BY SA"),
     array("value" => "http://creativecommons.org/licenses/by-nc-sa/3.0/", "t" => "CC BY NC SA"),
-    array("value" => "http://creativecommons.org/licenses/publicdomain/", "t" => "Puclic Domain")
+    array("value" => "http://creativecommons.org/licenses/publicdomain/", "t" => "Puclic Domain"),
+    array("value" => "no known copyright restrictions",                   "t" => "no known copyright restrictions")
     );
 $license_type = self::get_license_type($license_url, $copyrightstatus); //default is based on specs from mapping doc.
 if(isset($url_params['license_type']))
 {
     if($val = $url_params['license_type']) $license_type = $val;
 }
+
+echo "<br>[$license_type]</br>";
+
 //====================================================
-$bibliographicCitation = self::get_bibliographicCitation($title_id);
+$bibliographicCitation = self::get_bibliographicCitation($title_id, $Page->ItemID, $Page->PageID, @$Page->PageNumbers);
 //====================================================
 
 if(isset($params))
@@ -103,6 +107,10 @@ if(isset($params))
     <input type="hidden" name="bibliographicCitation" value="<?php echo $bibliographicCitation ?>">
     
     <table border="0">
+        <tr>
+            <td>Bibliographic Citation (computed):</td>
+            <td><?php echo $bibliographicCitation ?></td>
+        </tr>
         <tr>
             <td>Subject:</td>
             <td>

@@ -599,10 +599,8 @@ class bhl_access_controller //extends ControllerBase
             if($val = @$xml->Result->FullTitle) return $val;
             elseif($val = @$xml->Result->ShortTitle) return $val;
         }
-        elseif($sought_field == "BibliographicLevel") {if($val = @$xml->Result->BibliographicLevel) return $val;}
-        elseif($sought_field == "all") {if($val = @$xml->Result) return $val;}
-        
-        
+        if($sought_field == "BibliographicLevel") {if($val = @$xml->Result->BibliographicLevel) return $val;}
+        if($sought_field == "all")                {if($val = @$xml->Result) return $val;}
     }
     
     function get_ItemInfo_using_item_id($item_id, $sought_field)
@@ -612,11 +610,23 @@ class bhl_access_controller //extends ControllerBase
         $xml = self::search_bhl($p);
         
         if($sought_field == "copyrightstatus") {if($val = @$xml->Result->CopyrightStatus) return $val;}
-        if($sought_field == "license url") {if($val = @$xml->Result->LicenseUrl) return trim($val);}
-        if($sought_field == "PrimaryTitleID") {if($val = @$xml->Result->PrimaryTitleID) return trim($val);}
+        if($sought_field == "license url")     {if($val = @$xml->Result->LicenseUrl) return trim($val);}
+        if($sought_field == "PrimaryTitleID")  {if($val = @$xml->Result->PrimaryTitleID) return trim($val);}
+        if($sought_field == "all")             {if($val = @$xml->Result) return $val;}
+    }
+
+    private function get_PartInfo_using_item_id($item_id, $sought_field)
+    {
+        if($item_info = self::get_ItemInfo_using_item_id($item_id, "all"))
+        {
+            foreach($item_info as $item)
+            {
+                return $item->Parts;
+            }
+        }
     }
     
-    function get_bibliographicCitation($title_id)
+    function get_bibliographicCitation($title_id, $item_id, $page_id, $PageNumbers)
     {
         /* IF the BibliographicLevel of the title is either "Monograph/Item" or "Monographic component part," 
         we should be able to construct the BibliographicCitation from the GetTitleMetadata API like this:   <Authors:Creator, start with the first name and list them all, separating individual names 
@@ -638,17 +648,118 @@ class bhl_access_controller //extends ControllerBase
         {
             $authors = array();
             foreach($rec->Authors->Creator as $Creator) $authors[] = $Creator->Name;
-            $authors = trim(implode("; ", $authors)) . ". ";
-            
-            $citation = $authors;
+            $authors = trim(implode("; ", $authors));
+            $citation = self::format_citation_part($authors);
             if($val = @$rec->PublicationDate) $citation .= self::format_citation_part($val);
             if($val = @$rec->FullTitle)       $citation .= self::format_citation_part($val);
             if($val = @$rec->PublisherName)   $citation .= self::format_citation_part($val);
             if($val = @$rec->PublisherPlace)  $citation .= self::format_citation_part($val);
         }
+        elseif(self::bibliographic_level_is_journal($rec->BibliographicLevel))
+        {
+            $page_nos = self::get_page_nos($PageNumbers);
+            $part_info = self::get_part_info_for_this_page($page_id, $item_id, $page_nos);
+
+            //these next two lines are taken from 2 respective pages below:
+            $partx = utf8_encode(json_encode($part_info));                                  //taken from itemsearch-result.php
+            $Part = json_decode($partx, true); //converts it to array() instead of object   //taken from part-more-info.php
+            
+            // echo "<pre>"; print_r($Part) . echo "</pre>";
+            
+            $authors = array();
+            if(isset($Part['Authors']['Creator'][0]))
+            {
+                $total_authors = count(@$Part['Authors']['Creator']);
+                if($total_authors)
+                {
+                    foreach(@$Part['Authors']['Creator'] as $Creator) $authors[] = self::check_arr(@$Creator['Name']);
+                }
+            }
+            else
+            {
+                $total_authors = count(@$Part['Authors']);
+                if($total_authors)
+                {
+                    foreach(@$Part['Authors'] as $Creator) $authors[] = self::check_arr(@$Creator['Name']);
+                }
+            }
+            /* <Authors:Creator, start with the first name and list them all, separating individual names with semicolons>. <Date>. <Title>. <ContainerTitle> <Volume>  <Series> (<Issue>):<PageRange>. */
+            $authors = trim(implode("; ", $authors));
+            $citation = self::format_citation_part($authors);
+            if($val = self::check_arr(@$Part['Date']))           $citation .= self::format_citation_part($val);
+            if($val = self::check_arr(@$Part['Title']))          $citation .= self::format_citation_part($val);
+            if($val = self::check_arr(@$Part['ContainerTitle'])) $citation .= trim($val)." ";
+            if($val = self::check_arr(@$Part['Volume']))         $citation .= trim($val)." ";
+            if($val = self::check_arr(@$Part['Series']))         $citation .= trim($val)." ";
+            if($val = self::check_arr(@$Part['Issue']))          $citation .= "(".trim($val).")";
+            if($val = self::check_arr(@$Part['PageRange']))      $citation .= ":".self::format_citation_part($val);
+        }
         // echo "<br>[$citation]</br>";
         // echo "<br>[$rec->BibliographicLevel]</br>";
         return $citation;
+    }
+    
+    private function get_page_nos($PageNumbers)
+    {
+        $final_page_nos = array();
+        
+        $valid_page_prefix = array("Page", "Article, Page"); //there can be more in this array, will add as soon as others are discovered...
+        $total_page_numbers = count(@$PageNumbers->PageNumber);
+        if($total_page_numbers == 1)
+        {
+            foreach($PageNumbers as $PageNumber)
+            {
+                foreach($valid_page_prefix as $prefix)
+                {
+                    if($prefix == (string) @$PageNumber->Prefix) $final_page_nos[(string) @$PageNumber->Number] = '';
+                }
+            }
+        }
+        elseif($total_page_numbers > 1)
+        {
+            foreach($PageNumbers->PageNumber as $PageNumber)
+            {
+                foreach($valid_page_prefix as $prefix)
+                {
+                    if($prefix == (string) @$PageNumber->Prefix) $final_page_nos[self::string_or_object(@$PageNumber->Number)] = '';
+                }
+            }
+        }
+        $final_page_nos = array_keys($final_page_nos);
+        return $final_page_nos;
+    }
+    
+    private function get_part_info_for_this_page($page_id, $item_id, $page_nos)
+    {
+        $parts                    = array();
+        $page_ids_with_parts      = array();
+        $part_ids_with_page_range = array();
+        $part_info = self::get_PartInfo_using_item_id($item_id, "all");
+        foreach($part_info->Part as $Part)
+        {
+            if($val = (string) $Part->StartPageID) $page_ids_with_parts[$val] = (string) $Part->PartID;
+            if($val = (string) $Part->PageRange) $part_ids_with_page_range[(string) $Part->PartID] = $val;
+            $parts[(string) $Part->PartID] = $Part;
+        }
+
+        // echo "<pre>"; print_r($page_ids_with_parts); print_r($part_ids_with_page_range); print_r($page_nos); echo "</pre>"; //good for debugging
+        
+        $final_part_id = false;
+        if($val = @$page_ids_with_parts[$page_id]) $final_part_id = $val;
+        else
+        {
+            foreach($part_ids_with_page_range as $part_id => $page_range)
+            {
+                $range = explode("--", $page_range);
+                foreach($page_nos as $page_no)
+                {
+                    if(in_array($page_no, range($range[0], $range[1]))) $final_part_id = $part_id;
+                }
+            }
+        }
+        echo "<br>this page belongs to part id = [$final_part_id]<br>";
+        if($val = $final_part_id) return $parts[$val];
+        return false;
     }
     
     private function format_citation_part($part)
@@ -666,10 +777,17 @@ class bhl_access_controller //extends ControllerBase
         return $part;
     }
     
-    private function bibliographic_level_is_monograph($level)
+    private function bibliographic_level_is_monograph($level) //meaning level is non-journal
     {
         if($level == "Monograph/Item")                              return true;
         if(stripos($level, "Monographic component part") !== false) return true; //string is found
+        return false;
+    }
+
+    private function bibliographic_level_is_journal($level)
+    {
+        if($level == "Serial")                                 return true;
+        if(stripos($level, "Serial component part") !== false) return true; //string is found
         return false;
     }
     
@@ -685,6 +803,7 @@ class bhl_access_controller //extends ControllerBase
         if(!$license_url)
         {
             if(self::is_not_in_copyright($copyrightstatus)) return "http://creativecommons.org/licenses/publicdomain/";
+            else return "no known copyright restrictions";
         }
         else return $license_url;
     }

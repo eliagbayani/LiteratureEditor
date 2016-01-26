@@ -65,6 +65,8 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
     ?>
     
     <tr bgcolor="lightblue"><td>TitleID</td><td>: <?php echo $title_id ?> &nbsp; {<?php echo $title ?>}</td></tr>
+    <tr bgcolor="lightblue"><td>BibliographicLevel</td><td>: {<?php echo self::get_TitleInfo_using_title_id($title_id, "BibliographicLevel") ?>}</td></tr>
+    
     
     
     <tr><td>Volume</td><td>: <?php echo @$Page->Volume ?></td></tr>
@@ -74,7 +76,7 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
     <tr><td>ThumbnailUrl</td><td>: <?php echo Functions::format_url(@$Page->ThumbnailUrl) ?></td></tr>
     <tr><td>FullSizeImageUrl</td><td>: <?php echo Functions::format_url(@$Page->FullSizeImageUrl) ?></td></tr>
     <tr><td>OcrUrl</td><td>: <?php echo Functions::format_url(@$Page->OcrUrl) ?></td></tr>
-    <tr valign="top"><td>OcrText</td><td>: <?php echo @$Page->OcrText ?></td></tr>
+    <tr valign="top"><td>OcrText</td><td>: <?php echo self::string_or_object(@$Page->OcrText) ?></td></tr>
     
     <?php
     $pass_title = $Page->PageID;
@@ -163,10 +165,7 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
         {
             ?>
             <tr><td>Prefix</td><td>: <?php echo (string) @$PageNumber->Prefix ?></td></tr>
-            <tr><td>Number</td><td>: 
-            <?php 
-            echo self::string_or_object(@$PageNumber->Number);
-            ?></td></tr>
+            <tr><td>Number</td><td>: <?php echo self::string_or_object(@$PageNumber->Number) ?></td></tr>
             <tr><td colspan="2">&nbsp;</td></tr>
             <?php
         }

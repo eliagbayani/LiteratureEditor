@@ -118,6 +118,8 @@
                                     <th></th>
                                     <th>PartID</th>
                                     <th>ItemID</th>
+                                    <th>StartPageID</th>
+                                    <th>PageRange</th>
                                     <th>Contributor</th>
                                     <th>GenreName</th>
                                     <th>Title</th>
@@ -140,6 +142,8 @@
                                             
                                             <td><?php echo $Part->PartID ?></td>
                                             <td><?php echo $Part->ItemID ?></td>
+                                            <td><?php echo $Part->StartPageID ?></td>
+                                            <td><?php echo $Part->PageRange ?></td>
                                             <td><?php echo $Part->Contributor ?></td>
                                             <td><?php echo $Part->GenreName ?></td>
                                             
