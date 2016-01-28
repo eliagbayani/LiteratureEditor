@@ -320,6 +320,27 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "|-\n");
                 fwrite($file, "|}\n");
 
+                //Bibliographic Citation
+                fwrite($file, "===Bibliographic Citation===\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Bibliographic Citation\"\n");
+                fwrite($file, "$go_top\n");
+                fwrite($file, "|" . self::format_wiki($params['bibliographicCitation'])."\n");
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
+
+                //Authors
+                fwrite($file, "===Authors===\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Authors\"\n");
+                fwrite($file, "$go_top\n");
+                $agents = explode("; ", @$params['agents']);
+                foreach($agents as $agent)
+                {
+                    fwrite($file, "|" . self::format_wiki($agent)."\n");
+                    fwrite($file, "|-\n");
+                }
+                fwrite($file, "|}\n");
+
+
                 //Audience Type
                 fwrite($file, "===Audience Type===\n");
                 fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Audience Type\"\n");
@@ -390,13 +411,13 @@ class bhl_access_controller //extends ControllerBase
                     // else
                     // {
                         fwrite($file, "|-\n");
-                        fwrite($file, "|NameBankID1   ||EOLID1  ||NameFound1  ||NameConfirmed1 <!-- This is just sample entry, will be ignored. Overwrite to add taxon here. -->\n");
+                        fwrite($file, "|NameBankID1   ||EOLID1  ||NameFound1  ||NameConfirmed1 <!-- This is just sample entry, will be ignored. Overwrite to add taxon. -->\n");
                         fwrite($file, "|-\n");
-                        fwrite($file, "|NameBankID2   ||EOLID2  ||NameFound2  ||NameConfirmed2 <!-- This is just sample entry, will be ignored. Overwrite to add taxon here. -->\n");
+                        fwrite($file, "|NameBankID2   ||EOLID2  ||NameFound2  ||NameConfirmed2 <!-- This is just sample entry, will be ignored. Overwrite to add taxon. -->\n");
                     // }
                     fwrite($file, "|-\n");
                     fwrite($file, "|}\n");
-                    fwrite($file, "<!-- Only the field NameConfirmed is required, the other three fields (NameBankID, EOLID, NameFound) are optional. -->" . "\n");
+                    fwrite($file, "<!-- Only the field NameConfirmed is required. The other three fields (NameBankID, EOLID, NameFound) are optional. -->" . "\n");
                     
                 // }
                 
@@ -626,7 +647,6 @@ class bhl_access_controller //extends ControllerBase
         $page_id     = $Page->PageID;
         $PageNumbers = @$Page->PageNumbers;
         
-        
         /* IF the BibliographicLevel of the title is either "Monograph/Item" or "Monographic component part," 
         we should be able to construct the BibliographicCitation from the GetTitleMetadata API like this:   <Authors:Creator, start with the first name and list them all, separating individual names 
         with semicolons>. <PublicationDate>. <FullTitle>. <PublisherName>, <PublisherPlace>.  
@@ -642,11 +662,12 @@ class bhl_access_controller //extends ControllerBase
         <GetItemMetadata:Page:Year>. [Please add article title]. <GetTitleMetadata:FullTitle> <GetItemMetadata:Page:Volume>: [please add page range]. 
         */
         $citation = "";
+        $authors = array();
+        
         $rec = self::get_TitleInfo_using_title_id($title_id, "all");
-        if(self::bibliographic_level_is_monograph($rec->BibliographicLevel))
+        if(self::bibliographic_level_is_monograph($rec->BibliographicLevel)) // 1st option -- e.g. page_id = 16059324
         {
-            $authors = array();
-            foreach($rec->Authors->Creator as $Creator) $authors[] = $Creator->Name;
+            foreach($rec->Authors->Creator as $Creator) $authors[] = self::remove_ending_char($Creator->Name);
             $authors = trim(implode("; ", $authors));
             $citation = self::format_citation_part($authors);
             if($val = @$rec->PublicationDate) $citation .= self::format_citation_part($val);
@@ -654,7 +675,7 @@ class bhl_access_controller //extends ControllerBase
             if($val = @$rec->PublisherName)   $citation .= self::format_citation_part($val);
             if($val = @$rec->PublisherPlace)  $citation .= self::format_citation_part($val);
         }
-        elseif(self::bibliographic_level_is_journal($rec->BibliographicLevel))
+        elseif(self::bibliographic_level_is_journal($rec->BibliographicLevel)) // 2nd option -- e.g. page_id = 6705456
         {
             $page_nos = self::get_page_nos($PageNumbers);
             $part_info = self::get_part_info_for_this_page($page_id, $item_id, $page_nos);
@@ -663,13 +684,12 @@ class bhl_access_controller //extends ControllerBase
             $partx = utf8_encode(json_encode($part_info));                                  //taken from itemsearch-result.php
             $Part = json_decode($partx, true); //converts it to array() instead of object   //taken from part-more-info.php
             
-            $authors = array();
             if(isset($Part['Authors']['Creator'][0]))
             {
                 $total_authors = count(@$Part['Authors']['Creator']);
                 if($total_authors)
                 {
-                    foreach(@$Part['Authors']['Creator'] as $Creator) $authors[] = self::check_arr(@$Creator['Name']);
+                    foreach(@$Part['Authors']['Creator'] as $Creator) $authors[] = self::remove_ending_char(self::check_arr(@$Creator['Name']));
                 }
             }
             else
@@ -677,7 +697,7 @@ class bhl_access_controller //extends ControllerBase
                 $total_authors = count(@$Part['Authors']);
                 if($total_authors)
                 {
-                    foreach(@$Part['Authors'] as $Creator) $authors[] = self::check_arr(@$Creator['Name']);
+                    foreach(@$Part['Authors'] as $Creator) $authors[] = self::remove_ending_char(self::check_arr(@$Creator['Name']));
                 }
             }
             /* <Authors:Creator, start with the first name and list them all, separating individual names with semicolons>. <Date>. <Title>. <ContainerTitle> <Volume>  <Series> (<Issue>):<PageRange>. */
@@ -692,7 +712,7 @@ class bhl_access_controller //extends ControllerBase
             if($val = self::check_arr(@$Part['PageRange']))      $citation .= ":".self::format_citation_part($val);
             
             
-            //start of 3rd option
+            //start of 3rd option -- page_id = 6705246
             $citation = trim($citation);
             if($citation == "." || $citation == "")
             {   /* [Please add authors]. <GetItemMetadata:Page:Year>. [Please add article title]. <GetTitleMetadata:FullTitle> <GetItemMetadata:Page:Volume>: [please add page range]. */
@@ -706,7 +726,7 @@ class bhl_access_controller //extends ControllerBase
             }
             
         }
-        return $citation;
+        return array("citation" => $citation, "authors" => $authors);
     }
     
     private function get_page_nos($PageNumbers)
@@ -773,15 +793,33 @@ class bhl_access_controller //extends ControllerBase
     private function format_citation_part($part)
     {
         $part = trim($part);
-        //remove other ending chars
-        $chars = array(":", ",", ";", "/", "-");
+        $chars = array(":", ",", ";", "/", "-"); //remove these ending chars
         foreach($chars as $char)
         {
-            if(substr($part, -1) == $char) $part = trim(substr($part, 0, strlen($part)-1));
+            if(substr($part, -1) == $char)
+            {
+                $part = trim(substr($part, 0, strlen($part)-1));
+                break;
+            }
         }
         //add period if ending char is not period.
         if(substr($part, -1) != ".") $part .= ". ";
         else                         $part .= " ";
+        return $part;
+    }
+
+    private function remove_ending_char($part)
+    {
+        $part = trim($part);
+        $chars = array(":", ",", ";", "/", "-"); //remove these ending chars
+        foreach($chars as $char)
+        {
+            if(substr($part, -1) == $char)
+            {
+                $part = trim(substr($part, 0, strlen($part)-1));
+                break;
+            }
+        }
         return $part;
     }
     

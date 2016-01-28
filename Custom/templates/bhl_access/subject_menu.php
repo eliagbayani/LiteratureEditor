@@ -85,7 +85,9 @@ if(isset($url_params['license_type']))
 echo "<br>[$license_type]</br>";
 
 //====================================================
-$bibliographicCitation = self::get_bibliographicCitation($title_id, $Page, $title);
+$citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
+$bibliographicCitation = $citation_and_authors['citation'];
+// print_r($citation_and_authors);
 //====================================================
 
 if(isset($params))
@@ -105,6 +107,7 @@ if(isset($params))
     <input type="hidden" name="search_type" value="move2wiki">
     <input type="hidden" name="licensor" value="<?php echo $licensor ?>">
     <input type="hidden" name="bibliographicCitation" value="<?php echo $bibliographicCitation ?>">
+    <input type="hidden" name="agents" value="<?php echo $citation_and_authors['authors'] ?>">
     
     <table border="0">
         <tr>
