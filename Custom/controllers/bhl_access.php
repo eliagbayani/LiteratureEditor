@@ -30,13 +30,9 @@ class bhl_access_controller //extends ControllerBase
         $this->bhl_api_service['pagesearch']  = "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetPageMetadata&ocr=t&names=t&apikey=" . BHL_API_KEY;
         
         $this->download_options = array('download_timeout_seconds' => 4800, 'download_wait_time' => 300000, 'expire_seconds' => false);
-        
     }
     
-    
-    public static function index()
-    {
-    }
+    public static function index(){}
 
     function render_template($filename, $variables)
     {
@@ -530,8 +526,6 @@ class bhl_access_controller //extends ControllerBase
         }
     }
 
-
-
     function format_wiki($wiki)
     {
         $wiki = str_replace(array("\n"), "", $wiki);
@@ -626,8 +620,13 @@ class bhl_access_controller //extends ControllerBase
         }
     }
     
-    function get_bibliographicCitation($title_id, $item_id, $page_id, $PageNumbers)
+    function get_bibliographicCitation($title_id, $Page, $title)
     {
+        $item_id     = $Page->ItemID;
+        $page_id     = $Page->PageID;
+        $PageNumbers = @$Page->PageNumbers;
+        
+        
         /* IF the BibliographicLevel of the title is either "Monograph/Item" or "Monographic component part," 
         we should be able to construct the BibliographicCitation from the GetTitleMetadata API like this:   <Authors:Creator, start with the first name and list them all, separating individual names 
         with semicolons>. <PublicationDate>. <FullTitle>. <PublisherName>, <PublisherPlace>.  
@@ -660,11 +659,9 @@ class bhl_access_controller //extends ControllerBase
             $page_nos = self::get_page_nos($PageNumbers);
             $part_info = self::get_part_info_for_this_page($page_id, $item_id, $page_nos);
 
-            //these next two lines are taken from 2 respective pages below:
+            //these next two lines are taken from 2 respective pages from /templates/:
             $partx = utf8_encode(json_encode($part_info));                                  //taken from itemsearch-result.php
             $Part = json_decode($partx, true); //converts it to array() instead of object   //taken from part-more-info.php
-            
-            // echo "<pre>"; print_r($Part) . echo "</pre>";
             
             $authors = array();
             if(isset($Part['Authors']['Creator'][0]))
@@ -693,9 +690,22 @@ class bhl_access_controller //extends ControllerBase
             if($val = self::check_arr(@$Part['Series']))         $citation .= trim($val)." ";
             if($val = self::check_arr(@$Part['Issue']))          $citation .= "(".trim($val).")";
             if($val = self::check_arr(@$Part['PageRange']))      $citation .= ":".self::format_citation_part($val);
+            
+            
+            //start of 3rd option
+            $citation = trim($citation);
+            if($citation == "." || $citation == "")
+            {   /* [Please add authors]. <GetItemMetadata:Page:Year>. [Please add article title]. <GetTitleMetadata:FullTitle> <GetItemMetadata:Page:Volume>: [please add page range]. */
+                $citation = "";
+                $citation .= "[Please add authors]. ";
+                if($val = @$Page->Year) $citation .= self::format_citation_part($val);
+                $citation .= "[Please add article title]. ";
+                if($val = $title) $citation .= self::format_citation_part($val);
+                if($val = @$Page->Volume) $citation .= self::format_citation_part($val);
+                $citation .= ": [Please add page range].";
+            }
+            
         }
-        // echo "<br>[$citation]</br>";
-        // echo "<br>[$rec->BibliographicLevel]</br>";
         return $citation;
     }
     
@@ -741,9 +751,7 @@ class bhl_access_controller //extends ControllerBase
             if($val = (string) $Part->PageRange) $part_ids_with_page_range[(string) $Part->PartID] = $val;
             $parts[(string) $Part->PartID] = $Part;
         }
-
         // echo "<pre>"; print_r($page_ids_with_parts); print_r($part_ids_with_page_range); print_r($page_nos); echo "</pre>"; //good for debugging
-        
         $final_part_id = false;
         if($val = @$page_ids_with_parts[$page_id]) $final_part_id = $val;
         else
@@ -757,7 +765,7 @@ class bhl_access_controller //extends ControllerBase
                 }
             }
         }
-        echo "<br>this page belongs to part id = [$final_part_id]<br>";
+        // echo "<br>this page belongs to part id = [$final_part_id]<br>";
         if($val = $final_part_id) return $parts[$val];
         return false;
     }

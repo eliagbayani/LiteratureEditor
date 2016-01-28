@@ -85,7 +85,7 @@ if(isset($url_params['license_type']))
 echo "<br>[$license_type]</br>";
 
 //====================================================
-$bibliographicCitation = self::get_bibliographicCitation($title_id, $Page->ItemID, $Page->PageID, @$Page->PageNumbers);
+$bibliographicCitation = self::get_bibliographicCitation($title_id, $Page, $title);
 //====================================================
 
 if(isset($params))
