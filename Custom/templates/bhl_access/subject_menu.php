@@ -107,13 +107,18 @@ if(isset($params))
     <input type="hidden" name="search_type" value="move2wiki">
     <input type="hidden" name="licensor" value="<?php echo $licensor ?>">
     <input type="hidden" name="bibliographicCitation" value="<?php echo $bibliographicCitation ?>">
-    <input type="hidden" name="agents" value="<?php echo $citation_and_authors['authors'] ?>">
+    <input type="hidden" name="agents" value="<?php echo $citation_and_authors['authors2'] ?>">
     
     <table border="0">
         <tr>
             <td>Bibliographic Citation (computed):</td>
             <td><?php echo $bibliographicCitation ?></td>
         </tr>
+        <tr>
+            <td>Authors (computed):</td>
+            <td><?php echo $citation_and_authors['authors2'] ?></td>
+        </tr>
+        
         <tr>
             <td>Subject:</td>
             <td>

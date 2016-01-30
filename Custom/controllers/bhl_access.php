@@ -662,13 +662,19 @@ class bhl_access_controller //extends ControllerBase
         <GetItemMetadata:Page:Year>. [Please add article title]. <GetTitleMetadata:FullTitle> <GetItemMetadata:Page:Volume>: [please add page range]. 
         */
         $citation = "";
-        $authors = array();
+        $authors = array();  //this is for the authors in bibliographicCitation
+        $authors2 = array(); //this is for the list of authors/agents
         
         $rec = self::get_TitleInfo_using_title_id($title_id, "all");
         if(self::bibliographic_level_is_monograph($rec->BibliographicLevel)) // 1st option -- e.g. page_id = 16059324
         {
-            foreach($rec->Authors->Creator as $Creator) $authors[] = self::remove_ending_char($Creator->Name);
+            foreach($rec->Authors->Creator as $Creator) 
+            {
+                $authors[] = self::remove_ending_char($Creator->Name);
+                $authors2[] = self::remove_ending_char($Creator->Name) . " {" . $Creator->CreatorID . "}";
+            }
             $authors = trim(implode("; ", $authors));
+            $authors2 = trim(implode("; ", $authors2));
             $citation = self::format_citation_part($authors);
             if($val = @$rec->PublicationDate) $citation .= self::format_citation_part($val);
             if($val = @$rec->FullTitle)       $citation .= self::format_citation_part($val);
@@ -726,7 +732,7 @@ class bhl_access_controller //extends ControllerBase
             }
             
         }
-        return array("citation" => $citation, "authors" => $authors);
+        return array("citation" => $citation, "authors" => $authors, "authors2" => $authors2);
     }
     
     private function get_page_nos($PageNumbers)
