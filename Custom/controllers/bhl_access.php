@@ -222,11 +222,16 @@ class bhl_access_controller //extends ControllerBase
         $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -s 'BHL data to Wiki' -m " . $params['pass_title'] . " < " . $temp_wiki_file;
 
         $status = shell_exec($cmdline . " 2>&1");
-        $status = str_ireplace("done", "done. ", $status);
-        // echo "<br>$cmdline<br>";
-
-        echo "[$status]<br>";
+        $status = str_ireplace("done", "done. &nbsp;", $status);
+        if(stripos($status, "Your edit was ignored because no change was made to the text") !== false) 
+        {
+            $status = "Your edit was ignored because no change was made to the text."; //string is found
+            $status2 = "See Wiki for Page ID:";
+        }
+        else $status2 = "See newly generated Wiki for Page ID:";
         
+        // echo "<br>$cmdline<br>";
+        self::display_message(array('type' => "highlight", 'msg' => $status));
         
         /* working also
         $wiki_page = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id'];
@@ -234,7 +239,8 @@ class bhl_access_controller //extends ControllerBase
         */
         
         $wiki_page = "../../wiki/" . $params['pass_title'];
-        echo "<br><a href=\"$wiki_page\">See generated Wiki for Page: " . $params['pass_title'] . " </a><br>";
+        
+        self::display_message(array('type' => "highlight", 'msg' => "$status2 <a href=\"$wiki_page\">" . $params['pass_title'] . " </a>"));
 
         // echo "<br>getcwd() = " . getcwd();
         // echo "<br>doc_root = " . $_SERVER['DOCUMENT_ROOT'];
@@ -250,8 +256,10 @@ class bhl_access_controller //extends ControllerBase
         $back .= "&subject_type=" . urlencode($params['subject_type']);
         $back .= "&audience_type=" . urlencode($params['audience_type']);
         $back .= "&license_type=" . urlencode($params['license_type']);
+        $back .= "&agents=" . urlencode($params['agents']);
+        $back .= "&taxon_names=" . urlencode($params['taxon_names']);
         
-       
+        
         fwrite($file, "<span class=\"plainlinks\">[$back Back to BHL API result page]</span>[[Image:Back icon.png|link=$back|Back to BHL API result page]]\n");
 
         // fwrite($file, "[[Contributing User::{{subst:REVISIONUSER}}]]\n");
@@ -264,18 +272,6 @@ class bhl_access_controller //extends ControllerBase
         $agent_url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:{$wiki_user}";
         fwrite($file, "<br /><span class=\"plainlinks\">Contributing User: [$agent_url <b>{$wiki_user}</b>]</span>\n");
         
-        /*
-        fwrite($file, "===Table of Contents===" . "\n");
-        fwrite($file, "{| class=\"wikitable\"" . "\n");
-        fwrite($file, "| [[#Page Summary|Page Summary]]" . "\n");
-        fwrite($file, "|-" . "\n");
-        fwrite($file, "| [[#OCR Text|OCR Text]]" . "\n");
-        fwrite($file, "|-" . "\n");
-        fwrite($file, "| [[#Taxa Found in Page|Taxa Found in Page]]" . "\n");
-        fwrite($file, "|-" . "\n");
-        fwrite($file, "|}" . "\n");
-        */
-
         $color_green = "color:green; background-color:#ffffcc;";
         
         if($loop = @$xml->Result)
@@ -292,12 +288,20 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "|" . "''enter title here''" . "\n");
                 fwrite($file, "|-\n");
                 fwrite($file, "|}\n");
+
+                //Taxa List
+                fwrite($file, "===Taxa Found in Page===\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Taxa Found in Page\"\n");
+                fwrite($file, "$go_top\n");
+                fwrite($file, "|" . $params['taxon_names']."\n");
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
                 
                 if(@$params['licensor'])
                 {
                     //Licensor
                     fwrite($file, "===Licensor===\n");
-                    fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Licensor\"\n");
+                    fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Licensor\"\n");
                     fwrite($file, "$go_top\n");
                     fwrite($file, "|" . self::format_wiki($params['licensor'])."\n");
                     fwrite($file, "|-\n");
@@ -306,7 +310,7 @@ class bhl_access_controller //extends ControllerBase
 
                 //Subject Type
                 fwrite($file, "===Subject Type===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Subject Type\"\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Subject Type\"\n");
                 fwrite($file, "$go_top\n");
                 fwrite($file, "|" . self::format_wiki($params['subject_type'])."\n");
                 fwrite($file, "|-\n");
@@ -314,7 +318,7 @@ class bhl_access_controller //extends ControllerBase
 
                 //License Type
                 fwrite($file, "===License Type===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"License Type\"\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"License Type\"\n");
                 fwrite($file, "$go_top\n");
                 fwrite($file, "|" . self::format_wiki($params['license_type'])."\n");
                 fwrite($file, "|-\n");
@@ -322,7 +326,7 @@ class bhl_access_controller //extends ControllerBase
 
                 //Bibliographic Citation
                 fwrite($file, "===Bibliographic Citation===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Bibliographic Citation\"\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Bibliographic Citation\"\n");
                 fwrite($file, "$go_top\n");
                 fwrite($file, "|" . self::format_wiki($params['bibliographicCitation'])."\n");
                 fwrite($file, "|-\n");
@@ -330,7 +334,7 @@ class bhl_access_controller //extends ControllerBase
 
                 //Authors
                 fwrite($file, "===Authors===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Authors\"\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Authors\"\n");
                 fwrite($file, "$go_top\n");
                 $agents = explode("; ", @$params['agents']);
                 foreach($agents as $agent)
@@ -343,7 +347,7 @@ class bhl_access_controller //extends ControllerBase
 
                 //Audience Type
                 fwrite($file, "===Audience Type===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"Audience Type\"\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Audience Type\"\n");
                 fwrite($file, "$go_top\n");
                 fwrite($file, "|" . self::format_wiki($params['audience_type'])."\n");
                 fwrite($file, "|-\n");
@@ -351,7 +355,7 @@ class bhl_access_controller //extends ControllerBase
 
                 //References
                 fwrite($file, "===User-defined References (optional)===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"color:green; background-color:#ffffcc;\" name=\"User-defined References\"\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"User-defined References\"\n");
                 fwrite($file, "$go_top\n");
                 fwrite($file, "|" . "\n");
                 fwrite($file, "<ref name=\"ref1\">John's Handbook, Third Edition, Doe-Roe Co., 1972.</ref><!-- Put your reference here or leave it as is. This sample won't be imported -->" . "\n");
@@ -384,19 +388,19 @@ class bhl_access_controller //extends ControllerBase
 
                 //OCR Text
                 fwrite($file, "===OCR Text===\n");
-                fwrite($file, "{| class=\"wikitable\" name=\"OCR Text\"\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"OCR Text\"\n");
                 fwrite($file, "$go_top\n");
                 fwrite($file, "|" . self::format_wiki($Page->OcrText)."\n");
                 fwrite($file, "|-\n");
                 fwrite($file, "|}\n");
 
                 //taxa
-                fwrite($file, "===Taxa Found in Page===\n");
+                fwrite($file, "===Taxa Found in Page (tabular)===\n");
                 $total_taxa = count($Page_xml->Names->Name);
                 fwrite($file, "Name(s): " . $total_taxa . "<br />\n");
                 // if($total_taxa)
                 // {
-                    fwrite($file, "{| class=\"wikitable\" name=\"Taxa Found in Page\"\n");
+                    fwrite($file, "{| class=\"wikitable\" name=\"Taxa Found in Page (tabular)\"\n");
                     fwrite($file, "$go_top\n");
                     fwrite($file, "|-\n");
                     fwrite($file, "! scope=\"col\"|NameBankID   ||! scope=\"col\"|EOLID ||! scope=\"col\"|NameFound ||! scope=\"col\"|NameConfirmed\n");
@@ -410,14 +414,18 @@ class bhl_access_controller //extends ControllerBase
                     }
                     // else
                     // {
+                        /*
                         fwrite($file, "|-\n");
                         fwrite($file, "|NameBankID1   ||EOLID1  ||NameFound1  ||NameConfirmed1 <!-- This is just sample entry, will be ignored. Overwrite to add taxon. -->\n");
                         fwrite($file, "|-\n");
                         fwrite($file, "|NameBankID2   ||EOLID2  ||NameFound2  ||NameConfirmed2 <!-- This is just sample entry, will be ignored. Overwrite to add taxon. -->\n");
+                        */
                     // }
+                    /*
                     fwrite($file, "|-\n");
                     fwrite($file, "|}\n");
                     fwrite($file, "<!-- Only the field NameConfirmed is required. The other three fields (NameBankID, EOLID, NameFound) are optional. -->" . "\n");
+                    */
                     
                 // }
                 
@@ -577,10 +585,13 @@ class bhl_access_controller //extends ControllerBase
             if(preg_match("/\[(.*?) Back to BHL API result page/ims", $str, $arr))
             {
                 $str = urldecode($arr[1]);
-                if(preg_match("/subject_type=(.*?)\&/ims", $str, $arr)) $final['subject_type'] = $arr[1];
-                if(preg_match("/audience_type=(.*?)\&/ims", $str, $arr)) $final['audience_type'] = $arr[1];
-                if(preg_match("/license_type=(.*?)xxx/ims", $str."xxx", $arr)) $final['license_type'] = $arr[1];
-                echo"<pre>"; print_r($final); echo "</pre>";
+                if(preg_match("/subject_type=(.*?)\&/ims", $str, $arr))         $final['subject_type']  = $arr[1];
+                if(preg_match("/audience_type=(.*?)\&/ims", $str, $arr))        $final['audience_type'] = $arr[1];
+                if(preg_match("/license_type=(.*?)\&/ims", $str, $arr))         $final['license_type']  = $arr[1];
+                if(preg_match("/agents=(.*?)\&/ims", $str, $arr))               $final['agents']        = $arr[1];
+                if(preg_match("/taxon_names=(.*?)xxx/ims", $str."xxx", $arr))   $final['taxon_names']   = $arr[1];
+
+                echo"<pre>"; print_r($final); echo "</pre>"; //debug
                 return $final;
             }
         }
@@ -641,6 +652,26 @@ class bhl_access_controller //extends ControllerBase
         }
     }
     
+    private function get_taxa_list($page_id)
+    {
+        $p['search_type'] = 'pagetaxasearch';
+        $p['page_id']     = $page_id;
+        $xml = self::search_bhl($p);
+        $names = array();
+        if($loop = @$xml->Result)
+        {
+            foreach($loop as $Page)
+            {
+                if(count($Page->Name))
+                {
+                    foreach($Page->Name as $Name) $names[(string) $Name->NameConfirmed] = ''; // $Name->NameBankID $Name->EOLID $Name->NameFound
+                }
+            }
+        }
+        $names = array_keys($names);
+        return implode("; ", $names);
+    }
+    
     function get_bibliographicCitation($title_id, $Page, $title)
     {
         $item_id     = $Page->ItemID;
@@ -695,7 +726,11 @@ class bhl_access_controller //extends ControllerBase
                 $total_authors = count(@$Part['Authors']['Creator']);
                 if($total_authors)
                 {
-                    foreach(@$Part['Authors']['Creator'] as $Creator) $authors[] = self::remove_ending_char(self::check_arr(@$Creator['Name']));
+                    foreach(@$Part['Authors']['Creator'] as $Creator) 
+                    {
+                        $authors[] = self::remove_ending_char(self::check_arr(@$Creator['Name']));
+                        $authors2[] = self::remove_ending_char(self::check_arr(@$Creator['Name'])) . " {" . $Creator['CreatorID'] . "}";
+                    }
                 }
             }
             else
@@ -703,11 +738,16 @@ class bhl_access_controller //extends ControllerBase
                 $total_authors = count(@$Part['Authors']);
                 if($total_authors)
                 {
-                    foreach(@$Part['Authors'] as $Creator) $authors[] = self::remove_ending_char(self::check_arr(@$Creator['Name']));
+                    foreach(@$Part['Authors'] as $Creator) 
+                    {
+                        $authors[] = self::remove_ending_char(self::check_arr(@$Creator['Name']));
+                        $authors2[] = self::remove_ending_char(self::check_arr(@$Creator['Name']))  . " {" . $Creator['CreatorID'] . "}";
+                    }
                 }
             }
             /* <Authors:Creator, start with the first name and list them all, separating individual names with semicolons>. <Date>. <Title>. <ContainerTitle> <Volume>  <Series> (<Issue>):<PageRange>. */
             $authors = trim(implode("; ", $authors));
+            $authors2 = trim(implode("; ", $authors2));
             $citation = self::format_citation_part($authors);
             if($val = self::check_arr(@$Part['Date']))           $citation .= self::format_citation_part($val);
             if($val = self::check_arr(@$Part['Title']))          $citation .= self::format_citation_part($val);

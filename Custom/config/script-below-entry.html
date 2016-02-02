@@ -3,7 +3,7 @@
 // $("#Table1").styleTable();
 // -->
 
-// <!--
+// <!-- orig
 // $( "#accordion" ).accordion();
 // -->
 $("#accordion").accordion({ collapsible: true,
@@ -34,10 +34,6 @@ $( "#button_search_taxa" ).button();
 $( "#button_move2wiki" ).button();
 
 $( "#radioset" ).buttonset();
-
-// <!-- orig not used
-// // $( "#tabs" ).tabs();
-// -->
 
 $( "#tabs_main" ).tabs();
 $( "#tabs" ).tabs();
@@ -104,4 +100,9 @@ $( "#dialog-link, #icons li" ).hover(
       $( this ).removeClass( "ui-state-hover" );
    }
 );
+
+$('input:text, input:password, input[type=email]')
+    .button().addClass('my-textfield');
+    
+    
 </script>

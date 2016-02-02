@@ -82,12 +82,25 @@ if(isset($url_params['license_type']))
     if($val = $url_params['license_type']) $license_type = $val;
 }
 
-echo "<br>[$license_type]</br>";
+// echo "<br>[$license_type]</br>";
 
 //====================================================
 $citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
 $bibliographicCitation = $citation_and_authors['citation'];
-// print_r($citation_and_authors);
+$agents = $citation_and_authors['authors2'];
+
+if(isset($url_params['agents']))
+{
+    if($val = $url_params['agents']) $agents = $val;
+}
+
+//====================================================
+$taxon_names = self::get_taxa_list($Page->PageID);
+if(isset($url_params['taxon_names']))
+{
+    if($val = $url_params['taxon_names']) $taxon_names = $val;
+}
+
 //====================================================
 
 if(isset($params))
@@ -95,6 +108,8 @@ if(isset($params))
     if($val = @$params['subject_type']) $subject_type = $val;
     if($val = @$params['audience_type']) $audience_type = $val;
     if($val = @$params['license_type']) $license_type = $val;
+    if($val = @$params['agents']) $agents = $val;
+    
 }
 //====================================================
 ?>
@@ -106,17 +121,22 @@ if(isset($params))
     <input type="hidden" name="pass_title" value="<?php echo urlencode($pass_title) ?>">
     <input type="hidden" name="search_type" value="move2wiki">
     <input type="hidden" name="licensor" value="<?php echo $licensor ?>">
-    <input type="hidden" name="bibliographicCitation" value="<?php echo $bibliographicCitation ?>">
-    <input type="hidden" name="agents" value="<?php echo $citation_and_authors['authors2'] ?>">
     
     <table border="0">
         <tr>
-            <td>Bibliographic Citation (computed):</td>
-            <td><?php echo $bibliographicCitation ?></td>
+            <td>Taxa found in page:</td>
+            <td><input size="100" type="text" name="taxon_names" value="<?php echo $taxon_names ?>"> <i><small>semi-colon separated taxon names</small></i></td>
+        </tr>
+    
+        <tr>
+            <td>Bibliographic Citation:</td>
+            <td>
+            <input type="text" size="100" name="bibliographicCitation" value="<?php echo $bibliographicCitation ?>">
+            </td>
         </tr>
         <tr>
-            <td>Authors (computed):</td>
-            <td><?php echo $citation_and_authors['authors2'] ?></td>
+            <td>Authors:</td>
+            <td><input size="100" type="text" name="agents" value="<?php echo $agents ?>"> <i><small>semi-colon separated authors</small></i></td>
         </tr>
         
         <tr>
