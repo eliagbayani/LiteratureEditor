@@ -64,8 +64,8 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
     }
     ?>
     
-    <tr bgcolor="lightblue"><td>TitleID</td><td>: <?php echo $title_id ?> &nbsp; {<?php echo $title ?>}</td></tr>
-    <tr bgcolor="lightblue"><td>BibliographicLevel</td><td>: {<?php echo self::get_TitleInfo_using_title_id($title_id, "BibliographicLevel") ?>}</td></tr>
+    <tr bgcolor="#F0F8FF"><td>TitleID</td><td>: <?php echo $title_id ?> &nbsp; {<?php echo $title ?>}</td></tr>
+    <tr bgcolor="#F0F8FF"><td>BibliographicLevel</td><td>: {<?php echo self::get_TitleInfo_using_title_id($title_id, "BibliographicLevel") ?>}</td></tr>
     
     
     
@@ -90,11 +90,17 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
         self::display_message(array('type' => "highlight", 'msg' => "Wiki already exists for this excerpt. <a href='$wiki'>View Wiki</a>"));
         $submit_text = "Proceed overwrite Wiki page";
         // <br><br><a href="$export_url">Proceed overwrite Wiki page</a>
+        
+        if(!count($Page_xml->Names->Name)) self::display_message(array('type' => "highlight", 'msg' => "Original excerpt does not have any taxon associated with it."));
+        
     }
     else
     {
         // <!-- <a href="$export_url">Export this to Wiki</a> -->
         $submit_text = "Export this to Wiki";
+        
+        if(!count($Page_xml->Names->Name)) self::display_message(array('type' => "error", 'msg' => "This excerpt does not have any taxon associated with it."));
+        
     }
 
 

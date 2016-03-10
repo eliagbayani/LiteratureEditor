@@ -70,7 +70,8 @@ class bhl_access_controller //extends ControllerBase
                                                       'page_id' => @$p['page_id'],
                                                       'radio' => @$p['radio'],
                                                       'search_type' => @$p['search_type'],
-                                                      'pass_title' => @$p['pass_title']
+                                                      'pass_title' => @$p['pass_title'],
+                                                      'use_cache' => @$p['use_cache']
                                                       ));
     }
     
@@ -280,6 +281,8 @@ class bhl_access_controller //extends ControllerBase
             {
                 $Page_xml = $Page;
                 $Page = json_decode(json_encode($Page)); //converting SimpleXMLElement Object to stdClass Object
+
+                // print_r($Page); exit;
 
                 //User-defined Title
                 fwrite($file, "===User-defined Title (optional)===\n");
@@ -559,6 +562,11 @@ class bhl_access_controller //extends ControllerBase
 
     function format_wiki($wiki)
     {
+        /* works but only replaces the first char dash.
+        if(substr($wiki, 0, 1) == "-") $wiki = "&ndash;" . trim(substr($wiki, 1, strlen($wiki))); //replace first char to &dash; if it is "-" dash.
+        */
+        $wiki = str_replace("-", "&ndash;", $wiki);
+        
         $wiki = str_replace(array("\n"), "", $wiki);
         return $wiki;
     }
@@ -642,6 +650,17 @@ class bhl_access_controller //extends ControllerBase
         if($sought_field == "PrimaryTitleID")  {if($val = @$xml->Result->PrimaryTitleID) return trim($val);}
         if($sought_field == "all")             {if($val = @$xml->Result) return $val;}
     }
+
+    // function get_PageInfo_using_page_id($page_id, $sought_field = "all")
+    // {
+    //     $p['search_type'] = 'pagesearch';
+    //     $p['page_id']     = $page_id;
+    //     $xml = self::search_bhl($p);
+    //     print_r($xml);
+    //     if($sought_field == "all")             {if($val = @$xml->Result) return $val;}
+    // }
+
+
 
     private function get_PartInfo_using_item_id($item_id, $sought_field)
     {
