@@ -146,7 +146,9 @@ class Functions
         if(!isset($options['expire_seconds'])) $options['expire_seconds'] = 2592000;
         if(!isset($options['timeout'])) $options['timeout'] = 120;
         // if(!isset($options['cache_path'])) $options['cache_path'] = DOC_ROOT . "tmp/cache/";
-        if(!isset($options['cache_path'])) $options['cache_path'] = "/Volumes/MacMini_HD2/sc_cache/";
+        // if(!isset($options['cache_path'])) $options['cache_path'] = "/Volumes/MacMini_HD2/sc_cache/";
+        if(!isset($options['cache_path'])) $options['cache_path'] = CACHE_PATH; //found in /Custom/config/settings.php
+
         $md5 = md5($url);
         $cache1 = substr($md5, 0, 2);
         $cache2 = substr($md5, 2, 2);

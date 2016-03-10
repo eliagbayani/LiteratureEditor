@@ -421,9 +421,11 @@ class bhl_access_controller //extends ControllerBase
                         fwrite($file, "|NameBankID2   ||EOLID2  ||NameFound2  ||NameConfirmed2 <!-- This is just sample entry, will be ignored. Overwrite to add taxon. -->\n");
                         */
                     // }
-                    /*
+                    
                     fwrite($file, "|-\n");
                     fwrite($file, "|}\n");
+                    
+                    /*
                     fwrite($file, "<!-- Only the field NameConfirmed is required. The other three fields (NameBankID, EOLID, NameFound) are optional. -->" . "\n");
                     */
                     
