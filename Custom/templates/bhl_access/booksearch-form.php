@@ -11,8 +11,6 @@
 <input type="hidden" name="search_type" value="booksearch">
 <table border = "0">
 
-
-
     <tr><td colspan="2">Enter at least one of these three search parameters:</td></tr>
     <tr><td>Book title:</td>            <td><input type="text" size="100" name="book_title"<?php if($book_title) echo " value=\"$book_title\""; ?>/> e.g. Selborne</td></tr>
     <tr><td>Author's last name':</td>   <td><input type="text" size="100" name="lname"<?php if($lname) echo " value=\"$lname\""; ?>/> e.g. White</td></tr>
@@ -34,3 +32,4 @@
     </tr>
 </table>
 </form>
+
