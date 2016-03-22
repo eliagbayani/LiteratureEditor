@@ -30,6 +30,19 @@ class bhl_access_controller //extends ControllerBase
         $this->bhl_api_service['pagesearch']  = "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetPageMetadata&ocr=t&names=t&apikey=" . BHL_API_KEY;
         
         $this->download_options = array('download_timeout_seconds' => 4800, 'download_wait_time' => 300000, 'expire_seconds' => false);
+
+        $this->id_url['page'] = "http://biodiversitylibrary.org/page/";
+        $this->id_url['title'] = "http://www.biodiversitylibrary.org/bibliography/";
+        $this->id_url['item'] = "http://www.biodiversitylibrary.org/item/";
+        $this->id_url['pagethumb'] = "http://www.biodiversitylibrary.org/pagethumb/";
+        $this->id_url['eol'] = "http://www.eol.org/pages/";
+        $this->id_url['creator'] = "http://www.biodiversitylibrary.org/creator/";
+        
+    }
+
+    public function get_url_by_id($type, $id)
+    {
+        return "<a href='" . $this->id_url[$type] . "$id'>$id</a>";
     }
     
     public static function index(){}

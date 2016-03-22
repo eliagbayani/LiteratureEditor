@@ -13,7 +13,7 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
     
     <tr>
         <td>PageID</td>
-        <td> : <?php echo $Page->PageID ?>
+        <td> : <?php echo self::get_url_by_id("page", $Page->PageID) ?>
         <!--
         <ul id="icons" class="ui-widget ui-helper-clearfix">
             <li>: <?php echo $Page->PageID ?></li>
@@ -29,7 +29,7 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
     <tr bgcolor="lightyellow"><td>ItemID</td>
     <td>
     <ul id="icons" class="ui-widget ui-helper-clearfix">
-        <li>: <?php echo $Page->ItemID ?></li>
+        <li>: <?php echo self::get_url_by_id("item", $Page->ItemID) ?></li>
         <li class="ui-state-default ui-corner-all" title="Search this item">
             <span class="ui-icon ui-icon-search"></span>
             <a href="../bhl_access/index.php?item_id=<?php echo $Page->ItemID?>&search_type=itemsearch">Search</a>&nbsp;&nbsp;
@@ -64,7 +64,7 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
     }
     ?>
     
-    <tr bgcolor="#F0F8FF"><td>TitleID</td><td>: <?php echo $title_id ?> &nbsp; {<?php echo $title ?>}</td></tr>
+    <tr bgcolor="#F0F8FF"><td>TitleID</td><td>: <?php echo self::get_url_by_id("title", $title_id) ?> &nbsp; {<?php echo $title ?>}</td></tr>
     <tr bgcolor="#F0F8FF"><td>BibliographicLevel</td><td>: {<?php echo self::get_TitleInfo_using_title_id($title_id, "BibliographicLevel") ?>}</td></tr>
     
     

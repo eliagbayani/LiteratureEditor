@@ -32,7 +32,7 @@
                     </ul>
                     <div id="tabs<?php echo $tabs_count ?>-1">
                     <table>
-                    <tr><td>TitleID</td>                <td>: <?php echo $title->TitleID ?></td></tr>
+                    <tr><td>TitleID</td>                <td>: <?php echo self::get_url_by_id("title", $title->TitleID) ?></td></tr>
                     <tr><td>BibliographicLevel</td>     <td>: <?php echo $title->BibliographicLevel ?></td></tr>
                     <tr><td>FullTitle</td>              <td>: <?php echo $title->FullTitle ?></td></tr>
                     <tr><td>ShortTitle</td>             <td>: <?php echo $title->ShortTitle ?></td></tr>
@@ -56,7 +56,7 @@
                         foreach($title->Authors->Creator as $Creator)
                         {
                             ?>
-                                <tr><td>CreatorID</td>      <td>: <?php echo $Creator->CreatorID ?></td></tr>
+                                <tr><td>CreatorID</td>      <td>: <?php echo self::get_url_by_id("creator", $Creator->CreatorID) ?></td></tr>
                                 <tr><td>Name</td>           <td>: <?php echo $Creator->Name ?></td></tr>
                                 <tr><td>Role</td>           <td>: <?php echo $Creator->Role ?></td></tr>
                                 <tr><td>Numeration</td>     <td>: <?php echo $Creator->Numeration ?></td></tr>
@@ -165,7 +165,6 @@
                                     <td><a title="More info on this item" href="../bhl_access/index.php?item_id=<?php echo $Item->ItemID?>&search_type=itemsearch"><span class="ui-icon ui-icon-info"></span></a></td>
                                     <td>
                                         <a href="<?php echo $Item->ItemUrl ?>"><?php echo $Item->ItemID ?></a>
-                                        
                                         <!--
                                         <ul id="icons" class="ui-widget ui-helper-clearfix">
                                             <li><a href="<?php echo $Item->ItemUrl ?>"><?php echo $Item->ItemID ?></a></li>
@@ -175,7 +174,6 @@
                                         </ul>
                                         -->
                                     </td>
-                                    
                                     <td><a href="<?php echo $Item->TitleUrl ?>"><?php echo $Item->PrimaryTitleID ?></a></td>
                                     <td><a href="<?php echo $Item->ItemThumbUrl ?>"><?php echo $Item->ThumbnailPageID ?></a></td>
                                     <td><?php echo $Item->Source ?></td>
@@ -189,7 +187,6 @@
                                     <td><?php echo $Item->DueDiligence ?></td>
                                     <td><?php echo $Item->CopyrightStatus ?></td>
                                     <td><?php echo $Item->CopyrightRegion ?></td>
-
                                     <td>
                                         LicenseUrl: <?php echo $Item->LicenseUrl ?><br>
                                         ExternalUrl: <?php echo $Item->ExternalUrl ?>
@@ -220,7 +217,6 @@
                                         <td><?php echo $TitleNote->NoteText ?></td>
                                         <td><?php echo $TitleNote->NoteSequence ?></td>
                                         <td><?php echo $TitleNote->NoteTypeName ?></td>
-
                                     </tr>
                                 <?php
                             }
@@ -231,15 +227,12 @@
                         ?>
                     </div>
 
-
-                
                 </div><!-- tabs end -->
             </div><!-- accordion end -->
             <?php
         }
         ?>
     </div>
-    
     <?php
 }
 ?>

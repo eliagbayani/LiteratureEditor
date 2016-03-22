@@ -30,7 +30,7 @@
                         <tr><td>TitleID</td>
                         <td>
                         <ul id="icons" class="ui-widget ui-helper-clearfix">
-                            <li>: <?php echo $Title->TitleID ?></li>
+                            <li>: <?php echo self::get_url_by_id("title", $Title->TitleID) ?></li>
                             <li class="ui-state-default ui-corner-all" title="More info on this book">
                                 <span class="ui-icon ui-icon-info"></span>
                                 <a href="../bhl_access/index.php?title_id=<?php echo $Title->TitleID?>&search_type=titlesearch">More info</a>&nbsp;&nbsp;
@@ -55,7 +55,7 @@
                         {
                             ?>
                                 <table>
-                                    <tr><td>CreatorID</td>      <td>: <?php echo $Creator->CreatorID ?></td></tr>
+                                    <tr><td>CreatorID</td>      <td>: <?php echo self::get_url_by_id("creator", $Creator->CreatorID) ?></td></tr>
                                     <tr><td>Name</td>           <td>: <?php echo $Creator->Name ?></td></tr>
                                     <tr><td>Role</td>           <td>: <?php echo $Creator->Role ?></td></tr>
                                     <tr><td>Numeration</td>     <td>: <?php echo $Creator->Numeration ?></td></tr>
@@ -74,7 +74,7 @@
                     </div>
                     <div id="tabs<?php echo $tabs_count ?>-3">
                         Item(s): <?php echo count($Title->Items->Item) ?><br>
-                        <?php 
+                        <?php
                         foreach($Title->Items->Item as $Item)
                         {
                             ?>
@@ -82,15 +82,15 @@
                                     <tr><td>ItemID</td>
                                     <td>
                                     <ul id="icons" class="ui-widget ui-helper-clearfix">
-                                        <li>: <?php echo $Item->ItemID ?></li>
+                                        <li>: <?php echo self::get_url_by_id("item", $Item->ItemID) ?></li>
                                         <li class="ui-state-default ui-corner-all" title=".ui-icon-search">
                                             <span class="ui-icon ui-icon-search"></span>
                                             <a href="../bhl_access/index.php?item_id=<?php echo $Item->ItemID?>&search_type=itemsearch">Search</a>&nbsp;&nbsp;
                                         </li>
                                     </ul>
                                     </td></tr>
-                                    <tr><td>PrimaryTitleID</td>     <td>: <?php echo $Item->PrimaryTitleID ?></td></tr>
-                                    <tr><td>ThumbnailPageID</td>    <td>: <?php echo $Item->ThumbnailPageID ?></td></tr>
+                                    <tr><td>PrimaryTitleID</td>     <td>: <?php echo self::get_url_by_id("title", $Item->PrimaryTitleID) ?></td></tr>
+                                    <tr><td>ThumbnailPageID</td>    <td>: <?php echo self::get_url_by_id("pagethumb", $Item->ThumbnailPageID) ?></td></tr>
                                     <tr><td>Volume</td>             <td>: <?php echo $Item->Volume ?></td></tr>
                                     <tr><td>Contributor</td>        <td>: <?php echo $Item->Contributor ?></td></tr>
                                     <tr><td>ItemUrl</td>            <td>: <?php echo Functions::format_url($Item->ItemUrl) ?></td></tr>

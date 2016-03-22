@@ -29,19 +29,19 @@
                     
                     <div id="tabs<?php echo $tabs_count ?>-1">
                     <table>
-                    <tr><td>ItemID</td>             <td>: <?php echo $item->ItemID ?></td></tr>
+                    <tr><td>ItemID</td>             <td>: <?php echo self::get_url_by_id("item", $item->ItemID) ?></td></tr>
                     <tr><td>PrimaryTitleID</td>     <td>
                     <ul id="icons" class="ui-widget ui-helper-clearfix">
-                        <li>: <?php echo $item->PrimaryTitleID ?></li>
+                        <li>: <?php echo self::get_url_by_id("title", $item->PrimaryTitleID) ?></li>
                         <li class="ui-state-default ui-corner-all" title="Search this title">
                             <span class="ui-icon ui-icon-search"></span>
-                            <a href="../bhl_access/index.php?title_id=<?php echo $item->PrimaryTitleID?>&search_type=titlesearch">Search</a>&nbsp;&nbsp;
+                            <a href="../bhl_access/index.php?title_id=<?php echo $item->PrimaryTitleID ?>&search_type=titlesearch">Search</a>&nbsp;&nbsp;
                         </li>
                         <li>&nbsp; {<?php echo self::get_TitleInfo_using_title_id($item->PrimaryTitleID, "FullTitle") ?>}</li>
                     </ul>
                     
                     </td></tr>
-                    <tr><td>ThumbnailPageID</td>    <td>: <?php echo $item->ThumbnailPageID ?></td></tr>
+                    <tr><td>ThumbnailPageID</td>    <td>: <?php echo self::get_url_by_id("pagethumb", $item->ThumbnailPageID) ?></td></tr>
                     <tr><td>Source</td>             <td>: <?php echo $item->Source ?></td></tr>
                     <tr><td>SourceIdentifier</td>   <td>: <?php echo $item->SourceIdentifier ?></td></tr>
                     <tr><td>Volume</td>             <td>: <?php echo $item->Volume ?></td></tr>
@@ -92,8 +92,8 @@
                                         <td><a title="More info on this page" href="index.php?page_more_info=<?php echo urlencode($pagex)?>"><span class="ui-icon ui-icon-info"></span></a></td>
                                         -->
                                         <td><a title="More info on this page" href="../bhl_access/index.php?page_id=<?php echo $Page->PageID?>&search_type=pagesearch"><span class="ui-icon ui-icon-info"></span></a></td>
-                                        <td><?php echo $Page->PageID ?></td>
-                                        <td><?php echo $Page->ItemID ?></td>
+                                        <td><?php echo self::get_url_by_id("page", $Page->PageID) ?></td>
+                                        <td><?php echo self::get_url_by_id("item", $Page->ItemID) ?></td>
                                         <td><?php echo $Page->Volume ?></td>
                                         <td><?php echo $Page->Year ?></td>
                                         <td valign="top"><?php echo $Page->OcrText ?>

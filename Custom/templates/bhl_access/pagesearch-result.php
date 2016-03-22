@@ -44,7 +44,7 @@
                                 <tr align="left">
                                     <th>NameBankID</th>
                                     <th>EOLID</th>
-                                    <th></th>
+                                    <!--- <th></th> --->
                                     <th>NameFound</th>
                                     <th>NameConfirmed</th>
                                 </tr>
@@ -55,8 +55,9 @@
                                     <tr>
                                         <td><?php echo $Name->NameBankID ?></td>
                                         <td>
-                                            <?php echo $Name->EOLID ?>
+                                            <?php echo self::get_url_by_id("eol", $Name->EOLID) ?>
                                         </td>
+                                        <!---
                                         <td>
                                             <?php if(trim($Name->EOLID))
                                             {
@@ -66,7 +67,7 @@
                                             }
                                             ?>
                                         </td>
-                                        
+                                        --->
                                         <td><?php echo $Name->NameFound ?></td>
                                         <td><?php echo $Name->NameConfirmed ?></td>
                                     </tr>
