@@ -41,10 +41,10 @@ $wgScriptPath = "/LiteratureEditor"; // $wgScriptPath = "/w";
 $wgArticlePath = "/LiteratureEditor/wiki/$1";
 $wgScriptExtension = ".php";
 
+require_once("config/.htsettings.php");
 
 ## The protocol and server name to use in fully-qualified URLs
-$wgServer = "http://editors.eol.localhost";
-// $wgServer = "http://localhost";
+$wgServer = $conf['wgServer']; //"http://editors.eol.localhost";
 
 
 ## The relative URL path to the skins directory
@@ -64,8 +64,8 @@ $wgLogo = "$wgResourceBasePath/resources/assets/eol black bg.png";
 $wgDBtype = "mysql";
 $wgDBserver = "localhost";
 $wgDBname = "wiki_literatureeditor";
-$wgDBuser = "root";
-$wgDBpassword = "m173";
+$wgDBuser       = $conf['wgDBuser'];//"root";
+$wgDBpassword   = $conf['wgDBpassword'];//"m173";
 
 
 # MySQL specific settings
@@ -79,10 +79,8 @@ $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $wgDBmysql5 = false;
 
 ## Shared memory settings
-///* used in EoEarth
-$wgMainCacheType = CACHE_MEMCACHED;
-$wgMemCachedServers = array( '127.0.0.1:11211' );
-//*/
+$wgMainCacheType = $conf['wgMainCacheType']; //CACHE_MEMCACHED;;
+$wgMemCachedServers = $conf['wgMemCachedServers']; //array( '127.0.0.1:11211' );
 
 /* 
 Make sure that XCache is installed with the new version of PHP. The most likely cause is the new version of PHP simply doesn't have xcache installed. You can do this by creating a php file with just the code <?php phpinfo(); and then viewing it in a web browser.
@@ -96,6 +94,9 @@ $wgMemCachedServers = array();
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
 $wgEnableUploads = true;
+$wgUseImageMagick               = $conf['wgUseImageMagick']; //true;
+$wgImageMagickConvertCommand    = $conf['wgImageMagickConvertCommand']; //"/usr/local/bin/convert";
+
 /*
 all these folders must have write permissions
 e.g.
@@ -103,23 +104,23 @@ e.g.
     chmod 0777 /images/temp
 */
 
-//1. Setup in LocalSettings.php
-// change images folder:
-// orig is     : /Library/WebServer/Documents/LiteratureEditor/images
-// changed to  : /Library/WebServer/Documents/LiteratureEditor_images
+/* working
 $images_folder      = $IP . "_images";
 $wgUploadDirectory  = $images_folder;               //where MediaWiki uploades images
 $wgUploadPath       = $wgScriptPath . "_images";    //where MediaWiki views images
 $wgDeletedDirectory = "$images_folder/deleted";
 $wgTmpDirectory     = "$images_folder/temp";
-// 2. Setup in Apache vhosts file, inside <VirtualHost *:80></VirtualHost>
-// Alias /LiteratureEditor/images/    "/Library/WebServer/Documents/LiteratureEditor_images/"
+*/
+
+$images_folder      = $conf['images_folder'];
+$wgUploadDirectory  = $conf['wgUploadDirectory'];   //where MediaWiki uploades images
+$wgUploadPath       = $conf['wgUploadPath'];        //where MediaWiki views images
+$wgDeletedDirectory = $conf['wgDeletedDirectory'];
+$wgTmpDirectory     = $conf['wgTmpDirectory'];
 
 
 
 
-$wgUseImageMagick = true;
-$wgImageMagickConvertCommand = "/usr/local/bin/convert";
 
 
 # InstantCommons allows wiki to use images from http://commons.wikimedia.org

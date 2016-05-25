@@ -13,9 +13,11 @@
         <td>Title ID:</td>
         <td><input type="text" size="20" name="title_id"<?php if($title_id) echo " value=\"$title_id\""; ?>/></td>
         
+        <!---
         <td><input type="checkbox" name="use_cache"<?php if($use_cache) echo " checked"; ?>/>
-        
         <?php echo "[$use_cache]" ?>
+        --->
+        
         </td>
         
         <td><button id="button_search_title">Search this title</button></td>
