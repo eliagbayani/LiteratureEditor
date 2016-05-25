@@ -501,38 +501,6 @@ class Functions
 
     public static function get_eol_defined_uris($download_options = false)
     {
-        if(!$download_options) $download_options = array('resource_id' => 'URIs', 'download_wait_time' => 1000000, 'timeout' => 900, 'expire_seconds' => 86400, 'download_attempts' => 1); //expires in 24 hours
-        for($i=1; $i<=12; $i++)
-        {
-            $urls = array();
-            // $urls[] = "http://localhost/cp/TraitRequest/measurements/URIs for Data on EOL - Encyclopedia of Life" . $i . ".html";
-            $urls[] = "https://dl.dropboxusercontent.com/u/7597512/TraitRequest/measurements/URIs for Data on EOL - Encyclopedia of Life" . $i . ".html";
-            foreach($urls as $url)
-            {
-                if($html = Functions::lookup_with_cache($url, $download_options))
-                {
-                    $html = str_ireplace("<wbr/>", "", $html);
-                    $params = array("<tr class='hidden' id='known_uri", "<tr id='known_uri");
-                    foreach($params as $param)
-                    {
-                        if(preg_match_all("/" . $param . "(.*?)<\/tr>/ims", $html, $arr))
-                        {
-                            foreach($arr[1] as $t)
-                            {
-                                if(preg_match("/<td class='uri'>(.*?)<\/td>/ims", $t, $arr2) || preg_match("/<td class='excluded uri'>(.*?)<\/td>/ims", $t, $arr2))
-                                {
-                                    $val = '';
-                                    if(preg_match("/<td>(.*?)<\/td>/ims", $t, $arr3)) $val = $arr3[1];
-                                    $rec[$arr2[1]] = $val;
-                                }
-                            }
-                        }
-                    }
-                }
-                else return $rec;
-            }
-        }
-        return $rec;
     }
 
     // see http://www.php.net/manual/en/function.filesize.php#92462
