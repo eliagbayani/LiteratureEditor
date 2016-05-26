@@ -82,16 +82,16 @@
                                         <td>
                                     <ul id="icons" class="ui-widget ui-helper-clearfix">
                                         <li class="ui-state-default ui-corner-all" title="<?php echo "More on this page..." ?>">
-                                            <span class="ui-icon ui-icon-info"></span>
-                                            <a href="index.php?page_more_info=<?php echo urlencode($pagex) ?>">More info</a>&nbsp;&nbsp;
+                                            <span class="ui-icon ui-icon-search"></span>
+                                            <a href="index.php?page_more_info=<?php echo urlencode($pagex) ?>">Search</a>&nbsp;&nbsp;
                                         </li>
                                     </ul>
                                         </td>
                                     --->
                                         <!-- working but commented now since long URI is not allowed
-                                        <td><a title="More info on this page" href="index.php?page_more_info=<?php echo urlencode($pagex)?>"><span class="ui-icon ui-icon-info"></span></a></td>
+                                        <td><a title="More info on this page" href="index.php?page_more_info=<?php echo urlencode($pagex)?>"><span class="ui-icon ui-icon-search"></span></a></td>
                                         -->
-                                        <td><a title="More info on this page" href="../bhl_access/index.php?page_id=<?php echo $Page->PageID?>&search_type=pagesearch"><span class="ui-icon ui-icon-info"></span></a></td>
+                                        <td><a title="More info on this page" href="../bhl_access/index.php?page_id=<?php echo $Page->PageID?>&search_type=pagesearch"><span class="ui-icon ui-icon-search"></span></a></td>
                                         <td><?php echo self::get_url_by_id("page", $Page->PageID) ?></td>
                                         <td><?php echo self::get_url_by_id("item", $Page->ItemID) ?></td>
                                         <td><?php echo $Page->Volume ?></td>
@@ -138,7 +138,7 @@
                                 ?>
                                         <tr valign="top">
                                             
-                                            <td><a title="More info on this part" href="index.php?part_more_info=<?php echo urlencode($partx) ?>"><span class="ui-icon ui-icon-info"></span></a></td>
+                                            <td><a title="More info on this part" href="index.php?part_more_info=<?php echo urlencode($partx) ?>"><span class="ui-icon ui-icon-search"></span></a></td>
                                             
                                             <td><?php echo $Part->PartID ?></td>
                                             <td><?php echo $Part->ItemID ?></td>
@@ -151,7 +151,7 @@
                                             <td valign="top">
                                             <ul id="icons" class="ui-widget ui-helper-clearfix">
                                                 <li class="ui-state-default ui-corner-all" title=".ui-icon-info">
-                                                    <span class="ui-icon ui-icon-info"></span>
+                                                    <span class="ui-icon ui-icon-search"></span>
                                                     <a href="index.php?part_more_info=<?php echo urlencode($partx) ?>">More info</a>&nbsp;&nbsp;
                                                 </li>
                                                 <?php echo $Part->Title ?>

@@ -614,7 +614,7 @@ class bhl_access_controller //extends ControllerBase
                 if(preg_match("/agents=(.*?)\&/ims", $str, $arr))               $final['agents']        = $arr[1];
                 if(preg_match("/taxon_names=(.*?)xxx/ims", $str."xxx", $arr))   $final['taxon_names']   = $arr[1];
 
-                echo"<pre>"; print_r($final); echo "</pre>"; //debug
+                // echo"<pre>"; print_r($final); echo "</pre>"; //debug
                 return $final;
             }
         }

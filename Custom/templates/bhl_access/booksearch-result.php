@@ -32,8 +32,8 @@
                         <ul id="icons" class="ui-widget ui-helper-clearfix">
                             <li>: <?php echo self::get_url_by_id("title", $Title->TitleID) ?></li>
                             <li class="ui-state-default ui-corner-all" title="More info on this book">
-                                <span class="ui-icon ui-icon-info"></span>
-                                <a href="../bhl_access/index.php?title_id=<?php echo $Title->TitleID?>&search_type=titlesearch">More info</a>&nbsp;&nbsp;
+                                <span class="ui-icon ui-icon-search"></span>
+                                <a href="../bhl_access/index.php?title_id=<?php echo $Title->TitleID?>&search_type=titlesearch">Search</a>&nbsp;&nbsp;
                             </li>
                         </ul>
                         </td></tr>
