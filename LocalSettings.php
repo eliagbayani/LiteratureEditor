@@ -11,9 +11,7 @@
 # https://www.mediawiki.org/wiki/Manual:Configuration_settings
 
 # Protect against web entry
-if ( !defined( 'MEDIAWIKI' ) ) {
-	exit;
-}
+if ( !defined( 'MEDIAWIKI' ) ) {exit;}
 
 $wgShowExceptionDetails = true;
 
@@ -21,8 +19,8 @@ $wgShowExceptionDetails = true;
 
 // start by eli =====================
 // Define constants for my additional namespaces.
-define("NS_ForReview", 5000); // This MUST be even.
-define("NS_ForReview_TALK", 5001); // This MUST be the following odd integer.
+define("NS_ForHarvesting", 5000); // This MUST be even.
+define("NS_ForHarvesting_TALK", 5001); // This MUST be the following odd integer.
 // end by eli =====================
 
 
@@ -191,19 +189,13 @@ $wgDiff3 = "/usr/bin/diff3";
     }
 
     /*
-    Member      - can only post comments after an article.
-    Students    - can create articles and edit other articles. None of this work becomes public until....
-    Instructors - approves work by an author so can click the Publish button to make the article public; has authority to edit and publish there own work; can approve an application for someone who wants to be an author, 
-    though this might need someone higher to carry it out.
+    Public - can request to be a member, but the application needs to be approved.
+    Administrator - does the approving and setting up the account. 
 
-    Public can request to be a member, but the application needs to be approved.
-    The Instructor did the approving and setting up the account. I am not sure if others can approve, but I would expect that they could.
-    This is also the case for a member being moved up to an author.
-
-    Student Contribution project groups:
-        Students
-        Instructor
+    Literature Editor project groups:
         Public
+        EoL Data Provider
+        EoL Administrator
 
     MediaWiki default groups
         administrator   
@@ -289,22 +281,25 @@ $wgCreatePageUseVisualEditor = true;
 //=================================================
 
 //from TalkRight
-/* $wgGroupPermissions['EoE_Member']['talk']       = true; */ //working but not used in SC
-$wgGroupPermissions['EoL_Reviewer']['talk']       = true;
+$wgGroupPermissions['EoL_Reviewer']['talk']      = true;
 $wgGroupPermissions['EoL_Administrator']['talk'] = true;
 //=================================================
 
 //from Lockdown
 // Add namespaces.
-$wgExtraNamespaces[NS_ForReview]      = "ForReview";
-$wgExtraNamespaces[NS_ForReview_TALK] = "ForReview_talk"; // Note underscores in the namespace name.
+$wgExtraNamespaces[NS_ForHarvesting]      = "ForHarvesting";
+$wgExtraNamespaces[NS_ForHarvesting_TALK] = "ForHarvesting_talk"; // Note underscores in the namespace name.
 
 $wgSpecialPageLockdown['*']         = array('EoL_Reviewer', 'EoL_Administrator');
 $wgSpecialPageLockdown['BlockList'] = array('EoL_Reviewer', 'EoL_Administrator');
 $wgSpecialPageLockdown['Export']    = array('EoL_Reviewer', 'EoL_Administrator');
 
-$wgNamespacePermissionLockdown[NS_ForReview]['*']      = array('EoL_Reviewer', 'EoL_Administrator');
-$wgNamespacePermissionLockdown[NS_ForReview_TALK]['*'] = array('EoL_Reviewer', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_ForHarvesting]['*']      = array('EoL_Reviewer', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_ForHarvesting_TALK]['*'] = array('EoL_Reviewer', 'EoL_Administrator');
+
+$wgNamespacePermissionLockdown[NS_MAIN]['*'] = array('EoL_Reviewer', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_TALK]['*'] = array('EoL_Reviewer', 'EoL_Administrator');
+
 
 /* To modify NS_MEDIAWIKI & NS_MEDIAWIKI_TALK user must be both 'administrator' and 'EoL_Administrator' */
 $spaces = array(NS_MEDIAWIKI, NS_MEDIAWIKI_TALK);
@@ -318,32 +313,20 @@ foreach($spaces as $space)
 }
 
 
-$wgNamespacePermissionLockdown[NS_MAIN]['edit']         = array('EoL_Administrator');
-$wgNamespacePermissionLockdown[NS_MAIN]['createpage']   = array('EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_MAIN]['edit']         = array('EoL_Reviewer', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_MAIN]['createpage']   = array('EoL_Reviewer', 'EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['delete']       = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['undelete']     = array('EoL_Administrator');
+
+$wgNamespacePermissionLockdown[NS_TALK]['edit']         = array('EoL_Reviewer', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_TALK]['createpage']   = array('EoL_Reviewer', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_TALK]['delete']       = array('EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_TALK]['undelete']     = array('EoL_Administrator');
 
 $wgNamespacePermissionLockdown[NS_PROJECT]['edit']         = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_PROJECT]['createpage']   = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_PROJECT]['delete']       = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_PROJECT]['undelete']     = array('EoL_Administrator');
-
-$wgNamespacePermissionLockdown[NS_TALK]['edit']         = array('EoL_Reviewer', 'EoL_Administrator'); //'EoE_Member'
-$wgNamespacePermissionLockdown[NS_TALK]['createpage']   = array('EoL_Reviewer', 'EoL_Administrator'); //'EoE_Member'
-$wgNamespacePermissionLockdown[NS_TALK]['delete']       = array('EoL_Administrator');
-$wgNamespacePermissionLockdown[NS_TALK]['undelete']     = array('EoL_Administrator');
-
-
-/*
-for($i=0; $i<16; $i++)
-{
-    $wgNamespacePermissionLockdown[$i]['edit']         = array('EoL_Administrator');
-    $wgNamespacePermissionLockdown[$i]['createpage']   = array('EoL_Administrator');
-    $wgNamespacePermissionLockdown[$i]['delete']       = array('EoL_Administrator');
-    $wgNamespacePermissionLockdown[$i]['undelete']     = array('EoL_Administrator');
-}
-*/
-
 
 
 /*
