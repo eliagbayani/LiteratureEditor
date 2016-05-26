@@ -119,10 +119,6 @@ $wgDeletedDirectory = $conf['wgDeletedDirectory'];
 $wgTmpDirectory     = $conf['wgTmpDirectory'];
 
 
-
-
-
-
 # InstantCommons allows wiki to use images from http://commons.wikimedia.org
 $wgUseInstantCommons = true;
 
@@ -264,14 +260,16 @@ $wgFileExtensions = array_merge($wgFileExtensions, explode(" ", "pdf xls xlsx tx
 $wgFileExtensions = array_unique($wgFileExtensions); 
 // print_r($wgFileExtensions);exit;
 
-
 //================================================= EoL: Literature Editor
-$wgSMTP = array('host'      => 'ssl://smtp.gmail.com',
-                'IDHost'    => 'gmail.com',
-                'port'      => 465,
-                'username'  => 'eagbayanieol@gmail.com', //turn on the radio here for this account to work: https://www.google.com/settings/u/1/security/lesssecureapps
-                'password'  => 'erjaeol1309',
-                'auth'      => true);
+if($conf['use_smtp'])
+{
+    $wgSMTP = array('host'      => 'ssl://smtp.gmail.com',
+                    'IDHost'    => 'gmail.com',
+                    'port'      => 465,
+                    'username'  => 'eagbayanieol@gmail.com', //turn on the radio here for this account to work: https://www.google.com/settings/u/1/security/lesssecureapps
+                    'password'  => 'erjaeol1309',
+                    'auth'      => true);
+}
 
 $wgEmailAuthentication  = true;
 $wgEnableEmail          = true;
@@ -307,6 +305,18 @@ $wgSpecialPageLockdown['Export']    = array('EoL_Reviewer', 'EoL_Administrator')
 
 $wgNamespacePermissionLockdown[NS_ForReview]['*']      = array('EoL_Reviewer', 'EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_ForReview_TALK]['*'] = array('EoL_Reviewer', 'EoL_Administrator');
+
+/* To modify NS_MEDIAWIKI & NS_MEDIAWIKI_TALK user must be both 'administrator' and 'EoL_Administrator' */
+$spaces = array(NS_MEDIAWIKI, NS_MEDIAWIKI_TALK);
+foreach($spaces as $space)
+{
+    $wgNamespacePermissionLockdown[$space]['edit']         = array('EoL_Administrator');
+    $wgNamespacePermissionLockdown[$space]['createpage']   = array('EoL_Administrator');
+    $wgNamespacePermissionLockdown[$space]['delete']       = array(''); //no one can delete
+    $wgNamespacePermissionLockdown[$space]['undelete']     = array(''); //no one can undelete
+    $wgNamespacePermissionLockdown[$space]['move']         = array(''); //no one can move
+}
+
 
 $wgNamespacePermissionLockdown[NS_MAIN]['edit']         = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['createpage']   = array('EoL_Administrator');
@@ -428,7 +438,14 @@ $wgEmailUsersMaxRecipients  = 5;    //: Defines the max number of recipients
 $wgEmailUsersUseJobQueue = true;    //: Use Manual:Job queue when sending mails
 
 //================================================
+$wgShowIPinHeader = false;
+
+//$wgActionLockdown['history'] = array('user'); //only logged-in users can view history - working but used below instead
+$wgActionLockdown['history'] = array('EoL_Reviewer', 'EoL_Administrator');
+//==================================================
+// $wgReadOnly = 'Upgrading to MediaWiki 1.26.2'; //uncomment this line everytime we upgrade to have database-readonly access.
+//================================================
+
 // echo "\n" . $wgUser->getName() . "\n"; ---deprecated already
 // echo "\n" . $_COOKIE['wiki_literatureeditorUserName'] . "\n"; //was used in /Custom/controllers/bhl_access.php;
-
 // var_dump(ini_get('include_path')); //just to see the include_path

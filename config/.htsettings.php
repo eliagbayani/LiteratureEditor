@@ -21,6 +21,9 @@ $conf['wgTmpDirectory']     = $conf['images_folder']."/temp";
 // ImageMagick
 $conf['wgUseImageMagick']               = true;
 $conf['wgImageMagickConvertCommand']    = "/usr/bin/convert";
+
+// mail
+$conf['use_smtp'] = false;
 // */
 
 //==========================================================================
@@ -34,8 +37,8 @@ $conf['wgDBuser']       = "root";
 $conf['wgDBpassword']   = "m173";
 
 // cache
-$conf['wgMainCacheType']    = CACHE_ACCEL; //CACHE_MEMCACHED;                used in MW 1.25.2
-$conf['wgMemCachedServers'] = array();     //array( '127.0.0.1:11211' );     used in MW 1.25.2
+$conf['wgMainCacheType']    = CACHE_MEMCACHED; //CACHE_ACCEL; //CACHE_MEMCACHED;                used in MW 1.25.2
+$conf['wgMemCachedServers'] = array( '127.0.0.1:11211' ); //array();     //array( '127.0.0.1:11211' );     used in MW 1.25.2
 
 // images
 $conf['images_folder']      = "/Library/WebServer/Documents/LiteratureEditor_images";
@@ -47,5 +50,8 @@ $conf['wgTmpDirectory']     = $conf['images_folder']."/temp";
 // ImageMagick
 $conf['wgUseImageMagick']               = true;
 $conf['wgImageMagickConvertCommand']    = "/usr/local/bin/convert";
+
+// mail
+$conf['use_smtp'] = true;
 */
 ?>

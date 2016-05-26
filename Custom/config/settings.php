@@ -4,8 +4,8 @@ if(!defined('DOWNLOAD_WAIT_TIME')) define('DOWNLOAD_WAIT_TIME', '300000'); //.3 
 define('DOWNLOAD_ATTEMPTS', '2');
 if(!defined('DOWNLOAD_TIMEOUT_SECONDS')) define('DOWNLOAD_TIMEOUT_SECONDS', '30');
 
-//define('CACHE_PATH', '/Volumes/MacMini_HD2/cache_LiteratureEditor/');
-define('CACHE_PATH', '/var/www/html/cache_LiteratureEditor/');
+// define('CACHE_PATH', '/Volumes/MacMini_HD2/cache_LiteratureEditor/');    //for mac mini
+define('CACHE_PATH', '/var/www/html/cache_LiteratureEditor/');           //for archive
 
 
 // define('BHL_API_KEY', '8e525086-c464-4298-9431-b815de6c2901'); //Katja's -> used when caching requests
