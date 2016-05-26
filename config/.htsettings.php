@@ -5,7 +5,7 @@ $conf['wgServer']           = "http://editors.eol.org";
 
 // database
 $conf['wgDBuser']           = "root";
-$conf['wgDBpassword']       = "-secret-";
+$conf['wgDBpassword']       = "m173!XAbc*";
 
 // cache
 $conf['wgMainCacheType']    = CACHE_ACCEL;
