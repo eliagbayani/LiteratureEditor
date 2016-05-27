@@ -53,7 +53,8 @@ $wgResourceBasePath = $wgScriptPath;
 ## or else you'll overwrite your logo when you upgrade!
 // $wgLogo = "$wgResourceBasePath/resources/assets/wiki.png";
 // $wgLogo = "$wgResourceBasePath/images/three_balls.png";
-$wgLogo = "$wgResourceBasePath/resources/assets/eol black bg.png";
+// $wgLogo = "$wgResourceBasePath/resources/assets/eol black bg.png";
+$wgLogo = "$wgResourceBasePath/resources/assets/eol_literature_logo.png";
 
 ## UPO means: this is also a user preference option
 
