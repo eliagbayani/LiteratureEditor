@@ -131,7 +131,7 @@ class bhl_access_controller //extends ControllerBase
 
         $xml = Functions::lookup_with_cache($url, array('expire_seconds' => false, 'download_timeout_seconds' => 300)); //timesout in 5 mins. = 300 secs.
         $xml = simplexml_load_string($xml);
-        // print_r($xml);
+        if(!$xml) $xml = Functions::lookup_with_cache($url, array('expire_seconds' => 1, 'download_timeout_seconds' => 300)); //try again
         return $xml;
 
         /* moved this in render_layout()
@@ -602,6 +602,7 @@ class bhl_access_controller //extends ControllerBase
     
     private function get_url_params_from_wiki($arr)
     {
+        if(!$arr) return array(); //bit of a hack, should be checked later
         foreach($arr as $rec)
         {
             $str = $rec['revisions'][0]['*'];
