@@ -172,13 +172,13 @@ $wgDiff3 = "/usr/bin/diff3";
     }
     //initialize allowed rights
     $rights = array('read', 'createtalk', 'editmyoptions', 'editmyprivateinfo', 'editmyusercss', 'editmyuserjs', 'editmywatchlist', 'viewmyprivateinfo', 'viewmywatchlist');
-    foreach(array('EoL_Reviewer', 'EoL_Administrator') as $eoe_user) //'EoE_Member'
+    foreach(array('EoL_Contributor', 'EoL_Administrator') as $eoe_user) //'EoE_Member'
     {
         foreach($rights as $right) $wgGroupPermissions[$eoe_user][$right] = true;
     }
     //initialize basic rights
     $rights = array('createpage', 'edit', 'delete', 'undelete', 'upload', 'sendemail');
-    foreach(array('EoL_Reviewer', 'EoL_Administrator') as $eoe_user) //'EoE_Administrator'
+    foreach(array('EoL_Contributor', 'EoL_Administrator') as $eoe_user) //'EoE_Administrator'
     {
         foreach($rights as $right) $wgGroupPermissions[$eoe_user][$right] = true;
     }
@@ -282,7 +282,7 @@ $wgCreatePageUseVisualEditor = true;
 //=================================================
 
 //from TalkRight
-$wgGroupPermissions['EoL_Reviewer']['talk']      = true;
+$wgGroupPermissions['EoL_Contributor']['talk']      = true;
 $wgGroupPermissions['EoL_Administrator']['talk'] = true;
 //=================================================
 
@@ -291,15 +291,15 @@ $wgGroupPermissions['EoL_Administrator']['talk'] = true;
 $wgExtraNamespaces[NS_ForHarvesting]      = "ForHarvesting";
 $wgExtraNamespaces[NS_ForHarvesting_TALK] = "ForHarvesting_talk"; // Note underscores in the namespace name.
 
-$wgSpecialPageLockdown['*']         = array('EoL_Reviewer', 'EoL_Administrator');
-$wgSpecialPageLockdown['BlockList'] = array('EoL_Reviewer', 'EoL_Administrator');
-$wgSpecialPageLockdown['Export']    = array('EoL_Reviewer', 'EoL_Administrator');
+$wgSpecialPageLockdown['*']         = array('EoL_Contributor', 'EoL_Administrator');
+$wgSpecialPageLockdown['BlockList'] = array('EoL_Contributor', 'EoL_Administrator');
+$wgSpecialPageLockdown['Export']    = array('EoL_Contributor', 'EoL_Administrator');
 
-$wgNamespacePermissionLockdown[NS_ForHarvesting]['*']      = array('EoL_Reviewer', 'EoL_Administrator');
-$wgNamespacePermissionLockdown[NS_ForHarvesting_TALK]['*'] = array('EoL_Reviewer', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_ForHarvesting]['*']      = array('EoL_Contributor', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_ForHarvesting_TALK]['*'] = array('EoL_Contributor', 'EoL_Administrator');
 
-$wgNamespacePermissionLockdown[NS_MAIN]['*'] = array('EoL_Reviewer', 'EoL_Administrator');
-$wgNamespacePermissionLockdown[NS_TALK]['*'] = array('EoL_Reviewer', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_MAIN]['*'] = array('EoL_Contributor', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_TALK]['*'] = array('EoL_Contributor', 'EoL_Administrator');
 
 
 /* To modify NS_MEDIAWIKI & NS_MEDIAWIKI_TALK user must be both 'administrator' and 'EoL_Administrator' */
@@ -314,13 +314,13 @@ foreach($spaces as $space)
 }
 
 
-$wgNamespacePermissionLockdown[NS_MAIN]['edit']         = array('EoL_Reviewer', 'EoL_Administrator');
-$wgNamespacePermissionLockdown[NS_MAIN]['createpage']   = array('EoL_Reviewer', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_MAIN]['edit']         = array('EoL_Contributor', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_MAIN]['createpage']   = array('EoL_Contributor', 'EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['delete']       = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['undelete']     = array('EoL_Administrator');
 
-$wgNamespacePermissionLockdown[NS_TALK]['edit']         = array('EoL_Reviewer', 'EoL_Administrator');
-$wgNamespacePermissionLockdown[NS_TALK]['createpage']   = array('EoL_Reviewer', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_TALK]['edit']         = array('EoL_Contributor', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_TALK]['createpage']   = array('EoL_Contributor', 'EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_TALK]['delete']       = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_TALK]['undelete']     = array('EoL_Administrator');
 
@@ -425,7 +425,7 @@ $wgEmailUsersUseJobQueue = true;    //: Use Manual:Job queue when sending mails
 $wgShowIPinHeader = false;
 
 //$wgActionLockdown['history'] = array('user'); //only logged-in users can view history - working but used below instead
-$wgActionLockdown['history'] = array('EoL_Reviewer', 'EoL_Administrator');
+$wgActionLockdown['history'] = array('EoL_Contributor', 'EoL_Administrator');
 //==================================================
 // $wgReadOnly = 'Upgrading to MediaWiki 1.26.2'; //uncomment this line everytime we upgrade to have database-readonly access.
 //================================================
