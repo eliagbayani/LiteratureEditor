@@ -298,8 +298,10 @@ $wgSpecialPageLockdown['Export']    = array('EoL_Contributor', 'EoL_Administrato
 $wgNamespacePermissionLockdown[NS_ForHarvesting]['*']      = array('EoL_Contributor', 'EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_ForHarvesting_TALK]['*'] = array('EoL_Contributor', 'EoL_Administrator');
 
-$wgNamespacePermissionLockdown[NS_MAIN]['*'] = array('EoL_Contributor', 'EoL_Administrator');
-$wgNamespacePermissionLockdown[NS_TALK]['*'] = array('EoL_Contributor', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_MAIN]['*']             = array('EoL_Contributor', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_TALK]['*']             = array('EoL_Contributor', 'EoL_Administrator', );
+$wgNamespacePermissionLockdown[NS_MAIN]['read']          = array('developer', 'script', 'maintenance script', 'maintenance', 'user', 'bot', 'sysop', 'administrator', 'bureaucrat', 'api', 'user', 'autoconfirmed');
+$wgNamespacePermissionLockdown[NS_MAIN]['read']          = array('*');
 
 
 /* To modify NS_MEDIAWIKI & NS_MEDIAWIKI_TALK user must be both 'administrator' and 'EoL_Administrator' */
@@ -433,3 +435,8 @@ $wgActionLockdown['history'] = array('EoL_Contributor', 'EoL_Administrator');
 // echo "\n" . $wgUser->getName() . "\n"; ---deprecated already
 // echo "\n" . $_COOKIE['wiki_literatureeditorUserName'] . "\n"; //was used in /Custom/controllers/bhl_access.php;
 // var_dump(ini_get('include_path')); //just to see the include_path
+
+/* not needed at this point
+$wgEnableAPI = true;
+$wgEnableWriteAPI = true;
+*/
