@@ -40,6 +40,16 @@ class bhl_access_controller //extends ControllerBase
         
     }
 
+    public function user_is_logged_in_wiki()
+    {
+        // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&meta=userinfo&format=json
+        $url = "http://" . $_SERVER['SERVER_NAME'] . "/LiteratureEditor/api.php?action=query&meta=userinfo&format=json";
+        $json = file_get_contents($url);
+        $arr = json_decode($json, true);
+        print_r($arr);
+        
+    }
+
     public function get_url_by_id($type, $id)
     {
         return "<a href='" . $this->id_url[$type] . "$id'>$id</a>";
