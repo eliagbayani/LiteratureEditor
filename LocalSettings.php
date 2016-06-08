@@ -244,10 +244,18 @@ require_once("$IP/extensions/TalkRight/TalkRight.php");             //ver 1.5.1 
 require_once "$IP/extensions/ConfirmAccount/ConfirmAccount.php";    //added by Eli Sep 9
 require_once("$IP/extensions/EmailUsers/EmailUsers.php");           //added by Eli Oct 20
 wfLoadExtension( 'EmbedVideo' );
-
+require_once "$IP/extensions/UserFunctions/UserFunctions.php";      //added 8-Jun-2016
 
 # End of automatically generated settings.
 # Add more configuration options below.
+
+//================================================= UserFunctions: https://www.mediawiki.org/wiki/Extension:UserFunctions
+$wgUFEnablePersonalDataFunctions = true;
+$wgUFEnablePersonalDataFunctions = true;
+$wgUFAllowedNamespaces = array(
+        NS_MAIN => true,
+        NS_USER => true);
+//================================================= 
 
 $wgFileExtensions = array_merge($wgFileExtensions, explode(" ", "pdf xls xlsx txt doc png ppt ods jp2 webp PDF XLS XLSX TXT DOC PNG PPT ODS JP2 WEBP svg png jpg jpeg gif bmp SVG PNG JPG JPEG GIF BMP")); //e.g. array('txt', 'pdf', 'doc') by Eli
 $wgFileExtensions = array_unique($wgFileExtensions); 
@@ -286,14 +294,22 @@ $wgGroupPermissions['EoL_Contributor']['talk']      = true;
 $wgGroupPermissions['EoL_Administrator']['talk'] = true;
 //=================================================
 
-//from Lockdown
 // Add namespaces.
 $wgExtraNamespaces[NS_ForHarvesting]      = "ForHarvesting";
 $wgExtraNamespaces[NS_ForHarvesting_TALK] = "ForHarvesting_talk"; // Note underscores in the namespace name.
 
+//=================================================from Lockdown
+
+// $wgActionLockdown['history'] = array('user'); //only logged-in users can view history - working but used below instead
+$wgActionLockdown['history'] = array('EoL_Contributor', 'EoL_Administrator');
+/* use this to disable viewing of source:
+https://www.mediawiki.org/wiki/Extension:ProtectSource
+*/
+
 $wgSpecialPageLockdown['*']         = array('EoL_Contributor', 'EoL_Administrator');
 $wgSpecialPageLockdown['BlockList'] = array('EoL_Contributor', 'EoL_Administrator');
 $wgSpecialPageLockdown['Export']    = array('EoL_Contributor', 'EoL_Administrator');
+// $wgSpecialPageLockdown['Version'] = array('bureaucrat', 'sysop'); not sure yet what it does "Version"
 
 $wgNamespacePermissionLockdown[NS_ForHarvesting]['*']      = array('EoL_Contributor', 'EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_ForHarvesting_TALK]['*'] = array('EoL_Contributor', 'EoL_Administrator');
@@ -425,9 +441,6 @@ $wgEmailUsersUseJobQueue = true;    //: Use Manual:Job queue when sending mails
 
 //================================================
 $wgShowIPinHeader = false;
-
-//$wgActionLockdown['history'] = array('user'); //only logged-in users can view history - working but used below instead
-$wgActionLockdown['history'] = array('EoL_Contributor', 'EoL_Administrator');
 //==================================================
 // $wgReadOnly = 'Upgrading to MediaWiki 1.26.2'; //uncomment this line everytime we upgrade to have database-readonly access.
 //================================================
