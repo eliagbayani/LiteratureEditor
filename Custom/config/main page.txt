@@ -1,0 +1,47 @@
+
+
+List of: <span class="plainlinks">[{{ fullurl: Special:ListUsers |group=EoL_Administrator }} EoL Administrators]</span> | <span class="plainlinks">[{{ fullurl: Special:ListUsers |group=EoL_Contributor }} EoL Contributors]</span> | [[Special:ListUsers|All]]
+
+==For Public==
+[[Special:RequestAccount|Request an account]]
+
+==For EoL Contributors==
+
+{{#ifanon:
+<!--then-->
+You must [[{{#special:userlogin}}|login first]] to search BHL.
+
+If you do not have an account, please [[{{#special:requestaccount}}|request an account first.]]
+|
+<!--else-->
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php Search BHL]</span>
+[[Image:Search BHL icon.png|link=http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php|Search BHL]]
+}}
+
+
+{{#ifingroup:EoL_Administrator
+|<!--then-->
+==For EoL Administrators==
+
+[[Special:ConfirmAccounts|Approve new users]]
+
+[[Special:Block|Ban users]]
+
+[[Special:EmailUser|Send e-mail to user]]
+
+[[Special:EmailUsers|Send batch e-mail]]
+
+[[Special:CreateAccount|Create Account]]
+
+[[Special:UserRights|Assign User Rights]]
+
+|<!--else-->
+}}
+
+<!-- working
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/index.php?title=Special%3AAllPages&from=&to=&namespace=5000 Articles that are for EoL Harvesting]</span>
+-->
+<!--
+[[{{#special:PrefixIndex/For EoL Harvesting:}}|Articles that are for EoL Harvesting (to be harvested into eol.org)]]
+<span class="plainlinks">[http://editors.eol.localhost/LiteratureEditor/index.php?title=Special%3APrefixIndex&prefix=&namespace=5000 Articles that are for EoL Harvesting]</span>
+-->
