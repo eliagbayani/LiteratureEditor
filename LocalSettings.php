@@ -177,7 +177,7 @@ $wgDiff3 = "/usr/bin/diff3";
         foreach($rights as $right) $wgGroupPermissions[$eoe_user][$right] = true;
     }
     //initialize basic rights
-    $rights = array('createpage', 'edit', 'delete', 'undelete', 'upload', 'sendemail');
+    $rights = array('createpage', 'edit', 'delete', 'undelete', 'upload', 'sendemail'); //, 'apihighlimits', 'writeapi', 'bot'
     foreach(array('EoL_Contributor', 'EoL_Administrator') as $eoe_user) //'EoE_Administrator'
     {
         foreach($rights as $right) $wgGroupPermissions[$eoe_user][$right] = true;
@@ -251,10 +251,8 @@ require_once "$IP/extensions/UserFunctions/UserFunctions.php";      //added 8-Ju
 
 //================================================= UserFunctions: https://www.mediawiki.org/wiki/Extension:UserFunctions
 $wgUFEnablePersonalDataFunctions = true;
-$wgUFEnablePersonalDataFunctions = true;
-$wgUFAllowedNamespaces = array(
-        NS_MAIN => true,
-        NS_USER => true);
+$wgUFAllowedNamespaces = array(NS_MAIN => true, NS_USER => true);
+// $wgUFEnableSpecialContexts = false;
 //================================================= 
 
 $wgFileExtensions = array_merge($wgFileExtensions, explode(" ", "pdf xls xlsx txt doc png ppt ods jp2 webp PDF XLS XLSX TXT DOC PNG PPT ODS JP2 WEBP svg png jpg jpeg gif bmp SVG PNG JPG JPEG GIF BMP")); //e.g. array('txt', 'pdf', 'doc') by Eli
@@ -315,7 +313,7 @@ $wgNamespacePermissionLockdown[NS_ForHarvesting]['*']      = array('EoL_Contribu
 $wgNamespacePermissionLockdown[NS_ForHarvesting_TALK]['*'] = array('EoL_Contributor', 'EoL_Administrator');
 
 $wgNamespacePermissionLockdown[NS_MAIN]['*']             = array('EoL_Contributor', 'EoL_Administrator');
-$wgNamespacePermissionLockdown[NS_TALK]['*']             = array('EoL_Contributor', 'EoL_Administrator', );
+$wgNamespacePermissionLockdown[NS_TALK]['*']             = array('EoL_Contributor', 'EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['read']          = array('developer', 'script', 'maintenance script', 'maintenance', 'user', 'bot', 'sysop', 'administrator', 'bureaucrat', 'api', 'user', 'autoconfirmed');
 $wgNamespacePermissionLockdown[NS_MAIN]['read']          = array('*');
 
@@ -452,4 +450,8 @@ $wgShowIPinHeader = false;
 /* not needed at this point
 $wgEnableAPI = true;
 $wgEnableWriteAPI = true;
+*/
+
+/* helpful cookie variable
+print_r($_COOKIE);
 */

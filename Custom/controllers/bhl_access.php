@@ -40,15 +40,62 @@ class bhl_access_controller //extends ControllerBase
         
     }
 
-    public function user_is_logged_in_wiki()
+    function user_is_logged_in_wiki()
     {
+        $session_cookie = 'wiki_literatureeditor_session';
+        if(!isset($_COOKIE[$session_cookie])) return false;
+
+        $path = "http://" . $_SERVER['SERVER_NAME'];
+        $url  = $path . "/LiteratureEditor/api.php?action=query&meta=userinfo&format=json";
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_COOKIE, $session_cookie . '=' . $_COOKIE[$session_cookie]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        $string = curl_exec($ch);
+        curl_close($ch);
+
+        /* string possible values:
+        Array ( [wiki_literatureeditor_session] => qm1skkoagkoke0pejoke12uti2 ) {"query":{"userinfo":{"id":0,"name":"127.0.0.1","anon":""}}}
+        Array ( [wiki_literatureeditor_session] => q1hjhuk9108ufr6l1c6jfmli06 ) {"query":{"userinfo":{"id":1,"name":"EAgbayani"}}}
+        */
+        if(stripos($string, "\"anon\"") !== false) //string is found
+        {
+            echo "<p>Cannot proceed.<p>";
+            echo "<a href='" . $path . "/LiteratureEditor/wiki/Special:UserLogin'>You must login from the wiki first</a>";
+            return false;
+        }
+        else
+        {
+            echo "<p>Login OK.<p>";
+            return true;
+        }
+    }
+    
+    /*
+    public function isLoggedIn()
+    {
+        // clearstatcache();
         // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&meta=userinfo&format=json
         $url = "http://" . $_SERVER['SERVER_NAME'] . "/LiteratureEditor/api.php?action=query&meta=userinfo&format=json";
+        $url = "http://editors.eol.localhost"      . "/LiteratureEditor/api.php?action=query&meta=userinfo&format=json&assert=bot";
+        // $url = "http://editors.eol.localhost"      . "/LiteratureEditor/api.php?action=query&meta=userinfo&uiprop=rights|hasmsg&format=json";
+        $url = "http://editors.eol.localhost/LiteratureEditor/api.php?action=parse&page=WhoIsLoggedIn&prop=text";
+        $url = "http://editors.eol.localhost/LiteratureEditor/api.php?action=query&meta=userinfo&format=json&assert=bot";
+        // $url = "http://editors.eol.localhost/LiteratureEditor/wiki/WhoIsLoggedIn";
+        // $json = Functions::lookup_with_cache($url, array('expire_seconds' => 0));
+
+        // clearstatcache();
         $json = file_get_contents($url);
-        $arr = json_decode($json, true);
-        print_r($arr);
+        // clearstatcache();
+        print($json); exit;
+        clearstatcache();
         
+        $arr = json_decode($json, true);
+        echo "<br>$url<br>";
+        print_r($arr);
     }
+    */
 
     public function get_url_by_id($type, $id)
     {

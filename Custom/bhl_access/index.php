@@ -21,6 +21,7 @@ require_once("../lib/Functions.php");
 require_once("../controllers/bhl_access.php");
 
 $ctrler = new bhl_access_controller($params);
+if(!$ctrler->user_is_logged_in_wiki()) return;
 
 require_once("../templates/bhl_access/layout.php");
 
