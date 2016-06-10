@@ -1113,8 +1113,11 @@ class bhl_access_controller //extends ControllerBase
         if(is_string($value)) return (string) $value;
         elseif(is_object($value))
         {
-            echo "<br>Investigate:<br>";
-            print_r($value);
+            if(!$value)
+            {
+                echo "<br>Investigate:<br>";
+                print_r($value);
+            }
             return "";
         }
     }
