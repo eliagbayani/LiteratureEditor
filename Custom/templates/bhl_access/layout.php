@@ -1,7 +1,8 @@
 <div id="tabs_main">
     <ul>
-        <li><a href="#tabs_main-1">Book Search</a></li>
+        <li><a href="#tabs_main-4">Page Search</a></li>
         <li><a href="#tabs_main-2">ID Search</a></li>
+        <li><a href="#tabs_main-1">Book Search</a></li>
         <li><a href="#tabs_main-3">Pick A Title</a></li>
     </ul>
     <div id="tabs_main-1">
@@ -17,6 +18,11 @@
     </div>
     <div id="tabs_main-3">
         <?php print $ctrler->render_layout(@$params, 'titlelist-form') ?>
+    </div>
+    <div id="tabs_main-4">
+        <?php 
+        print $ctrler->render_layout(@$params, 'pagesearch-form');
+        ?>
     </div>
 </div>
 
