@@ -41,10 +41,13 @@ $page_IDs = self::get_page_IDs($Page->ItemID);
         $next_page = $Page->PageID + 1;
         if(in_array($next_page, $page_IDs))
         {
-            echo "<a href='index.php?page_id=$next_page&search_type=pagesearch'>Skip to next page</a>";
+            echo "You can also <a href='index.php?page_id=$next_page&search_type=pagesearch'>Skip to next page</a>";
         }
+        else echo "No more succeeding page.";
         ?>
-    
+        
+        &nbsp;&nbsp; or &nbsp;&nbsp;<button id="">Add a page</button>
+        
     </td>
     <td>
     </td>
@@ -95,6 +98,12 @@ $page_IDs = self::get_page_IDs($Page->ItemID);
             </td></tr>
             </table>
         </div>
+        
+        <h2>Taxon Associations</h2>
+        <div></div>
+        <h2>Excerpt Metadata</h2>
+        <div></div>
+        
     
     </div>
 
