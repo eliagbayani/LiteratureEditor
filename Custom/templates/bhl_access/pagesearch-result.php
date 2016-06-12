@@ -28,12 +28,13 @@
                 <div id="tabs">
                     
                     <ul>
+                        <li><a href="#tabs-0">Page Editor</a></li>
                         <li><a href="#tabs-1">Page Summary</a></li>
                         <li><a href="#tabs-2">PagesTypes</a></li>
                         <li><a href="#tabs-3">PageNumbers</a></li>
                         <li><a href="#tabs-4">Taxa</a></li>
                     </ul>
-                    
+                    <?php require_once("page-editor.php") ?>
                     <?php require_once("page-more-info-sub.php") ?>
                     <div id="tabs-4">
                         Name(s): <?php echo count($Page_xml->Names->Name) ?><br>

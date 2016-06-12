@@ -719,7 +719,19 @@ class bhl_access_controller //extends ControllerBase
         if($sought_field == "copyrightstatus") {if($val = @$xml->Result->CopyrightStatus) return $val;}
         if($sought_field == "license url")     {if($val = @$xml->Result->LicenseUrl) return trim($val);}
         if($sought_field == "PrimaryTitleID")  {if($val = @$xml->Result->PrimaryTitleID) return trim($val);}
+        if($sought_field == "pages")           {if($val = @$xml->Result->Pages) return $val;}
         if($sought_field == "all")             {if($val = @$xml->Result) return $val;}
+    }
+
+    function get_page_IDs($item_id)
+    {
+        $page_IDs = array();
+        if($xml = self::get_ItemInfo_using_item_id($item_id, "pages"))
+        {
+            foreach($xml->Page as $Page) $page_IDs[] = (int) $Page->PageID;
+            $page_IDs = array_unique($page_IDs);
+        }
+        return $page_IDs;
     }
 
     // function get_PageInfo_using_page_id($page_id, $sought_field = "all")
@@ -730,8 +742,6 @@ class bhl_access_controller //extends ControllerBase
     //     print_r($xml);
     //     if($sought_field == "all")             {if($val = @$xml->Result) return $val;}
     // }
-
-
 
     private function get_PartInfo_using_item_id($item_id, $sought_field)
     {
@@ -1169,6 +1179,93 @@ class bhl_access_controller //extends ControllerBase
         return false;
     }
     
+    function page_editor_msgs()
+    {
+        return array("intro" => "Use the <b>Skip to next page</b> button to remove the current text excerpt and replace it with the content of the next page. If your
+        excerpt spans several pages, you can append the content of subsequent pages to the text excerpt using the <b>Add a page</b> button.
+        Each time you click this button, the text of the next page in the volume will be added. Please note that, in general,
+        excerpts for EOL should be brief. If you have text spanning more than a couple of pages, you should consider breaking it down into multiple excerpts.",
+        
+        "title" => "Please select an <a href='http://eol.org/info/98'>EOL subchapter</a> for the excerpt. You can also enter a title to specify the scope of the excerpt. For example if you map
+        an excerpt to the <b>Morphology</b> subchapter, you may want to use <b>Larvae</b> or <b>Morphology of Larvae</b> as the title if the excerpt focuses on the morphology of the larvae. Also, if the
+        excerpt represents the original description, please map it to the <b>Diagnostic Description</b> subchapter and add <b>Original Description</b> as the title. Don't use the subchapter title as the title
+        since this would lead to title duplication on EOL pages.",
+        
+        "text_excerpt" => "Remove text that is not part of the targeted excerpt, proofread the remaining text, and fix OCR errors. <b>Please do not change the original text.</b> The excerpt
+        should be a faithful transcription of the original work. If you spot an error (e.g. a misspelling) in the original text, you can draw attention to it by adding [sic]
+        after the problematic passage. Please do clean up the text by removing page numbers, headers, footers, and other elements that are not part of the targeted
+        excerpt. It's also a good idea to dehyphenate the text, i.e., to remove word breaks due to typesetting. You can use HTML to replicate the original text format,
+        but please use it sparingly and with caution. Creative use of HTML may lead to display problems when the text is imported to EOL or other applications.
+        Recommended tags are &lt;p&gt;&lt;/p&gt; to mark up paragraphs and &lt;m&gt;&lt;/m&gt; to mark up italics.",
+        "references" => "If there are any references cited in the excerpt, please add the full bibliographic citations for these works here. Separate individual references by blank lines.
+        Unfortunately, there is no way for us to get the references automatically, so you will have to track down the References section of the original work and fetch the relevant references from there.",
+        
+        "taxon_asso" => "Add a list of taxon names, separated by semicolons. The excerpt will then be placed on these EOL taxon pages. You can copy names from the list below. but
+        be aware that not all names found on a page are suitable for taxon associations. Please only enter names if the excerpt provides substantial information that 
+        would be a valuable addition to the taxon page. If relevant taxon names are missing, please add them. Also, the names listed in the text may be outdated. If
+        EOL has good synonym coverage for a given taxon, outdated names are not a problem, but you may want to check EOL to make sure the names you enter
+        are recognized. If not, you may want to do a bit of research to figure out the best names for your taxon associations. While you should not update taxon 
+        names in the original text, it's a good idea to do so for the taxon associations.",
+        
+        "excerpt_meta" => "Most of these fields are automatically populated from information provided by BHL, but for some fields this is difficult or impossible. Please double-check to make sure
+        everything looks correct.");
+    }
+    
+    function get_subjects()
+    {
+        return array(
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#TaxonBiology", "t" => "Overview › Brief Summary"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Description", "t" => "Overview › Comprehensive Description > Description"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription", "t" => "Overview › Comprehensive Description > General Description"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Biology", "t" => "Overview › Comprehensive Description > Biology"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Distribution", "t" => "Overview › Distribution"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Morphology", "t" => "Physical Description › Morphology"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Size", "t" => "Physical Description › Size"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#DiagnosticDescription", "t" => "Physical Description › Diagnostic Description"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#LookAlikes", "t" => "Physical Description › Look Alikes"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#Development", "t" => "Physical Description › Development"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Habitat", "t" => "Ecology › Habitat"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Migration", "t" => "Ecology › Migration"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Dispersal", "t" => "Ecology › Dispersal"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#TrophicStrategy", "t" => "Ecology › Trophic Strategy"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Associations", "t" => "Ecology › Associations"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Diseases", "t" => "Ecology › Diseases and Parasites"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#PopulationBiology", "t" => "Ecology › Population Biology"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Ecology", "t" => "Ecology › General Ecology"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Behaviour", "t" => "Life History and Behavior › Behavior"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Cyclicity", "t" => "Life History and Behavior › Cyclicity"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#LifeCycle", "t" => "Life History and Behavior › Life Cycle"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#LifeExpectancy", "t" => "Life History and Behavior › Life Expectancy"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Reproduction", "t" => "Life History and Behavior › Reproduction"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Growth", "t" => "Life History and Behavior › Growth"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Evolution", "t" => "Evolution and Systematics › Evolution"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#FossilHistory", "t" => "Evolution and Systematics › Fossil History"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#SystematicsOrPhylogenetics", "t" => "Evolution and Systematics › Systematics or Phylogenetics"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#FunctionalAdaptations", "t" => "Evolution and Systematics › Functional Adaptations"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Physiology", "t" => "Physiology and Cell Biology › Physiology"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Cytology", "t" => "Physiology and Cell Biology › Cell Biology"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Genetics", "t" => "Molecular Biology and Genetics › Genetics"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#Genome", "t" => "Molecular Biology and Genetics › Genome"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#MolecularBiology", "t" => "Molecular Biology and Genetics › Molecular Biology"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#Barcode", "t" => "Molecular Biology and Genetics › Molecular Biology > Barcode"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#ConservationStatus", "t" => "Conservation › Conservation Status"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Conservation", "t" => "Conservation › Conservation"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Trends", "t" => "Conservation › Trends"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Procedures", "t" => "Conservation › Threats > Procedures"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Threats", "t" => "Conservation › Threats"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Management", "t" => "Conservation › Management"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Use", "t" => "Relevance to Humans and Ecosystems › Benefits"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#RiskStatement", "t" => "Relevance to Humans and Ecosystems › Risks"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#Notes", "t" => "Notes"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#Taxonomy", "t" => "Names and Taxonomy › Taxonomy"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#TypeInformation", "t" => "Names and Taxonomy › Type Information"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#EducationResources", "t" => "Education Resources"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#Education", "t" => "Education"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#CitizenScience", "t" => "Citizen Science Links"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Key", "t" => "Identification Resources > Key"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#IdentificationResources", "t" => "Identification Resources"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#NucleotideSequences", "t" => "Nucleotide Sequences"));
+    }
 }
 
 /*
