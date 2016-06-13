@@ -724,6 +724,30 @@ class bhl_access_controller //extends ControllerBase
         if($sought_field == "volume")          {if($val = @$xml->Result->Volume) return trim($val);}
     }
 
+    function get_PageInfo_using_page_id($page_id, $sought_field)
+    {
+        $p['search_type'] = 'pagesearch';
+        $p['page_id']     = $page_id;
+        $xml = self::search_bhl($p);
+        
+        // print_r($xml);
+        // echo "<br>" . @$xml->Result->OcrText . "<br>";
+        
+        if($sought_field == "ocr_text")     {if($val = @$xml->Result->OcrText) return (string) $val;}
+        if($sought_field == "taxa_names")   {if($val = @$xml->Result->Names) return $val;}
+        if($sought_field == "all")          {if($val = @$xml->Result) return $val;}
+    }
+
+    function get_separated_names($Names)
+    {
+        $string = array();
+        foreach($Names->Name as $Name)
+        {
+            if($val = self::string_or_object($Name->NameConfirmed)) $string[trim($val)] = '';
+        }
+        return array_keys($string);
+    }
+
     function get_page_IDs($item_id)
     {
         $page_IDs = array();
@@ -734,15 +758,6 @@ class bhl_access_controller //extends ControllerBase
         }
         return $page_IDs;
     }
-
-    // function get_PageInfo_using_page_id($page_id, $sought_field = "all")
-    // {
-    //     $p['search_type'] = 'pagesearch';
-    //     $p['page_id']     = $page_id;
-    //     $xml = self::search_bhl($p);
-    //     print_r($xml);
-    //     if($sought_field == "all")             {if($val = @$xml->Result) return $val;}
-    // }
 
     private function get_PartInfo_using_item_id($item_id, $sought_field)
     {
@@ -1182,7 +1197,7 @@ class bhl_access_controller //extends ControllerBase
     
     function page_editor_msgs()
     {
-        return array("intro" => "Use the <b>Skip to next page</b> button to remove the current text excerpt and replace it with the content of the next page. If your
+        return array("intro" => "Use the <b>Skip to next page</b> link to remove the current text excerpt and replace it with the content of the next page. If your
         excerpt spans several pages, you can append the content of subsequent pages to the text excerpt using the <b>Add a page</b> button.
         Each time you click this button, the text of the next page in the volume will be added. Please note that, in general,
         excerpts for EOL should be brief. If you have text spanning more than a couple of pages, you should consider breaking it down into multiple excerpts.",

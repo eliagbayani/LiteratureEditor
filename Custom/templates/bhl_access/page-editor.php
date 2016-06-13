@@ -18,27 +18,62 @@ if(!isset($params['header_title']))
     
     $ItemID = $Page->ItemID;
     $ocr_text = self::string_or_object(@$Page->OcrText);
+
+    $recently_added = $PageID;
+    $label_added = "";
+    
+    
+    /* should not be here, just for testing...
+    $new_ocr = self::get_PageInfo_using_page_id($PageID, "ocr_text");
+    echo "<br>new ocr: [$new_ocr]<br>";
+    */
+    
+    $taxon_asso = "";
+    $separated_names = self::get_separated_names($Page->Names);
+    $separated_names = array_filter($separated_names); //removes blank array values
+    
 }
-else
+else //this means [Add a page] button is clicked
 {
     $PageID         = $params['PageID'];
     $search_type    = $params['search_type'];
     $title_form     = $params['title_form'];
-    $header_title     = $params['header_title'];
+    $header_title   = $params['header_title'];
     
     $subject_type   = $params['subject_type'];
 
     $ItemID         = $params['ItemID'];
-    $ocr_text       = $params['ocr_text'];
+    $ocr_text       = trim($params['ocr_text']);
     $references     = $params['references'];
+
+    $recently_added = $params['recently_added'];
+    $label_added = $params['label_added'];
+    $label_added .= " $recently_added";
     
-    // echo "<pre>"; print_r($params); echo "</pre>"; exit;
+    //now get the ocr_text of added page
+    $new_ocr = trim(self::get_PageInfo_using_page_id($recently_added, "ocr_text"));
+    $ocr_text .= "\n" . "====================" . "\n" . $new_ocr;
+
+    $taxon_asso = $params['taxon_asso'];
+
+    //first get recently added page its taxa names:
+    $Page_Names = self::get_PageInfo_using_page_id($recently_added, "taxa_names");
+    $Page_Names = json_decode(json_encode($Page_Names)); //converting SimpleXMLElement Object to stdClass Object
+    $separated_names = self::get_separated_names($Page_Names);
+    $separated_names = array_filter($separated_names); //removes blank array values
+
+    //then append the old list from from-submitted to it
+    $old_list = $params['separated_names'];
+    $old_list = explode("|", $old_list);
+    $separated_names = array_merge($old_list, $separated_names);
+    $separated_names = array_unique($separated_names); //make unique
+
 }
 
 $page_IDs = self::get_page_IDs($ItemID);
 $subjects = self::get_subjects();
 $msgs = self::page_editor_msgs();
-$next_page = $PageID + 1;
+$next_page = $recently_added + 1;
 
 // print_r($page_IDs); exit;
 ?>
@@ -68,6 +103,9 @@ $next_page = $PageID + 1;
     <input type="hidden" name="search_type" value="pagesearch">
     <input type="hidden" name="page_id" value="<?php echo $PageID ?>">
     <input type="hidden" name="PageID" value="<?php echo $PageID ?>">
+
+    <input type="hidden" name="recently_added" value="<?php echo $next_page ?>">
+    <input type="hidden" name="label_added" value="<?php echo $label_added ?>">
     
     <input type="hidden" name="header_title" value="<?php echo $header_title ?>">
     <input type="hidden" name="next_page" value="<?php echo $next_page ?>">
@@ -76,15 +114,11 @@ $next_page = $PageID + 1;
     <tr>
     <td>
         <?php 
-        if(in_array($next_page, $page_IDs))
-        {
-            echo "You can also <a href='index.php?page_id=$next_page&search_type=pagesearch'>Skip to next page</a>";
-        }
-        else echo "No more succeeding page.";
+        if(in_array($next_page, $page_IDs)) echo "You can also <a href='index.php?page_id=" . ($PageID + 1) . "&search_type=pagesearch'>Skip to next page</a>";
+        else                                echo "No more succeeding page.";
         ?>
-        
         &nbsp;&nbsp; or &nbsp;&nbsp;<button id="">Add a page</button>
-        
+        &nbsp;&nbsp;<?php if($label_added) echo "Page added: $label_added"; ?>
     </td>
     <td>
     </td>
@@ -144,7 +178,20 @@ $next_page = $PageID + 1;
         </div>
         
         <h2>Taxon Associations</h2>
-        <div></div>
+        <div>
+            <table>
+            <tr><td>
+                <b>Taxon associations for this excerpt</b>:
+                <input size="100" type="text" name="taxon_asso" value="<?php echo $taxon_asso; ?>">
+            </td></tr>
+            <tr><td bgcolor="AliceBlue"><?php echo $msgs["taxon_asso"] ?></td></tr>
+            <tr><td>
+                <?php foreach($separated_names as $names) echo "$names<br>"; ?>
+                <input type="hidden" name="separated_names" value="<?php echo implode("|", $separated_names); ?>">
+            </td></tr>
+            </table>
+        </div>
+        
         <h2>Excerpt Metadata</h2>
         <div></div>
         
