@@ -721,6 +721,7 @@ class bhl_access_controller //extends ControllerBase
         if($sought_field == "PrimaryTitleID")  {if($val = @$xml->Result->PrimaryTitleID) return trim($val);}
         if($sought_field == "pages")           {if($val = @$xml->Result->Pages) return $val;}
         if($sought_field == "all")             {if($val = @$xml->Result) return $val;}
+        if($sought_field == "volume")          {if($val = @$xml->Result->Volume) return trim($val);}
     }
 
     function get_page_IDs($item_id)

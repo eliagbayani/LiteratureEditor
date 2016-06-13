@@ -32,8 +32,8 @@ if(isset($params['part_more_info'])) print $ctrler->render_template('part-more-i
 
 if(isset($params['search_type']))
 {
-    if($params['search_type'] == "titlelist") print $ctrler->render_template('titlelist-result', array('letter' => @$params['radio']));
-    if($params['search_type'] == "move2wiki") print $ctrler->render_template('move2wiki-result', array('params' => @$params));
+    if    ($params['search_type'] == "titlelist") print $ctrler->render_template('titlelist-result', array('letter' => @$params['radio']));
+    elseif($params['search_type'] == "move2wiki") print $ctrler->render_template('move2wiki-result', array('params' => @$params));
 }
 
 require_once("../config/script-below-entry.html");

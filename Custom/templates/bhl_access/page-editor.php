@@ -1,23 +1,52 @@
 <?php
-$title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
-$title = self::get_TitleInfo_using_title_id($title_id, "FullTitle");
+// if(isset($Page))
+if(!isset($params['header_title']))
+{
+    $PageID = $Page->PageID;
+    $search_type = "pagesearch";
+    $title_form = "";
+    
+    $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
+    $title = self::get_TitleInfo_using_title_id($title_id, "FullTitle");
+    $header_title = $title . " " . self::get_ItemInfo_using_item_id($Page->ItemID, "volume");
+    
+    $citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
+    $bibliographicCitation = $citation_and_authors['citation'];
+    $references            = $citation_and_authors['citation'];
+    
+    $agents = $citation_and_authors['authors2'];
+    
+    $ItemID = $Page->ItemID;
+    $ocr_text = self::string_or_object(@$Page->OcrText);
+}
+else
+{
+    $PageID         = $params['PageID'];
+    $search_type    = $params['search_type'];
+    $title_form     = $params['title_form'];
+    $header_title     = $params['header_title'];
+    
+    $subject_type   = $params['subject_type'];
+
+    $ItemID         = $params['ItemID'];
+    $ocr_text       = $params['ocr_text'];
+    $references     = $params['references'];
+    
+    // echo "<pre>"; print_r($params); echo "</pre>"; exit;
+}
+
+$page_IDs = self::get_page_IDs($ItemID);
 $subjects = self::get_subjects();
 $msgs = self::page_editor_msgs();
+$next_page = $PageID + 1;
 
-$citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
-$bibliographicCitation = $citation_and_authors['citation'];
-$agents = $citation_and_authors['authors2'];
-
-$page_IDs = self::get_page_IDs($Page->ItemID);
 // print_r($page_IDs); exit;
-
 ?>
-
 <div id="tabs-0">
 
-    <table><tr><td><big><?php echo $title . " " . @$Page->Volume . " " . @$Page->Year; ?></big></td></tr>
+    <table><tr><td><big><?php echo $header_title ?></big></td></tr>
     <tr>
-    <td><b>Processing Page <?php echo "<a href='http://biodiversitylibrary.org/page/$Page->PageID'>$Page->PageID</a>" ?></b></td>
+    <td><b>Processing Page <?php echo "<a href='http://biodiversitylibrary.org/page/$PageID'>$PageID</a>" ?></b></td>
     <td>
         <form name="" action="index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="search_type" value="pagesearch">
@@ -26,7 +55,7 @@ $page_IDs = self::get_page_IDs($Page->ItemID);
             <?php foreach($page_IDs as $page_ID)
             {
                 $selected = "";
-                if($Page->PageID == $page_ID) $selected = "selected";
+                if($PageID == $page_ID) $selected = "selected";
                 echo '<option value="' . $page_ID . '" ' . $selected . '>' . $page_ID . '</option>';
             }?>
         </select>
@@ -34,11 +63,19 @@ $page_IDs = self::get_page_IDs($Page->ItemID);
         </form>
     </td>
     </tr>
-
+    
+    <form name="" action="index.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="search_type" value="pagesearch">
+    <input type="hidden" name="page_id" value="<?php echo $PageID ?>">
+    <input type="hidden" name="PageID" value="<?php echo $PageID ?>">
+    
+    <input type="hidden" name="header_title" value="<?php echo $header_title ?>">
+    <input type="hidden" name="next_page" value="<?php echo $next_page ?>">
+    <input type="hidden" name="ItemID" value="<?php echo $ItemID ?>">
+    
     <tr>
     <td>
         <?php 
-        $next_page = $Page->PageID + 1;
         if(in_array($next_page, $page_IDs))
         {
             echo "You can also <a href='index.php?page_id=$next_page&search_type=pagesearch'>Skip to next page</a>";
@@ -65,12 +102,19 @@ $page_IDs = self::get_page_IDs($Page->ItemID);
             <tr><td><b>EOL subchapter</b>:</td>
                 <td>
                 <select name="subject_type" id="selectmenu_4"><option>Choose a subchapter</option>
-                    <?php foreach($subjects as $s) echo '<option value="' . $s['url'] . '" ' . '>' . $s['t'] . '</option>'; ?>
+                    <?php 
+                    foreach($subjects as $s)
+                    {
+                        $selected = "";
+                        if($subject_type == $s['url']) $selected = "selected";
+                        echo '<option value="' . $s['url'] . '" ' . $selected . '>' . $s['t'] . '</option>';
+                    }
+                    ?>
                 </select>
                 </td>
             </tr>
             <tr><td><b>Title</b> (optional):</td>
-                <td><input size="100" type="text" name="title"></td>
+                <td><input size="100" type="text" name="title_form" value="<?php echo $title_form; ?>"></td>
             </tr>
             <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["title"] ?></td></tr>
             </table>
@@ -81,7 +125,7 @@ $page_IDs = self::get_page_IDs($Page->ItemID);
             <table>
             <tr><td>
                 <textarea id="" rows="5" cols="100" name="ocr_text">
-                <?php echo self::string_or_object(@$Page->OcrText); ?>
+                <?php echo $ocr_text; ?>
                 </textarea>
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["text_excerpt"] ?></td></tr>
@@ -93,7 +137,7 @@ $page_IDs = self::get_page_IDs($Page->ItemID);
             <table>
             <tr><td>
                 <textarea id="" rows="5" cols="100" name="references">
-                <?php echo $bibliographicCitation; ?>
+                <?php echo $references; ?>
                 </textarea>
             </td></tr>
             </table>
@@ -106,8 +150,6 @@ $page_IDs = self::get_page_IDs($Page->ItemID);
         
     
     </div>
-
-
+    </form>
     
-
 </div>
