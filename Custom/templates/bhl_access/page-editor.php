@@ -32,8 +32,9 @@ if(!isset($params['header_title']))
     $separated_names = self::get_separated_names($Page->Names);
     $separated_names = array_filter($separated_names); //removes blank array values
     
+    $next_page = $recently_added + 1;
 }
-else //this means [Add a page] button is clicked
+else //this means a form-submit
 {
     $PageID         = $params['PageID'];
     $search_type    = $params['search_type'];
@@ -46,34 +47,48 @@ else //this means [Add a page] button is clicked
     $ocr_text       = trim($params['ocr_text']);
     $references     = $params['references'];
 
-    $recently_added = $params['recently_added'];
-    $label_added = $params['label_added'];
-    $label_added .= " $recently_added";
-    
-    //now get the ocr_text of added page
-    $new_ocr = trim(self::get_PageInfo_using_page_id($recently_added, "ocr_text"));
-    $ocr_text .= "\n" . "====================" . "\n" . $new_ocr;
+    $taxon_asso     = $params['taxon_asso'];
 
-    $taxon_asso = $params['taxon_asso'];
+    if($params['AddPage'] == 1)
+    {
+        $recently_added = $params['recently_added'];
+        $label_added = $params['label_added'];
+        $label_added .= " $recently_added";
 
-    //first get recently added page its taxa names:
-    $Page_Names = self::get_PageInfo_using_page_id($recently_added, "taxa_names");
-    $Page_Names = json_decode(json_encode($Page_Names)); //converting SimpleXMLElement Object to stdClass Object
-    $separated_names = self::get_separated_names($Page_Names);
-    $separated_names = array_filter($separated_names); //removes blank array values
+        //now get the ocr_text of added page
+        $new_ocr = trim(self::get_PageInfo_using_page_id($recently_added, "ocr_text"));
+        $ocr_text .= "\n" . "====================" . "\n" . $new_ocr;
+        
+        //first get recently added page its taxa names:
+        $Page_Names = self::get_PageInfo_using_page_id($recently_added, "taxa_names");
+        $Page_Names = json_decode(json_encode($Page_Names)); //converting SimpleXMLElement Object to stdClass Object
+        $separated_names = self::get_separated_names($Page_Names);
+        $separated_names = array_filter($separated_names); //removes blank array values
 
-    //then append the old list from from-submitted to it
-    $old_list = $params['separated_names'];
-    $old_list = explode("|", $old_list);
-    $separated_names = array_merge($old_list, $separated_names);
-    $separated_names = array_unique($separated_names); //make unique
+        //then append the old list from from-submitted to it
+        $old_list = $params['separated_names'];
+        $old_list = explode("|", $old_list);
+        $separated_names = array_merge($old_list, $separated_names);
+        $separated_names = array_unique($separated_names); //make unique
+        
+        $next_page = $recently_added + 1;
+    }
+    else
+    {
+        $recently_added = $params['recently_added'];
+        $next_page = $recently_added;
+        
+        $label_added = $params['label_added'];
+        
+        $old_list = $params['separated_names'];
+        $separated_names = explode("|", $old_list);
+    }
 
 }
 
 $page_IDs = self::get_page_IDs($ItemID);
 $subjects = self::get_subjects();
 $msgs = self::page_editor_msgs();
-$next_page = $recently_added + 1;
 
 // print_r($page_IDs); exit;
 ?>
@@ -110,6 +125,7 @@ $next_page = $recently_added + 1;
     <input type="hidden" name="header_title" value="<?php echo $header_title ?>">
     <input type="hidden" name="next_page" value="<?php echo $next_page ?>">
     <input type="hidden" name="ItemID" value="<?php echo $ItemID ?>">
+    <input type="hidden" name="AddPage" id="AddPage">
     
     <tr>
     <td>
@@ -117,16 +133,13 @@ $next_page = $recently_added + 1;
         if(in_array($next_page, $page_IDs)) echo "You can also <a href='index.php?page_id=" . ($PageID + 1) . "&search_type=pagesearch'>Skip to next page</a>";
         else                                echo "No more succeeding page.";
         ?>
-        &nbsp;&nbsp; or &nbsp;&nbsp;<button id="">Add a page</button>
+        &nbsp;&nbsp; or &nbsp;&nbsp;<button id="" onClick="document.getElementById('AddPage').value=1">Add a page</button> <button>Save</button>
         &nbsp;&nbsp;<?php if($label_added) echo "Page added: $label_added"; ?>
     </td>
     <td>
     </td>
     </tr>
-
     <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["intro"] ?></td></tr>
-    
-    
     </table>
 
     <div id="accordion_open2">
@@ -174,6 +187,7 @@ $next_page = $recently_added + 1;
                 <?php echo $references; ?>
                 </textarea>
             </td></tr>
+            <tr><td bgcolor="AliceBlue"><?php echo $msgs["references"] ?></td></tr>
             </table>
         </div>
         
@@ -186,7 +200,9 @@ $next_page = $recently_added + 1;
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["taxon_asso"] ?></td></tr>
             <tr><td>
-                <?php foreach($separated_names as $names) echo "$names<br>"; ?>
+                <?php 
+                echo "n=" . count($separated_names) . "<br>";
+                foreach($separated_names as $names) echo "$names<br>"; ?>
                 <input type="hidden" name="separated_names" value="<?php echo implode("|", $separated_names); ?>">
             </td></tr>
             </table>

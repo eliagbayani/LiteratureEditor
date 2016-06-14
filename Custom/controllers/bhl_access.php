@@ -741,9 +741,16 @@ class bhl_access_controller //extends ControllerBase
     function get_separated_names($Names)
     {
         $string = array();
-        foreach($Names->Name as $Name)
+        if(isset($Names->Name->NameConfirmed))
         {
-            if($val = self::string_or_object($Name->NameConfirmed)) $string[trim($val)] = '';
+            if($val = self::string_or_object($Names->Name->NameConfirmed)) $string[trim($val)] = '';
+        }
+        else
+        {
+            foreach($Names->Name as $Name)
+            {
+                if($val = self::string_or_object($Name->NameConfirmed)) $string[trim($val)] = '';
+            }
         }
         return array_keys($string);
     }
