@@ -204,6 +204,7 @@ $msgs = self::page_editor_msgs();
         <h2>Text Excerpt for EOL</h2>
         <div>
             <table>
+            <tr><td bgcolor="AliceBlue"><button id="" onClick="document.getElementById('AddPage').value=1;document.getElementById('accordion_item').value=1">Add a page</button> <?php echo $msgs["text_excerpt_pre"] ?></td></tr>
             <tr><td>
                 <textarea id="" rows="15" cols="100" name="ocr_text"><?php echo $ocr_text; ?></textarea> 
             </td></tr>

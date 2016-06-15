@@ -1204,15 +1204,16 @@ class bhl_access_controller //extends ControllerBase
     
     function page_editor_msgs()
     {
-        return array("intro" => "Use the <b>Skip to next page</b> link to remove the current text excerpt and replace it with the content of the next page. If your
-        excerpt spans several pages, you can append the content of subsequent pages to the text excerpt using the <b>Add a page</b> button.
-        Each time you click this button, the text of the next page in the volume will be added. Please note that, in general,
-        excerpts for EOL should be brief. If you have text spanning more than a couple of pages, you should consider breaking it down into multiple excerpts.",
+        return array("intro" => "Use the <b>Skip to next page</b> link to remove the current text excerpt and replace it with the content of the next page.",
         
         "title" => "Please select an <a href='http://eol.org/info/98'>EOL subchapter</a> for the excerpt. You can also enter a title to specify the scope of the excerpt. For example if you map
         an excerpt to the <b>Morphology</b> subchapter, you may want to use <b>Larvae</b> or <b>Morphology of Larvae</b> as the title if the excerpt focuses on the morphology of the larvae. Also, if the
         excerpt represents the original description, please map it to the <b>Diagnostic Description</b> subchapter and add <b>Original Description</b> as the title. Don't use the subchapter title as the title
         since this would lead to title duplication on EOL pages.",
+        
+        "text_excerpt_pre" => "If your excerpt spans several pages, you can append the content of subsequent pages to the text excerpt using the <b>Add a page</b> button.
+        Each time you click this button, the text of the next page in the volume will be added. Please note that, in general,
+        excerpts for EOL should be brief. If you have text spanning more than a couple of pages, you should consider breaking it down into multiple excerpts.",
         
         "text_excerpt" => "Remove text that is not part of the targeted excerpt, proofread the remaining text, and fix OCR errors. <b>Please do not change the original text.</b> The excerpt
         should be a faithful transcription of the original work. If you spot an error (e.g. a misspelling) in the original text, you can draw attention to it by adding [sic]
