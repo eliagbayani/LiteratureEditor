@@ -1,5 +1,10 @@
 <?php
 // if(isset($Page))
+
+$scientists = '';
+$public = '';
+$children = '';
+
 if(!isset($params['header_title']))
 {
     $PageID = $Page->PageID;
@@ -10,11 +15,16 @@ if(!isset($params['header_title']))
     $title = self::get_TitleInfo_using_title_id($title_id, "FullTitle");
     $header_title = $title . " " . self::get_ItemInfo_using_item_id($Page->ItemID, "volume");
     
+    $copyrightstatus = self::get_ItemInfo_using_item_id($Page->ItemID, 'copyrightstatus');
+    $license_url = self::get_ItemInfo_using_item_id($Page->ItemID, 'license url');
+    $license_type = self::get_license_type($license_url, $copyrightstatus); //default is based on specs from mapping doc.
+    
+    
+    
     $citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
     $bibliographicCitation = $citation_and_authors['citation'];
     $references            = $citation_and_authors['citation'];
-    
-    $agents = $citation_and_authors['authors2'];
+    $agents                = $citation_and_authors['authors2']; // Authors
     
     $ItemID = $Page->ItemID;
     $ocr_text = self::string_or_object(@$Page->OcrText);
@@ -32,6 +42,12 @@ if(!isset($params['header_title']))
     $separated_names = self::get_separated_names($Page->Names);
     $separated_names = array_filter($separated_names); //removes blank array values
     
+    // $subject_type = "http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription"; //default value
+    $language = '';
+    $rightsholder = '';
+    $contributor = '';
+    
+    
     $next_page = $recently_added + 1;
 }
 else //this means a form-submit
@@ -46,6 +62,20 @@ else //this means a form-submit
     $ItemID         = $params['ItemID'];
     $ocr_text       = trim($params['ocr_text']);
     $references     = $params['references'];
+
+    $language       = $params['language'];
+    $rightsholder   = $params['rightsholder'];
+    $contributor   = $params['contributor'];
+
+    $bibliographicCitation   = $params['bibliographicCitation'];
+    
+    $license_type   = $params['license_type'];  //has default values above
+    $agents         = $params['agents'];        //has default values above
+    
+    if(isset($params['scientists'])) $scientists = "checked";
+    if(isset($params['public']))     $public     = "checked";
+    if(isset($params['children']))   $children   = "checked";
+    
 
     $taxon_asso     = $params['taxon_asso'];
 
@@ -88,6 +118,8 @@ else //this means a form-submit
 
 $page_IDs = self::get_page_IDs($ItemID);
 $subjects = self::get_subjects();
+$languages = self::get_languages();
+$licenses = self::get_licenses();
 $msgs = self::page_editor_msgs();
 
 // print_r($page_IDs); exit;
@@ -126,6 +158,7 @@ $msgs = self::page_editor_msgs();
     <input type="hidden" name="next_page" value="<?php echo $next_page ?>">
     <input type="hidden" name="ItemID" value="<?php echo $ItemID ?>">
     <input type="hidden" name="AddPage" id="AddPage">
+    <input type="hidden" name="accordion_item" id="accordion_item">
     
     <tr>
     <td>
@@ -133,7 +166,7 @@ $msgs = self::page_editor_msgs();
         if(in_array($next_page, $page_IDs)) echo "You can also <a href='index.php?page_id=" . ($PageID + 1) . "&search_type=pagesearch'>Skip to next page</a>";
         else                                echo "No more succeeding page.";
         ?>
-        &nbsp;&nbsp; or &nbsp;&nbsp;<button id="" onClick="document.getElementById('AddPage').value=1">Add a page</button> <button>Save</button>
+        &nbsp;&nbsp; or &nbsp;&nbsp;<button id="" onClick="document.getElementById('AddPage').value=1">Add a page</button>
         &nbsp;&nbsp;<?php if($label_added) echo "Page added: $label_added"; ?>
     </td>
     <td>
@@ -164,6 +197,7 @@ $msgs = self::page_editor_msgs();
                 <td><input size="100" type="text" name="title_form" value="<?php echo $title_form; ?>"></td>
             </tr>
             <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["title"] ?></td></tr>
+            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=0">Save</button></td></tr>
             </table>
         </div>
     
@@ -171,11 +205,10 @@ $msgs = self::page_editor_msgs();
         <div>
             <table>
             <tr><td>
-                <textarea id="" rows="5" cols="100" name="ocr_text">
-                <?php echo $ocr_text; ?>
-                </textarea>
+                <textarea id="" rows="15" cols="100" name="ocr_text"><?php echo $ocr_text; ?></textarea> 
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["text_excerpt"] ?></td></tr>
+            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=1">Save</button></td></tr>
             </table>
         </div>
     
@@ -183,11 +216,10 @@ $msgs = self::page_editor_msgs();
         <div>
             <table>
             <tr><td>
-                <textarea id="" rows="5" cols="100" name="references">
-                <?php echo $references; ?>
-                </textarea>
+                <textarea id="" rows="15" cols="100" name="references"><?php echo $references; ?></textarea>
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["references"] ?></td></tr>
+            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=2">Save</button></td></tr>
             </table>
         </div>
         
@@ -196,7 +228,7 @@ $msgs = self::page_editor_msgs();
             <table>
             <tr><td>
                 <b>Taxon associations for this excerpt</b>:
-                <input size="100" type="text" name="taxon_asso" value="<?php echo $taxon_asso; ?>">
+                <input size="100" type="text" name="taxon_asso" value="<?php echo $taxon_asso; ?>"> <button id="" onClick="document.getElementById('accordion_item').value=3">Save</button>
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["taxon_asso"] ?></td></tr>
             <tr><td>
@@ -209,10 +241,80 @@ $msgs = self::page_editor_msgs();
         </div>
         
         <h2>Excerpt Metadata</h2>
-        <div></div>
+        <div>
+        <table>
+        <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["excerpt_meta"] ?></td></tr>
+        <tr><td width="95"><b>Language</b>:</td>
+            <td>
+                <select name="language" id="">
+                    <?php 
+                    foreach($languages as $s)
+                    {
+                        $selected = "";
+                        if($language == $s['abb']) $selected = "selected";
+                        echo '<option value="' . $s['abb'] . '" ' . $selected . '>' . $s['name'] . '</option>';
+                    }
+                    ?>
+                </select>
+            
+            </td>
+        </tr>
+        
+        <tr>
+            <td><b>License</b>:</td>
+            <td>
+                <select name="license_type" id="selectmenu_3">
+                    <option></option>
+                    <?php foreach($licenses as $s)
+                    {
+                        $selected = "";
+                        if($license_type == $s['value']) $selected = "selected";
+                        echo '<option value="' . $s['value'] . '" ' . $selected . '>' . $s['t'] . '</option>';
+                    }?>
+                </select>
+            </td>
+        </tr>
+        
+        <tr><td><b>Rights holder</b>:</td>
+            <td><input size="100" type="text" name="rightsholder" value="<?php echo $rightsholder; ?>"></td>
+        </tr>
+        
+        <tr>
+            <td><b>Authors</b>:</td>
+            <td><input size="100" type="text" name="agents" value="<?php echo $agents ?>"></td>
+        </tr>
+        <tr>
+            <td><b>Bibliographic citation</b>:</td>
+            <td><textarea id="" rows="4" cols="100" name="bibliographicCitation"><?php echo $bibliographicCitation; ?></textarea></td>
+        </tr>
+
+        <tr><td><b>Contributor</b>:</td>
+            <td><input size="100" type="text" name="contributor" value="<?php echo $contributor; ?>"></td>
+        </tr>
+
+        <tr><td><b>Audience</b>:</td>
+            <td><input type="checkbox" name="scientists" <?php echo $scientists; ?>> scientists &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" name="public"     <?php echo $public; ?>> public &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" name="children"   <?php echo $children; ?>> children
+            </td>
+        </tr>
+        
+        
+        
+        <tr><td colspan="2"><button id="" onClick="document.getElementById('accordion_item').value=4">Save</button></td></tr>
+        </table>
+        </div>
         
     
     </div>
     </form>
     
 </div>
+
+<?php
+if(isset($params['accordion_item']))
+{
+    print '<script>$("#accordion_open2").accordion({ active: ' . $params['accordion_item'] . ', heightStyle: "content" });</script>';
+}
+
+?>

@@ -50,9 +50,6 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
         $licensor = self::get_licensor_for_this_title($title);
         if(!$licensor) self::display_message(array('type' => "error", 'msg' => "Please investigate, licensor not found. OR send this message with the Page ID [$Page->PageID] to <a href=\"mailto:" . DEVELOPER_EMAIL . "\">admin</a>."));
     }
-    
-    
-    
     ?>
     
     <tr bgcolor="lightyellow"><td>CopyrightStatus</td><td>: {<?php echo $copyrightstatus ?>}</td></tr>

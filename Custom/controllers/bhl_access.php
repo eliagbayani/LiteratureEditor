@@ -61,13 +61,13 @@ class bhl_access_controller //extends ControllerBase
         */
         if(stripos($string, "\"anon\"") !== false) //string is found
         {
-            echo "<p>Cannot proceed.<p>";
-            echo "<a href='" . $path . "/LiteratureEditor/wiki/Special:UserLogin'>You must login from the wiki first</a>";
+            echo "<h3><p>Cannot proceed.<p>";
+            echo "<a href='" . $path . "/LiteratureEditor/wiki/Special:UserLogin'>You must login from the wiki first</a></h3>";
             return false;
         }
         else
         {
-            echo "<p>Login OK.<p>";
+            // echo "<p>Login OK.<p>";
             return true;
         }
     }
@@ -1232,6 +1232,28 @@ class bhl_access_controller //extends ControllerBase
         
         "excerpt_meta" => "Most of these fields are automatically populated from information provided by BHL, but for some fields this is difficult or impossible. Please double-check to make sure
         everything looks correct.");
+    }
+    
+    function get_licenses()
+    {
+        return array(
+        array("value" => "http://creativecommons.org/licenses/by/3.0/",       "t" => "CC BY"),
+        array("value" => "http://creativecommons.org/licenses/by-nc/3.0/",    "t" => "CC BY NC"),
+        array("value" => "http://creativecommons.org/licenses/by-sa/3.0/",    "t" => "CC BY SA"),
+        array("value" => "http://creativecommons.org/licenses/by-nc-sa/3.0/", "t" => "CC BY NC SA"),
+        array("value" => "http://creativecommons.org/licenses/publicdomain/", "t" => "Puclic Domain"),
+        array("value" => "no known copyright restrictions",                   "t" => "no known copyright restrictions"));
+    }
+    
+    function get_languages()
+    {
+        return array(
+        array("name" => "English",           "abb" => "en"),
+        array("name" => "Espa&#241;ol",      "abb" => "es"),
+        array("name" => "Fran&#231;ais",     "abb" => "fr"),
+        array("name" => "German",            "abb" => "de"),
+        array("name" => "Portugus-Brasil",   "abb" => "br"),
+        array("name" => "Portugus-Portugal", "abb" => "pt"),);
     }
     
     function get_subjects()

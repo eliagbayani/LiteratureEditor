@@ -17,14 +17,7 @@ if(isset($url_params['audience_type']))
     if($val = $url_params['audience_type']) $audience_type = $val;
 }
 //====================================================
-$licenses = array(
-    array("value" => "http://creativecommons.org/licenses/by/3.0/",       "t" => "CC BY"),
-    array("value" => "http://creativecommons.org/licenses/by-nc/3.0/",    "t" => "CC BY NC"),
-    array("value" => "http://creativecommons.org/licenses/by-sa/3.0/",    "t" => "CC BY SA"),
-    array("value" => "http://creativecommons.org/licenses/by-nc-sa/3.0/", "t" => "CC BY NC SA"),
-    array("value" => "http://creativecommons.org/licenses/publicdomain/", "t" => "Puclic Domain"),
-    array("value" => "no known copyright restrictions",                   "t" => "no known copyright restrictions")
-    );
+$licenses = self::get_licenses();
 $license_type = self::get_license_type($license_url, $copyrightstatus); //default is based on specs from mapping doc.
 if(isset($url_params['license_type']))
 {
