@@ -23,7 +23,6 @@ if(!isset($params['header_title']))
     
     $citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
     $bibliographicCitation = $citation_and_authors['citation'];
-    $references            = $citation_and_authors['citation'];
     $agents                = $citation_and_authors['authors2']; // Authors
     
     $ItemID = $Page->ItemID;
@@ -31,6 +30,7 @@ if(!isset($params['header_title']))
 
     $recently_added = $PageID;
     $label_added = "";
+    $label_added_ref = "";
     
     
     /* should not be here, just for testing...
@@ -47,6 +47,7 @@ if(!isset($params['header_title']))
     $rightsholder = '';
     $contributor = '';
     
+    $references = '';
     
     $next_page = $recently_added + 1;
 }
@@ -87,7 +88,7 @@ else //this means a form-submit
 
         //now get the ocr_text of added page
         $new_ocr = trim(self::get_PageInfo_using_page_id($recently_added, "ocr_text"));
-        $ocr_text .= "\n" . "====================" . "\n" . $new_ocr;
+        $ocr_text .= "\n" . "==================== added ====================" . "\n" . $new_ocr;
         
         //first get recently added page its taxa names:
         $Page_Names = self::get_PageInfo_using_page_id($recently_added, "taxa_names");
@@ -112,6 +113,30 @@ else //this means a form-submit
         
         $old_list = $params['separated_names'];
         $separated_names = explode("|", $old_list);
+    }
+    
+    //for references
+    $label_added_ref = $params['label_added_ref'];
+    if($params['ref_prioritized'] == 1)
+    {
+        if($val = $params['ref_page_id'])
+        {
+            if(stripos($label_added_ref, $val) !== false) //this string is found - page already added
+            {
+                self::display_message(array('type' => "error", 'msg' => "Page already added: [$val]"));
+            }
+            else
+            {
+                //now get the ocr_text of added page
+                if($new_ref = trim(self::get_PageInfo_using_page_id($val, "ocr_text")))
+                {
+                    $references .= "\n" . "==================== added ====================" . "\n" . $new_ref;
+                    $label_added_ref .= " $val";
+                }
+                else self::display_message(array('type' => "error", 'msg' => "Invalid Page ID: [$val]"));
+            }
+            
+        }
     }
 
 }
@@ -153,6 +178,7 @@ $msgs = self::page_editor_msgs();
 
     <input type="hidden" name="recently_added" value="<?php echo $next_page ?>">
     <input type="hidden" name="label_added" value="<?php echo $label_added ?>">
+    <input type="hidden" name="label_added_ref" value="<?php echo $label_added_ref ?>">
     
     <input type="hidden" name="header_title" value="<?php echo $header_title ?>">
     <input type="hidden" name="next_page" value="<?php echo $next_page ?>">
@@ -216,6 +242,13 @@ $msgs = self::page_editor_msgs();
         <h2>References</h2>
         <div>
             <table>
+            <tr><td><b>Fetch References from Page</b>: <input type="text" name="ref_page_id"> 
+            <button id="" onClick="document.getElementById('accordion_item').value=2;document.getElementById('ref_prioritized').value=1;">Add a page</button>
+            &nbsp;&nbsp;<?php if($label_added_ref) echo "Page added: $label_added_ref"; ?>
+            
+            <input type="text" name="ref_prioritized" id="ref_prioritized">
+            </td></tr>
+            
             <tr><td>
                 <textarea id="" rows="15" cols="100" name="references"><?php echo $references; ?></textarea>
             </td></tr>
