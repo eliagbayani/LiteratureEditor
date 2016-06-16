@@ -65,8 +65,10 @@
             <button id="button">Search Title >></button>
         </td>
         <td>
+            <!---
             <?php $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/" ?>
             <?php self::image_with_text(array("text" => "Back to Wiki", "src" => "../images/Back_icon.png", "alt_text" => "Back to Wiki", "href" => $back));?>
+            --->
         </td>
     </tr>
     </table>

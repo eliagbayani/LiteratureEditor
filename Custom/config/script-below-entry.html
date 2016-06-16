@@ -1,4 +1,6 @@
 <script>
+// $(function() {
+  
 // <!--
 // $("#Table1").styleTable();
 // -->
@@ -16,6 +18,12 @@ $("#accordion_open").accordion({ collapsible: true,
                                  header: "h3",
                                  heightStyle: "content"
                               });
+
+$("#accordion_open2").accordion({ collapsible: true,
+                                 header: "h2",
+                                 heightStyle: "content"
+                              });
+
 
 var availableTags = [
    "ActionScript",
@@ -89,9 +97,10 @@ $( "#menu" ).menu();
 
 $( "#tooltip" ).tooltip();
 
-$( "#selectmenu" ).selectmenu({width: 450});
-$( "#selectmenu_2" ).selectmenu();
-$( "#selectmenu_3" ).selectmenu({width: 250});
+$( "#selectmenu" ).selectmenu({width: 450});   //subject_type in subject_menu.php
+$( "#selectmenu_2" ).selectmenu();             //audience_type in subject_menu.php
+$( "#selectmenu_3" ).selectmenu({width: 250}); //license_type in subject_menu.php
+$( "#selectmenu_4" ).selectmenu({width: 450}); //subject_type in page-editor.php
 
 // Hover states on the static widgets
 $( "#dialog-link, #icons li" ).hover(
@@ -106,5 +115,13 @@ $( "#dialog-link, #icons li" ).hover(
 $('input:text, input:password, input[type=email]')
     .button().addClass('my-textfield');
     
-    
+
+/*
+//for textarea
+  $( "#resizable" ).resizable({handles: "se"});
+  $( "#resizable2" ).resizable({handles: "se"});
+*/
+  
+// });
+
 </script>
