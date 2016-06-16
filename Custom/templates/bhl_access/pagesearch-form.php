@@ -12,7 +12,7 @@
     <tr>
         <td>Page ID:</td>
         <td><input type="text" size="20" name="page_id"<?php if($page_id) echo " value=\"$page_id\""; ?>/></td>
-        <td><button id="button_search_page">Search this page</button></td>
+        <td><button id="button_search_page">Fetch this page</button></td>
     </tr>
 </table>
 </form>

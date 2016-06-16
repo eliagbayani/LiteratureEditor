@@ -1223,7 +1223,8 @@ class bhl_access_controller //extends ControllerBase
         after the problematic passage. Please do clean up the text by removing page numbers, headers, footers, and other elements that are not part of the targeted
         excerpt. It's also a good idea to dehyphenate the text, i.e., to remove word breaks due to typesetting. You can use HTML to replicate the original text format,
         but please use it sparingly and with caution. Creative use of HTML may lead to display problems when the text is imported to EOL or other applications.
-        Recommended tags are &lt;p&gt;&lt;/p&gt; to mark up paragraphs and &lt;m&gt;&lt;/m&gt; to mark up italics.",
+        Recommended tags are &lt;p&gt;&lt;/p&gt; to mark up paragraphs and &lt;em&gt;&lt;/em&gt; to mark up italics.",
+        
         "references" => "If there are any references cited in the excerpt, please add the full bibliographic citations for these works here. Separate individual references by blank lines.
         Unfortunately, there is no way for us to get the references automatically, so you will have to track down the References section of the original work and fetch the relevant references from there.",
         

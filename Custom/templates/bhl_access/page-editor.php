@@ -27,7 +27,7 @@ if(!isset($params['header_title']))
     
     $citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
     $bibliographicCitation = $citation_and_authors['citation'];
-    $agents                = $citation_and_authors['authors2']; // Authors
+    $agents                = $citation_and_authors['authors']; // Authors
     
     $ItemID = $Page->ItemID;
     $ocr_text = self::string_or_object(@$Page->OcrText);
@@ -192,14 +192,16 @@ $msgs = self::page_editor_msgs();
     <input type="hidden" name="accordion_item" id="accordion_item">
     <tr>
     <td>
+        <!--- working ok but commented by Katja
         <?php 
         if(in_array($next_page, $page_IDs)) echo "You can <a href='index.php?page_id=" . ($PageID + 1) . "&search_type=pagesearch'>skip to next page</a> to remove the current text excerpt and replace it with the content of the next page.";
         else                                echo "No more succeeding page.";
-        ?>
+        ?> 
+        --->
         <!-- working but a copy was moved to the 'Text Excerpt' section
         &nbsp;&nbsp; or &nbsp;&nbsp;<button id="" onClick="document.getElementById('AddPage').value=1">Add a page</button>
         -->
-        &nbsp;&nbsp;<?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
+        <?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
     </td>
     <td>
     </td>
