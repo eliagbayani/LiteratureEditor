@@ -747,9 +747,12 @@ class bhl_access_controller //extends ControllerBase
         }
         else
         {
-            foreach($Names->Name as $Name)
+            if(isset($Names->Name))
             {
-                if($val = self::string_or_object($Name->NameConfirmed)) $string[trim($val)] = '';
+                foreach($Names->Name as $Name)
+                {
+                    if($val = self::string_or_object($Name->NameConfirmed)) $string[trim($val)] = '';
+                }
             }
         }
         return array_keys($string);

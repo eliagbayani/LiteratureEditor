@@ -7,6 +7,8 @@
     // print_r($params);
     
 ?>
+
+<!-- working but not needed at this point
 <?php if($search_type == 'booksearch')
 {
     ?>
@@ -26,6 +28,5 @@ elseif($search_type == 'titlesearch')
     <div>Title ID: <?php echo $title_id; ?></div>
     <?php
 }
-
 ?>
-
+-->

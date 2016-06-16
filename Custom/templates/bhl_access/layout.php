@@ -1,12 +1,16 @@
 <div id="tabs_main">
     <ul>
         <li><a href="#tabs_main-4">Page Search</a></li>
-        <li><a href="#tabs_main-2">ID Search</a></li>
+        <li><a href="#tabs_main-2">BHL ID Search</a></li>
+        <!--- working
         <li><a href="#tabs_main-1">Book Search</a></li>
         <li><a href="#tabs_main-3">Pick A Title</a></li>
+        --->
+        <li><a onClick="tab4_clicked()" href="#tabs_main-5">Back to Wiki</a></li>
     </ul>
     <div id="tabs_main-1">
-        <?php print $ctrler->render_layout(@$params, 'booksearch-form') ?>
+        <?php //print $ctrler->render_layout(@$params, 'booksearch-form') 
+        ?>
     </div>
     <div id="tabs_main-2">
         <?php 
@@ -17,12 +21,23 @@
         ?>
     </div>
     <div id="tabs_main-3">
-        <?php print $ctrler->render_layout(@$params, 'titlelist-form') ?>
+        <?php //print $ctrler->render_layout(@$params, 'titlelist-form') 
+        ?>
     </div>
     <div id="tabs_main-4">
         <?php 
         print $ctrler->render_layout(@$params, 'pagesearch-form');
         ?>
     </div>
+    <div id="tabs_main-5">
+    Loading wiki...
+    </div>
 </div>
+<?php $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/" ?>
+<script>
+function tab4_clicked()
+{
+    location.href = '<?php echo $back ?>';
+}
+</script>
 

@@ -5,6 +5,12 @@ $scientists = '';
 $public = '';
 $children = '';
 
+$save_status[0] = '';
+$save_status[1] = '';
+$save_status[2] = '';
+$save_status[3] = '';
+$save_status[4] = '';
+
 if(!isset($params['header_title']))
 {
     $PageID = $Page->PageID;
@@ -19,8 +25,6 @@ if(!isset($params['header_title']))
     $license_url = self::get_ItemInfo_using_item_id($Page->ItemID, 'license url');
     $license_type = self::get_license_type($license_url, $copyrightstatus); //default is based on specs from mapping doc.
     
-    
-    
     $citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
     $bibliographicCitation = $citation_and_authors['citation'];
     $agents                = $citation_and_authors['authors2']; // Authors
@@ -31,7 +35,6 @@ if(!isset($params['header_title']))
     $recently_added = $PageID;
     $label_added = "";
     $label_added_ref = "";
-    
     
     /* should not be here, just for testing...
     $new_ocr = self::get_PageInfo_using_page_id($PageID, "ocr_text");
@@ -76,7 +79,6 @@ else //this means a form-submit
     if(isset($params['scientists'])) $scientists = "checked";
     if(isset($params['public']))     $public     = "checked";
     if(isset($params['children']))   $children   = "checked";
-    
 
     $taxon_asso     = $params['taxon_asso'];
 
@@ -115,6 +117,8 @@ else //this means a form-submit
         $separated_names = explode("|", $old_list);
     }
     
+    $save_status[$params['accordion_item']] = 'Saved OK';
+    
     //for references
     $label_added_ref = $params['label_added_ref'];
     if($params['ref_prioritized'] == 1)
@@ -124,6 +128,7 @@ else //this means a form-submit
             if(stripos($label_added_ref, $val) !== false) //this string is found - page already added
             {
                 self::display_message(array('type' => "error", 'msg' => "Page already added: [$val]"));
+                $save_status[2] = '';
             }
             else
             {
@@ -185,20 +190,23 @@ $msgs = self::page_editor_msgs();
     <input type="hidden" name="ItemID" value="<?php echo $ItemID ?>">
     <input type="hidden" name="AddPage" id="AddPage">
     <input type="hidden" name="accordion_item" id="accordion_item">
-    
     <tr>
     <td>
         <?php 
-        if(in_array($next_page, $page_IDs)) echo "You can also <a href='index.php?page_id=" . ($PageID + 1) . "&search_type=pagesearch'>Skip to next page</a>";
+        if(in_array($next_page, $page_IDs)) echo "You can <a href='index.php?page_id=" . ($PageID + 1) . "&search_type=pagesearch'>skip to next page</a> to remove the current text excerpt and replace it with the content of the next page.";
         else                                echo "No more succeeding page.";
         ?>
+        <!-- working but a copy was moved to the 'Text Excerpt' section
         &nbsp;&nbsp; or &nbsp;&nbsp;<button id="" onClick="document.getElementById('AddPage').value=1">Add a page</button>
-        &nbsp;&nbsp;<?php if($label_added) echo "Page added: $label_added"; ?>
+        -->
+        &nbsp;&nbsp;<?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
     </td>
     <td>
     </td>
     </tr>
+    <!-- working
     <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["intro"] ?></td></tr>
+    -->
     </table>
 
     <div id="accordion_open2">
@@ -223,19 +231,25 @@ $msgs = self::page_editor_msgs();
                 <td><input size="100" type="text" name="title_form" value="<?php echo $title_form; ?>"></td>
             </tr>
             <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["title"] ?></td></tr>
-            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=0">Save</button></td></tr>
+            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=0">Save</button> <i><?php echo $save_status[0] ?></i></td></tr>
             </table>
         </div>
     
         <h2>Text Excerpt for EOL</h2>
         <div>
             <table>
-            <tr><td bgcolor="AliceBlue"><button id="" onClick="document.getElementById('AddPage').value=1;document.getElementById('accordion_item').value=1">Add a page</button> <?php echo $msgs["text_excerpt_pre"] ?></td></tr>
+            <tr><td><button id="" onClick="document.getElementById('AddPage').value=1;document.getElementById('accordion_item').value=1">Add a page</button> &nbsp;&nbsp;<?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
+            </td></tr>
+            
+            <tr><td bgcolor="AliceBlue">
+            <?php echo $msgs["text_excerpt_pre"] ?>
+            </td></tr>
+            
             <tr><td>
                 <textarea id="" rows="15" cols="100" name="ocr_text"><?php echo $ocr_text; ?></textarea> 
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["text_excerpt"] ?></td></tr>
-            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=1">Save</button></td></tr>
+            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=1">Save</button> <i><?php echo $save_status[1] ?></i></td></tr>
             </table>
         </div>
     
@@ -244,16 +258,15 @@ $msgs = self::page_editor_msgs();
             <table>
             <tr><td><b>Fetch References from Page</b>: <input type="text" name="ref_page_id"> 
             <button id="" onClick="document.getElementById('accordion_item').value=2;document.getElementById('ref_prioritized').value=1;">Add a page</button>
-            &nbsp;&nbsp;<?php if($label_added_ref) echo "Page added: $label_added_ref"; ?>
-            
-            <input type="text" name="ref_prioritized" id="ref_prioritized">
+            &nbsp;&nbsp;<?php if($label_added_ref) echo "<i>Page added: $label_added_ref</i>"; ?>
+            <input type="hidden" name="ref_prioritized" id="ref_prioritized">
             </td></tr>
             
             <tr><td>
                 <textarea id="" rows="15" cols="100" name="references"><?php echo $references; ?></textarea>
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["references"] ?></td></tr>
-            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=2">Save</button></td></tr>
+            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=2">Save</button> <i><?php echo $save_status[2] ?></i></td></tr>
             </table>
         </div>
         
@@ -262,7 +275,7 @@ $msgs = self::page_editor_msgs();
             <table>
             <tr><td>
                 <b>Taxon associations for this excerpt</b>:
-                <input size="100" type="text" name="taxon_asso" value="<?php echo $taxon_asso; ?>"> <button id="" onClick="document.getElementById('accordion_item').value=3">Save</button>
+                <input size="100" type="text" name="taxon_asso" value="<?php echo $taxon_asso; ?>"> <button id="" onClick="document.getElementById('accordion_item').value=3">Save</button> <i><?php echo $save_status[3] ?></i>
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["taxon_asso"] ?></td></tr>
             <tr><td>
@@ -290,7 +303,6 @@ $msgs = self::page_editor_msgs();
                     }
                     ?>
                 </select>
-            
             </td>
         </tr>
         
@@ -332,10 +344,7 @@ $msgs = self::page_editor_msgs();
                 <input type="checkbox" name="children"   <?php echo $children; ?>> children
             </td>
         </tr>
-        
-        
-        
-        <tr><td colspan="2"><button id="" onClick="document.getElementById('accordion_item').value=4">Save</button></td></tr>
+        <tr><td colspan="2"><button id="" onClick="document.getElementById('accordion_item').value=4">Save</button> <i><?php echo $save_status[4] ?></i></td></tr>
         </table>
         </div>
         
@@ -346,9 +355,5 @@ $msgs = self::page_editor_msgs();
 </div>
 
 <?php
-if(isset($params['accordion_item']))
-{
-    print '<script>$("#accordion_open2").accordion({ active: ' . $params['accordion_item'] . ', heightStyle: "content" });</script>';
-}
-
+if(isset($params['accordion_item'])) print '<script>$("#accordion_open2").accordion({ active: ' . $params['accordion_item'] . ', heightStyle: "content" });</script>';
 ?>
