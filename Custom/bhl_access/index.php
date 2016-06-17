@@ -43,7 +43,16 @@ if(!$ctrler->user_is_logged_in_wiki()) return;
 if(isset($params['search2']) || @$params['search_type'] == 'booksearch'
                              || @$params['search_type'] == 'titlelist') require_once("../templates/bhl_access/layout2.php");
 else                                                                    require_once("../templates/bhl_access/layout.php");
+?>
 
+<!--- for spinner effect --->
+<div id="el"></div>
+<script type="text/javascript">
+var spinner = new Spinner().spin()
+target.appendChild(spinner.el)
+</script>
+
+<?php
 print $ctrler->render_layout(@$params, 'result');
 
 if(isset($params['page_more_info'])) print $ctrler->render_template('page-more-info', array('arr' => @$params['page_more_info']));

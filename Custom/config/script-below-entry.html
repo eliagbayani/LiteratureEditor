@@ -147,6 +147,10 @@ $( "#dialog-link, #icons li" ).hover(
 $('input:text, input:password, input[type=email]')
     .button().addClass('my-textfield');
     
+function spinner_on()
+{
+  $('#el').spin('large');
+}
 
 /*
 //for textarea
@@ -156,4 +160,10 @@ $('input:text, input:password, input[type=email]')
   
 // });
 
+</script>
+
+<script type="text/javascript">
+$(window).load(function () {
+     $('#el').spin(false);
+});
 </script>
