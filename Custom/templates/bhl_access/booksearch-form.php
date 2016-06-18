@@ -23,7 +23,7 @@
     <tr><td>Year:</td>      <td><input type="text" size="30" name="year"<?php if($year) echo " value=\"$year\""; ?>/> e.g. 1825</td></tr>
     <tr><td>Subject:</td>   <td><input type="text" size="30" name="subject"<?php if($subject) echo " value=\"$subject\""; ?>/></td></tr>
     <tr><td>Language:</td>  <td><input type="text" size="30" name="language"<?php if($language) echo " value=\"$language\""; ?>/> e.g. eng
-    &nbsp;&nbsp;&nbsp; <button id="button_search_book">Search this book</button>
+    &nbsp;&nbsp;&nbsp; <button id="button_search_book" onClick="spinner_on()">Search this book</button>
     </td>
     <td>
         <!---

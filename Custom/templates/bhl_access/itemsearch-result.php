@@ -35,7 +35,7 @@
                         <li>: <?php echo self::get_url_by_id("title", $item->PrimaryTitleID) ?></li>
                         <li class="ui-state-default ui-corner-all" title="Search this title">
                             <span class="ui-icon ui-icon-search"></span>
-                            <a href="../bhl_access/index.php?title_id=<?php echo $item->PrimaryTitleID ?>&search_type=titlesearch">Search</a>&nbsp;&nbsp;
+                            <a onClick="spinner_on()" href="../bhl_access/index.php?title_id=<?php echo $item->PrimaryTitleID ?>&search_type=titlesearch">Search</a>&nbsp;&nbsp;
                         </li>
                         <li>&nbsp; {<?php echo self::get_TitleInfo_using_title_id($item->PrimaryTitleID, "FullTitle") ?>}</li>
                     </ul>
@@ -91,7 +91,7 @@
                                         <!-- working but commented now since long URI is not allowed
                                         <td><a title="More info on this page" href="index.php?page_more_info=<?php echo urlencode($pagex)?>"><span class="ui-icon ui-icon-search"></span></a></td>
                                         -->
-                                        <td><a title="More info on this page" href="../bhl_access/index.php?page_id=<?php echo $Page->PageID?>&search_type=pagesearch"><span class="ui-icon ui-icon-search"></span></a></td>
+                                        <td><a onClick="spinner_on()" title="More info on this page" href="../bhl_access/index.php?page_id=<?php echo $Page->PageID?>&search_type=pagesearch"><span class="ui-icon ui-icon-search"></span></a></td>
                                         <td><?php echo self::get_url_by_id("page", $Page->PageID) ?></td>
                                         <td><?php echo self::get_url_by_id("item", $Page->ItemID) ?></td>
                                         <td><?php echo $Page->Volume ?></td>
@@ -134,12 +134,9 @@
                                 // $partx = utf8_encode(json_encode($Part, JSON_ERROR_CTRL_CHAR));
                                 // $partx = utf8_encode(json_encode($Part, JSON_FORCE_OBJECT));
                                 $partx = utf8_encode(json_encode($Part));
-                            
                                 ?>
                                         <tr valign="top">
-                                            
-                                            <td><a title="More info on this part" href="index.php?part_more_info=<?php echo urlencode($partx) ?>"><span class="ui-icon ui-icon-search"></span></a></td>
-                                            
+                                            <td><a title="More info on this part" href="index.php?part_more_info=<?php echo urlencode($partx) ?>"><span class="ui-icon ui-icon-search" onClick="spinner_on()"></span></a></td>
                                             <td><?php echo $Part->PartID ?></td>
                                             <td><?php echo $Part->ItemID ?></td>
                                             <td><?php echo $Part->StartPageID ?></td>
@@ -163,7 +160,6 @@
                                             <td><?php echo $Part->ContainerTitle ?></td>
                                             <td><?php echo $Part->Date ?></td>
                                             <td><?php echo Functions::format_url($Part->PartUrl) ?></td>
-                                        
                                         </tr>
                                 <?php
                             }

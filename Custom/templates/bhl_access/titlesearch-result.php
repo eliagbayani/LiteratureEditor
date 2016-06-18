@@ -162,7 +162,7 @@
                         {
                             ?>
                                 <tr>
-                                    <td><a title="More info on this item" href="../bhl_access/index.php?item_id=<?php echo $Item->ItemID?>&search_type=itemsearch"><span class="ui-icon ui-icon-search"></span></a></td>
+                                    <td><a onClick="spinner_on()" title="More info on this item" href="../bhl_access/index.php?item_id=<?php echo $Item->ItemID?>&search_type=itemsearch"><span class="ui-icon ui-icon-search"></span></a></td>
                                     <td>
                                         <a href="<?php echo $Item->ItemUrl ?>"><?php echo $Item->ItemID ?></a>
                                         <!--

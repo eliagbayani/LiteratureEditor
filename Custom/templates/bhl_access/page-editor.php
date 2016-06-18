@@ -138,10 +138,14 @@ else //this means a form-submit
                     $references .= "\n" . "==================== added ====================" . "\n" . $new_ref;
                     $label_added_ref .= " $val";
                 }
-                else self::display_message(array('type' => "error", 'msg' => "Invalid Page ID: [$val]"));
+                else
+                {
+                    self::display_message(array('type' => "error", 'msg' => "Invalid Page ID: [$val]"));
+                    $save_status[2] = '';
+                }
             }
-            
         }
+        else $save_status[2] = '';
     }
 
 }
@@ -171,7 +175,7 @@ $msgs = self::page_editor_msgs();
                 echo '<option value="' . $page_ID . '" ' . $selected . '>' . $page_ID . '</option>';
             }?>
         </select>
-        <button id="">Go</button>
+        <button id="" onClick="spinner_on()">Go</button>
         </form>
     </td>
     </tr>
@@ -199,7 +203,7 @@ $msgs = self::page_editor_msgs();
         ?> 
         --->
         <!-- working but a copy was moved to the 'Text Excerpt' section
-        &nbsp;&nbsp; or &nbsp;&nbsp;<button id="" onClick="document.getElementById('AddPage').value=1">Add a page</button>
+        &nbsp;&nbsp; or &nbsp;&nbsp;<button id="" onClick="document.getElementById('AddPage').value=1;spinner_on();">Add a page</button>
         -->
         <?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
     </td>
@@ -233,14 +237,14 @@ $msgs = self::page_editor_msgs();
                 <td><input size="100" type="text" name="title_form" value="<?php echo $title_form; ?>"></td>
             </tr>
             <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["title"] ?></td></tr>
-            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=0">Save</button> <i><?php echo $save_status[0] ?></i></td></tr>
+            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=0;spinner_on();">Save</button> <i><?php echo $save_status[0] ?></i></td></tr>
             </table>
         </div>
     
         <h2>Text Excerpt for EOL</h2>
         <div>
             <table>
-            <tr><td><button id="" onClick="document.getElementById('AddPage').value=1;document.getElementById('accordion_item').value=1">Add a page</button> &nbsp;&nbsp;<?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
+            <tr><td><button id="" onClick="document.getElementById('AddPage').value=1;document.getElementById('accordion_item').value=1;spinner_on();">Add a page</button> &nbsp;&nbsp;<?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
             </td></tr>
             
             <tr><td bgcolor="AliceBlue">
@@ -251,7 +255,7 @@ $msgs = self::page_editor_msgs();
                 <textarea id="" rows="15" cols="100" name="ocr_text"><?php echo $ocr_text; ?></textarea> 
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["text_excerpt"] ?></td></tr>
-            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=1">Save</button> <i><?php echo $save_status[1] ?></i></td></tr>
+            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=1;spinner_on();">Save</button> <i><?php echo $save_status[1] ?></i></td></tr>
             </table>
         </div>
     
@@ -259,7 +263,7 @@ $msgs = self::page_editor_msgs();
         <div>
             <table>
             <tr><td><b>Fetch References from Page</b>: <input type="text" name="ref_page_id"> 
-            <button id="" onClick="document.getElementById('accordion_item').value=2;document.getElementById('ref_prioritized').value=1;">Add a page</button>
+            <button id="" onClick="document.getElementById('accordion_item').value=2;document.getElementById('ref_prioritized').value=1;spinner_on();">Add a page</button>
             &nbsp;&nbsp;<?php if($label_added_ref) echo "<i>Page added: $label_added_ref</i>"; ?>
             <input type="hidden" name="ref_prioritized" id="ref_prioritized">
             </td></tr>
@@ -268,7 +272,7 @@ $msgs = self::page_editor_msgs();
                 <textarea id="" rows="15" cols="100" name="references"><?php echo $references; ?></textarea>
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["references"] ?></td></tr>
-            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=2">Save</button> <i><?php echo $save_status[2] ?></i></td></tr>
+            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=2;spinner_on();">Save</button> <i><?php echo $save_status[2] ?></i></td></tr>
             </table>
         </div>
         
@@ -277,7 +281,7 @@ $msgs = self::page_editor_msgs();
             <table>
             <tr><td>
                 <b>Taxon associations for this excerpt</b>:
-                <input size="100" type="text" name="taxon_asso" value="<?php echo $taxon_asso; ?>"> <button id="" onClick="document.getElementById('accordion_item').value=3">Save</button> <i><?php echo $save_status[3] ?></i>
+                <input size="100" type="text" name="taxon_asso" value="<?php echo $taxon_asso; ?>"> <button id="" onClick="document.getElementById('accordion_item').value=3;spinner_on();">Save</button> <i><?php echo $save_status[3] ?></i>
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["taxon_asso"] ?></td></tr>
             <tr><td>
@@ -346,7 +350,7 @@ $msgs = self::page_editor_msgs();
                 <input type="checkbox" name="children"   <?php echo $children; ?>> children
             </td>
         </tr>
-        <tr><td colspan="2"><button id="" onClick="document.getElementById('accordion_item').value=4">Save</button> <i><?php echo $save_status[4] ?></i></td></tr>
+        <tr><td colspan="2"><button id="" onClick="document.getElementById('accordion_item').value=4;spinner_on();">Save</button> <i><?php echo $save_status[4] ?></i></td></tr>
         </table>
         </div>
         

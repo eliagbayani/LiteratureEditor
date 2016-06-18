@@ -12,7 +12,7 @@
     <tr>
         <td>Item ID:</td>
         <td><input type="text" size="20" name="item_id"<?php if($item_id) echo " value=\"$item_id\""; ?>/></td>
-        <td><button id="button_search_item">Search this item</button></td>
+        <td><button id="button_search_item" onClick="spinner_on()">Search this item</button></td>
     </tr>
 </table>
 </form>

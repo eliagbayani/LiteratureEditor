@@ -45,7 +45,7 @@ if(isset($params['search2']) || @$params['search_type'] == 'booksearch'
 else                                                                    require_once("../templates/bhl_access/layout.php");
 ?>
 
-<!--- for spinner effect --->
+<!--- for spinner effect: http://spin.js.org/ --->
 <div id="el"></div>
 <script type="text/javascript">
 var spinner = new Spinner().spin()

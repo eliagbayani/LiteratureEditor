@@ -32,7 +32,7 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
         <li>: <?php echo self::get_url_by_id("item", $Page->ItemID) ?></li>
         <li class="ui-state-default ui-corner-all" title="Search this item">
             <span class="ui-icon ui-icon-search"></span>
-            <a href="../bhl_access/index.php?item_id=<?php echo $Page->ItemID?>&search_type=itemsearch">Search</a>&nbsp;&nbsp;
+            <a onClick="spinner_on()" href="../bhl_access/index.php?item_id=<?php echo $Page->ItemID?>&search_type=itemsearch">Search</a>&nbsp;&nbsp;
         </li>
     </ul>
     </td>

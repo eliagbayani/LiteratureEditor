@@ -33,7 +33,7 @@
                             <li>: <?php echo self::get_url_by_id("title", $Title->TitleID) ?></li>
                             <li class="ui-state-default ui-corner-all" title="More info on this book">
                                 <span class="ui-icon ui-icon-search"></span>
-                                <a href="../bhl_access/index.php?title_id=<?php echo $Title->TitleID?>&search_type=titlesearch">Search</a>&nbsp;&nbsp;
+                                <a onClick="spinner_on()" href="../bhl_access/index.php?title_id=<?php echo $Title->TitleID?>&search_type=titlesearch">Search</a>&nbsp;&nbsp;
                             </li>
                         </ul>
                         </td></tr>
@@ -85,7 +85,7 @@
                                         <li>: <?php echo self::get_url_by_id("item", $Item->ItemID) ?></li>
                                         <li class="ui-state-default ui-corner-all" title=".ui-icon-search">
                                             <span class="ui-icon ui-icon-search"></span>
-                                            <a href="../bhl_access/index.php?item_id=<?php echo $Item->ItemID?>&search_type=itemsearch">Search</a>&nbsp;&nbsp;
+                                            <a onClick="spinner_on()" href="../bhl_access/index.php?item_id=<?php echo $Item->ItemID?>&search_type=itemsearch">Search</a>&nbsp;&nbsp;
                                         </li>
                                     </ul>
                                     </td></tr>

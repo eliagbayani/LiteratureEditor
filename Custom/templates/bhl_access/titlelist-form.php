@@ -62,7 +62,7 @@
 
         </td>
         <td valign="top">
-            <button id="button">Search Title >></button>
+            <button id="button" onClick="spinner_on()">Search Title >></button>
         </td>
         <td>
             <!---

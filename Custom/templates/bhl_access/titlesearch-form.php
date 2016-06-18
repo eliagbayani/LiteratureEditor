@@ -20,7 +20,7 @@
         
         </td>
         
-        <td><button id="button_search_title">Search this title</button></td>
+        <td><button id="button_search_title" onClick="spinner_on()">Search this title</button></td>
     </tr>
 </table>
 </form>
