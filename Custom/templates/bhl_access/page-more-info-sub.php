@@ -8,7 +8,7 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
 // echo "<hr>";
 
 ?>
-<div id="tabs-1">
+<div id="tabs-1"><!--- Page Summary --->
     <table>
     
     <tr>
@@ -64,8 +64,6 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
     <tr bgcolor="#F0F8FF"><td>TitleID</td><td>: <?php echo self::get_url_by_id("title", $title_id) ?> &nbsp; {<?php echo $title ?>}</td></tr>
     <tr bgcolor="#F0F8FF"><td>BibliographicLevel</td><td>: {<?php echo self::get_TitleInfo_using_title_id($title_id, "BibliographicLevel") ?>}</td></tr>
     
-    
-    
     <tr><td>Volume</td><td>: <?php echo @$Page->Volume ?></td></tr>
     <tr><td>Issue</td><td>: <?php echo @$Page->Issue ?></td></tr>
     <tr><td>Year</td><td>: <?php echo @$Page->Year ?></td></tr>
@@ -75,11 +73,9 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
     <tr><td>OcrUrl</td><td>: <?php echo Functions::format_url(@$Page->OcrUrl) ?></td></tr>
     <tr valign="top"><td>OcrText</td><td>: <?php echo self::string_or_object(@$Page->OcrText) ?></td></tr>
     
-    <?php
+    <?php /* working but workflow changed...
     $pass_title = $Page->PageID;
     $export_url = "../bhl_access/index.php?page_id=" . $Page->PageID . "&item_id=" . $Page->ItemID . "&title_id=" . $title_id . "&pass_title=" . urlencode($pass_title) . "&search_type=move2wiki";
-
-    
     if($url_params = self::check_if_this_title_has_wiki($pass_title))
     {
         $wiki = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $Page->PageID;
@@ -87,20 +83,14 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
         self::display_message(array('type' => "highlight", 'msg' => "Wiki already exists for this excerpt. <a href='$wiki'>View Wiki</a>"));
         $submit_text = "Proceed overwrite Wiki page";
         // <br><br><a href="$export_url">Proceed overwrite Wiki page</a>
-        
         if(!count($Page_xml->Names->Name)) self::display_message(array('type' => "highlight", 'msg' => "Original excerpt does not have any taxon associated with it."));
-        
     }
     else
     {
         // <!-- <a href="$export_url">Export this to Wiki</a> -->
         $submit_text = "Export this to Wiki";
-        
         if(!count($Page_xml->Names->Name)) self::display_message(array('type' => "error", 'msg' => "This excerpt does not have any taxon associated with it."));
-        
     }
-
-
     if(self::is_in_copyright_OR_all_rights_reserved($copyrightstatus))
     {
         self::display_message(array('type' => "highlight", 'msg' => "This is IN COPYRIGHT or ALL RIGHTS RESERVED. We cannot import text into the wiki."));
@@ -113,12 +103,13 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
         </td></tr>
         <?php
     }
+    */
     ?>
-
+    
     </table>
 </div>
 
-<div id="tabs-2">
+<div id="tabs-2"><!--- PagesTypes --->
     <table>
     <!-- <?php print_r(@$Page->PageTypes->PageType)  ?> --> <!-- for debug -->
     <?php $total_page_types = count(@$Page->PageTypes->PageType) ?>
@@ -146,7 +137,7 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
     </table>
 </div>
 
-<div id="tabs-3">
+<div id="tabs-3"><!--- PageNumbers --->
     <table>
     <!-- <?php print_r(@$Page->PageNumbers->PageNumber)  ?> --> <!-- for debug -->
     <?php $total_page_numbers = count(@$Page->PageNumbers->PageNumber) ?>
