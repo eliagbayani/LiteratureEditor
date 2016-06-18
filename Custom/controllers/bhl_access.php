@@ -643,6 +643,7 @@ class bhl_access_controller //extends ControllerBase
     
     function check_if_this_title_has_wiki($title)
     {
+        exit("<p>should not pass here anymore since workflow changed already.");
         // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&titles=9407451&format=json
         $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&prop=revisions&rvprop=content&titles=" . urlencode($title) . "&format=json";
         // $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&titles=" . urlencode($title) . "&format=json";
