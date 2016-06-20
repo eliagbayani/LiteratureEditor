@@ -48,8 +48,9 @@ else                                                                    require_
 <!--- for spinner effect: http://spin.js.org/ --->
 <div id="el"></div>
 <script type="text/javascript">
-var spinner = new Spinner().spin()
-target.appendChild(spinner.el)
+var spinner = new Spinner().spin();
+target.appendChild(spinner.el);
+$('#el').spin('large');
 </script>
 
 <?php
@@ -67,7 +68,7 @@ if(isset($params['search_type']))
 require_once("../config/script-below-entry.html");
 
 //for layout
-if(@$params['search_type'] == 'itemsearch')      print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
+if    (@$params['search_type'] == 'itemsearch')      print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
 elseif(@$params['search_type'] == 'titlesearch')     print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
 elseif(@$params['search_type'] == 'pagetaxasearch')  print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
 elseif(@$params['search_type'] == 'pagesearch')      print '<script>$( "#tabs_main" ).tabs( "option", "active", 0 );</script>';

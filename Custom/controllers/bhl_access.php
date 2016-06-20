@@ -262,6 +262,91 @@ class bhl_access_controller //extends ControllerBase
     //     return bhl_access_controller::render_template('article-summary', $article);
     // }
 
+    function get_label_added_pageInfo($page_id)
+    {
+        $Page = self::get_PageInfo_using_page_id($page_id, 'all');
+        $Page = json_decode(json_encode($Page)); //converting SimpleXMLElement Object to stdClass Object
+        
+        $info = array();
+        //for PageNumbers
+        $total_page_numbers = count(@$Page->PageNumbers->PageNumber);
+        if($total_page_numbers == 1)
+        {
+            foreach($Page->PageNumbers as $PageNumber)
+            {
+                $info['prefix'] = (string) @$PageNumber->Prefix;
+                $info['number'] = (string) @$PageNumber->Number;
+            }
+        }
+        elseif($total_page_numbers > 1)
+        {
+            foreach($Page->PageNumbers->PageNumber as $PageNumber)
+            {
+                $info['prefix'] = (string) @$PageNumber->Prefix;
+                $info['number'] = self::string_or_object(@$PageNumber->Number);
+            }
+        }
+        //for PageTypes
+        $total_page_types = count(@$Page->PageTypes->PageType);
+        if($total_page_types == 1)
+        {
+            foreach($Page->PageTypes as $PageType)
+            {
+                $info['type'] = @$PageType->PageTypeName;
+            }
+        }
+        elseif($total_page_types > 1)
+        {
+            foreach($Page->PageTypes->PageType as $PageType)
+            {
+                $info['type'] = @$PageType->PageTypeName;
+            }
+        }
+        return $info;
+    }
+
+    /*
+    Array
+    (
+        [search_type] => move2wiki_v2
+        [page_id] => 16194405
+        [PageID] => 16194405
+        [recently_added] => 16194408
+        [label_added] =>  16194406 16194407
+        [label_added_ref] =>  16194324 16194325 16194407
+        [header_title] => Proceedings of the Entomological Society of Washington. v 101 1998
+        [next_page] => 16194408
+        [ItemID] => 54810
+        [AddPage] => 
+        [accordion_item] => 
+        [subject_type] => http://rs.tdwg.org/ontology/voc/SPMInfoItems#Morphology
+        [title_form] => The Answer
+        [ocr_text] => the first ocr text
+    ==================== added ====================
+    the 2nd ocr text
+    ==================== added ====================
+    The 3rd ocr text
+        [ref_page_id] => 
+        [ref_prioritized] => 
+        [references] => ==================== added ====================
+    first parag reference
+    ==================== added ====================
+    2nd parag refrence
+    ==================== added ====================
+    third part referece...
+        [taxon_asso] => Asteraceae; Diptera; Trixis californica
+        [separated_names] => Asteraceae|Bebbia juncea|Diptera|Pteromalidae|Pteromalus|Tephritidae|Tomoplagia|Trixis|Trixis californica|Trupanea|Trupanea arizonensis|Trupanea conjuncta|Acamptopappus|Aciurina thoracica Curran, 1932|Baccharis sarothroides|Cirsium californicum|Cirsium proteanum J. T. Howell|Paracantha gentilis|Porophyllum gracile|Trupanea actinobola|Trupanea bisetosa|Trupanea californica|Trupanea jonesi|Trupanea nigricornis|Trypetidae|Agarodes|Agarodes alabamensis|Agarodes crassicornis|Agarodes distincta|Agarodes grisea|Agarodes libalis|Agarodes logani|Agarodes stannardi|Agarodes tuskaloosa|Agarodes ziczac|Sericostomatidae|Trichoptera
+        [language] => en
+        [license_type] => http://creativecommons.org/licenses/by-nc/3.0/
+        [rightsholder] => Eli E. Agbayani
+        [agents] => Goeden, R D; Teerink, J A
+        [bibliographicCitation] => Goeden, R D; Teerink, J A. 1999. LIFE HISTORY AND DESCRIPTION OF IMMATURE STAGES OF TRUPANEA ARIZONENSIS MALLOCH (DIPTERA : TEPHRITIDAE) ON TRIXIS CALIFORNICA KELLOGG VAR. CALIFORNICA (ASTERACEAE) IN SOUTHERN CALIFORNIA. Proceedings of the Entomological Society of Washington 101 :75--85.
+        [contributor] => the contributor
+        [public] => on
+        [children] => on
+    )    
+    */
+
     function move2wiki($params)
     {
         $filename = "../temp/wiki/" . $params['page_id'] . ".wiki";
@@ -269,27 +354,61 @@ class bhl_access_controller //extends ControllerBase
         {
             $go_top = "|+ style=\"caption-side:right;\"|[[Image:arrow-up icon.png|link=#top|Go top]]";
             
-            $p['search_type'] = 'pagesearch';
-            $p['page_id']     = $params['page_id'];
-            $xml = self::search_bhl($p);
-            self::write_page_info($xml, $file, $params, $go_top);
+            if(isset($params['header_title']))
+            {   //ver 2
+                echo "elix";
+                $p['page_id']         = $params['page_id'];
+                $params['pass_title'] = $params['page_id'];
+                
+                fwrite($file, "== Review excerpt ==\n");
+                fwrite($file, "Excerpt from " . "'''" . $params['header_title'] . "'''" . "\n\n");
+                $ids = array($params['page_id']);
+                $ids = array_merge($ids, explode(" ", $params['label_added']));
+                $ids = array_filter($ids);
+                print_r($ids);
+                foreach($ids as $id)
+                {
+                    $info = self::get_label_added_pageInfo($id);
+                    $link = "[http://biodiversitylibrary.org/page/$id $id]";
+                    fwrite($file, $info['prefix'] . " " . $info['number'] . " (" . $info['type'] . ") &nbsp;&nbsp;&nbsp; PageID: $link \n");
+                }
 
-            $p['search_type'] = 'itemsearch';
-            $p['item_id']     = $params['item_id'];
-            $xml = self::search_bhl($p);
-            self::write_item_info($xml, $file, $go_top);
+                fwrite($file, "== Bibliographic Citation ==\n");
+                fwrite($file, $params['bibliographicCitation'] . "\n");
+                
+                fwrite($file, "== Excerpt Metadata ==\n");
+                fwrite($file, "'''Authors''': " . $params['agents']  . "\n\n");
+                $info = self::get_license_value();
+                $link = "[" . $params['license_type'] . " " . $info[$params['license_type']] . "]";
+                fwrite($file, "'''License''': " . $link . "\n\n");
+                fwrite($file, "'''Rights Holder''': " . $params['rightsholder']  . "\n\n");
+                fwrite($file, "'''Compiler''': " . @$params['compiler']  . "\n\n");
+                fwrite($file, "'''Supplier''': " . @$params['supplier']  . "\n\n");
+                fwrite($file, "'''Language''': " . @$params['language']  . "\n\n");
+                
+                
+            }
+            else
+            {   //ver 1
+                $p['search_type'] = 'pagesearch';
+                $p['page_id']     = $params['page_id'];
+                $xml = self::search_bhl($p);
+                self::write_page_info($xml, $file, $params, $go_top);
 
-            $p['search_type'] = 'titlesearch';
-            $p['title_id']     = $params['title_id'];
-            $xml = self::search_bhl($p);
-            self::write_title_info($xml, $file, $go_top);
-            
+                $p['search_type'] = 'itemsearch';
+                $p['item_id']     = $params['item_id'];
+                $xml = self::search_bhl($p);
+                self::write_item_info($xml, $file, $go_top);
+
+                $p['search_type'] = 'titlesearch';
+                $p['title_id']     = $params['title_id'];
+                $xml = self::search_bhl($p);
+                self::write_title_info($xml, $file, $go_top);
+            }
             fclose($file);
         }
         
-        
         $temp_wiki_file = DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/Custom/temp/wiki/" . $p['page_id'] . ".wiki";
-        // $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -s 'Quick edit' -m " . $p['page_id'] . " < " . $temp_wiki_file;
         $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -s 'BHL data to Wiki' -m " . $params['pass_title'] . " < " . $temp_wiki_file;
 
         $status = shell_exec($cmdline . " 2>&1");
@@ -643,6 +762,7 @@ class bhl_access_controller //extends ControllerBase
     
     function check_if_this_title_has_wiki($title)
     {
+        return false;
         exit("<p>should not pass here anymore since workflow changed already.");
         // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&titles=9407451&format=json
         $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&prop=revisions&rvprop=content&titles=" . urlencode($title) . "&format=json";
@@ -1243,23 +1363,34 @@ class bhl_access_controller //extends ControllerBase
     function get_licenses()
     {
         return array(
-        array("value" => "http://creativecommons.org/licenses/by/3.0/",       "t" => "CC BY"),
-        array("value" => "http://creativecommons.org/licenses/by-nc/3.0/",    "t" => "CC BY NC"),
-        array("value" => "http://creativecommons.org/licenses/by-sa/3.0/",    "t" => "CC BY SA"),
-        array("value" => "http://creativecommons.org/licenses/by-nc-sa/3.0/", "t" => "CC BY NC SA"),
-        array("value" => "http://creativecommons.org/licenses/publicdomain/", "t" => "Puclic Domain"),
-        array("value" => "no known copyright restrictions",                   "t" => "no known copyright restrictions"));
+        array("value" => "http://creativecommons.org/licenses/by/3.0/",         "t" => "CC BY"),            //
+        array("value" => "http://creativecommons.org/licenses/by-nc/3.0/",      "t" => "CC BY NC"),         //
+        array("value" => "http://creativecommons.org/licenses/by-sa/3.0/",      "t" => "CC BY SA"),         //
+        array("value" => "http://creativecommons.org/licenses/by-nc-sa/3.0/",   "t" => "CC BY NC SA"),      //
+        array("value" => "http://creativecommons.org/licenses/publicdomain/",   "t" => "Puclic Domain"),    //
+        array("value" => "no known copyright restrictions",                     "t" => "no known copyright restrictions"));
     }
-    
+
+    function get_license_value()
+    {   //from http://creativecommons.org
+        return array("http://creativecommons.org/licenses/by/3.0/"       => "Attribution 3.0",
+                     "http://creativecommons.org/licenses/by-nc/3.0/"    => "Attribution-NonCommercial 3.0",
+                     "http://creativecommons.org/licenses/by-sa/3.0/"    => "Attribution-ShareAlike 3.0",
+                     "http://creativecommons.org/licenses/by-nc-sa/3.0/" => "Attribution-NonCommercial-ShareAlike 3.0",
+                     "http://creativecommons.org/licenses/publicdomain/" => "Puclic Domain",
+                     "no known copyright restrictions"                   => "no known copyright restrictions");
+    }
+
     function get_languages()
     {
         return array(
-        array("name" => "English",           "abb" => "en"),
-        array("name" => "Espa&#241;ol",      "abb" => "es"),
-        array("name" => "Fran&#231;ais",     "abb" => "fr"),
-        array("name" => "German",            "abb" => "de"),
-        array("name" => "Portugus-Brasil",   "abb" => "br"),
-        array("name" => "Portugus-Portugal", "abb" => "pt"),);
+        array("name" => "English",           "abb" => "English"), //en
+        array("name" => "Spanish",           "abb" => "Spanish"), //es
+        array("name" => "French",            "abb" => "French"), //fr
+        array("name" => "German",            "abb" => "German"), //de
+        array("name" => "Portugus-Brasil",   "abb" => "Portugus-Brasil"), //br
+        array("name" => "Portugus-Portugal", "abb" => "Portugus-Portugal") //pt
+        );
     }
     
     function get_subjects()

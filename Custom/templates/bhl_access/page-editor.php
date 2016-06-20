@@ -181,7 +181,7 @@ $msgs = self::page_editor_msgs();
     </tr>
     
     <form name="" action="index.php" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="search_type" value="pagesearch">
+    <input type="hidden" name="search_type" id="search_type" value="pagesearch">
     <input type="hidden" name="page_id" value="<?php echo $PageID ?>">
     <input type="hidden" name="PageID" value="<?php echo $PageID ?>">
 
@@ -356,6 +356,7 @@ $msgs = self::page_editor_msgs();
         
     
     </div>
+    <button onClick="document.getElementById('search_type').value='move2wiki';spinner_on();">Review Excerpt & Metadata</button>
     </form>
     
 </div>
