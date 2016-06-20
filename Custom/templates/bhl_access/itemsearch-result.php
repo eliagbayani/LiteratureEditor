@@ -67,7 +67,7 @@
                             <tr align="left">
                                 <th width="10"></th>
                                 <th>PageID</th>
-                                <th>ItemID</th>
+                                <!--- <th>ItemID</th> --->
                                 <th>Volume</th>
                                 <th>Year</th>
                                 <!--- <th>OcrText</th> working but too long to load --->
@@ -93,7 +93,7 @@
                                         -->
                                         <td><a onClick="spinner_on()" title="More info on this page" href="../bhl_access/index.php?page_id=<?php echo $Page->PageID?>&search_type=pagesearch"><span class="ui-icon ui-icon-search"></span></a></td>
                                         <td><?php echo self::get_url_by_id("page", $Page->PageID) ?></td>
-                                        <td><?php echo self::get_url_by_id("item", $Page->ItemID) ?></td>
+                                        <!--- <td><?php echo self::get_url_by_id("item", $Page->ItemID) ?></td> --->
                                         <td><?php echo $Page->Volume ?></td>
                                         <td><?php echo $Page->Year ?></td>
                                         <!--- <td valign="top"><?php echo $Page->OcrText ?> --->
