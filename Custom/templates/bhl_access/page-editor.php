@@ -90,7 +90,7 @@ else //this means a form-submit
 
         //now get the ocr_text of added page
         $new_ocr = trim(self::get_PageInfo_using_page_id($recently_added, "ocr_text"));
-        $ocr_text .= "\n" . "==================== added ====================" . "\n" . $new_ocr;
+        $ocr_text .= "\n" . $this->parag_separator . "\n" . $new_ocr;
         
         //first get recently added page its taxa names:
         $Page_Names = self::get_PageInfo_using_page_id($recently_added, "taxa_names");
@@ -135,7 +135,7 @@ else //this means a form-submit
                 //now get the ocr_text of added page
                 if($new_ref = trim(self::get_PageInfo_using_page_id($val, "ocr_text")))
                 {
-                    $references .= "\n" . "==================== added ====================" . "\n" . $new_ref;
+                    $references .= "\n" . $this->parag_separator . "\n" . $new_ref;
                     $label_added_ref .= " $val";
                 }
                 else
@@ -252,7 +252,7 @@ $msgs = self::page_editor_msgs();
             </td></tr>
             
             <tr><td>
-                <textarea id="" rows="15" cols="100" name="ocr_text"><?php echo $ocr_text; ?></textarea> 
+                <textarea id="" rows="15" cols="100" name="ocr_text"><?php echo self::format_wiki($ocr_text); ?></textarea> 
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["text_excerpt"] ?></td></tr>
             <tr><td><button id="" onClick="document.getElementById('accordion_item').value=1;spinner_on();">Save</button> <i><?php echo $save_status[1] ?></i></td></tr>
@@ -269,7 +269,7 @@ $msgs = self::page_editor_msgs();
             </td></tr>
             
             <tr><td>
-                <textarea id="" rows="15" cols="100" name="references"><?php echo $references; ?></textarea>
+                <textarea id="" rows="15" cols="100" name="references"><?php echo self::format_wiki($references); ?></textarea>
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["references"] ?></td></tr>
             <tr><td><button id="" onClick="document.getElementById('accordion_item').value=2;spinner_on();">Save</button> <i><?php echo $save_status[2] ?></i></td></tr>
