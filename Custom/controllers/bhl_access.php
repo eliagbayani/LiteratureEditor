@@ -38,6 +38,9 @@ class bhl_access_controller //extends ControllerBase
         $this->id_url['eol'] = "http://www.eol.org/pages/";
         $this->id_url['creator'] = "http://www.biodiversitylibrary.org/creator/";
         
+        $this->parag_separator = "==================== added ====================";
+        
+        
     }
 
     function user_is_logged_in_wiki()
@@ -305,6 +308,33 @@ class bhl_access_controller //extends ControllerBase
         return $info;
     }
 
+    function get_subject_desc($subject_type)
+    {
+        $subjects = self::get_subjects();
+        foreach($subjects as $s)
+        {
+            if($subject_type == $s['url']) return $s['t'];
+        }
+    }
+    
+    function get_license_url($license_type)
+    {
+        $licenses = self::get_licenses();
+        foreach($licenses as $s)
+        {
+            if($license_type == $s['value']) return $s['url'];
+        }
+    }
+
+    function get_license_value($license_url)
+    {
+        $licenses = self::get_licenses();
+        foreach($licenses as $s)
+        {
+            if($license_url == $s['url']) return $s['value'];
+        }
+    }
+    
     /*
     Array
     (
@@ -356,21 +386,19 @@ class bhl_access_controller //extends ControllerBase
             
             if(isset($params['header_title']))
             {   //ver 2
-                echo "elix";
                 $p['page_id']         = $params['page_id'];
                 $params['pass_title'] = $params['page_id'];
                 
-                fwrite($file, "== Review excerpt ==\n");
+                fwrite($file, "=== Review excerpt ===\n");
                 fwrite($file, "Excerpt from " . "'''" . $params['header_title'] . "'''" . "\n\n");
                 $ids = array($params['page_id']);
                 $ids = array_merge($ids, explode(" ", $params['label_added']));
                 $ids = array_filter($ids);
-                print_r($ids);
                 foreach($ids as $id)
                 {
                     $info = self::get_label_added_pageInfo($id);
                     $link = "[http://biodiversitylibrary.org/page/$id $id]";
-                    fwrite($file, $info['prefix'] . " " . $info['number'] . " (" . $info['type'] . ") &nbsp;&nbsp;&nbsp; PageID: $link \n");
+                    fwrite($file, $info['prefix'] . " " . $info['number'] . " (" . $info['type'] . ") &nbsp;&nbsp;&nbsp; PageID: $link \n\n");
                 }
 
                 fwrite($file, "== Bibliographic Citation ==\n");
@@ -378,13 +406,64 @@ class bhl_access_controller //extends ControllerBase
                 
                 fwrite($file, "== Excerpt Metadata ==\n");
                 fwrite($file, "'''Authors''': " . $params['agents']  . "\n\n");
-                $info = self::get_license_value();
-                $link = "[" . $params['license_type'] . " " . $info[$params['license_type']] . "]";
+
+                $link = "[" . self::get_license_url($params['license_type']) . " " . $params['license_type'] . "]";
                 fwrite($file, "'''License''': " . $link . "\n\n");
+
                 fwrite($file, "'''Rights Holder''': " . $params['rightsholder']  . "\n\n");
                 fwrite($file, "'''Compiler''': " . @$params['compiler']  . "\n\n");
-                fwrite($file, "'''Supplier''': " . @$params['supplier']  . "\n\n");
+                fwrite($file, "'''Supplier''': " . "Biodiversity Heritage Library"  . "\n\n");
                 fwrite($file, "'''Language''': " . @$params['language']  . "\n\n");
+                $audience = '';
+                if(isset($params['scientists'])) $audience .= "scientists; ";
+                if(isset($params['children'])) $audience .= "children; ";
+                if(isset($params['public'])) $audience .= "public ";
+                $audience = self::remove_ending_char($audience);
+                fwrite($file, "'''Audience''': " . $audience . "\n\n");
+                
+                fwrite($file, "== Taxon Associations ==\n");
+                $names = explode(";", $params['taxon_asso']);
+                $names = array_filter($names);
+                $names = array_map("trim", $names);
+                foreach($names as $name)
+                {
+                    $link = "http://www.eol.org/pages/" . str_replace(" ", "%20", $name);
+                    $link = "[" . $link . " " . $name . "]";
+                    fwrite($file, $link . "\n\n");
+                }
+                
+                fwrite($file, "== Title & Subchapter ==\n");
+                fwrite($file, "'''Subchapter''': " . self::get_subject_desc(@$params['subject_type']) . "\n\n");
+                fwrite($file, "'''Title''': " . $params['title_form'] . "\n\n");
+                
+                fwrite($file, "== Excerpt ==\n");
+                $ocrs = explode($this->parag_separator, $params['ocr_text']);
+                $ocrs = array_filter($ocrs);
+                $ocrs = array_map("trim", $ocrs);
+                foreach($ocrs as $ocr)
+                {
+                    fwrite($file, "{| class=\"wikitable\" style=\"" . "" . "\" name=\"OCR Text\"\n");
+                    fwrite($file, "$go_top\n");
+                    fwrite($file, "|" . self::format_wiki((string) $ocr)."\n");
+                    fwrite($file, "|-\n");
+                    fwrite($file, "|}\n");
+                }
+
+                fwrite($file, "== References ==\n");
+                $ocrs = explode($this->parag_separator, $params['references']);
+                $ocrs = array_filter($ocrs);
+                $ocrs = array_map("trim", $ocrs);
+                foreach($ocrs as $ocr)
+                {
+                    fwrite($file, "{| class=\"wikitable\" style=\"" . "" . "\" name=\"References\"\n");
+                    fwrite($file, "$go_top\n");
+                    fwrite($file, "|" . self::format_wiki((string) $ocr)."\n");
+                    fwrite($file, "|-\n");
+                    fwrite($file, "|}\n");
+                }
+                
+                
+                
             }
             else
             {   //ver 1
@@ -439,6 +518,8 @@ class bhl_access_controller //extends ControllerBase
     
     function write_page_info($xml, $file, $params, $go_top)
     {
+        $color_green = "color:green; background-color:#ffffcc;";
+        
         // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=42194842&search_type=pagesearch
         $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?page_id=" . $xml->Result->PageID . "&search_type=pagesearch";
         $back .= "&subject_type=" . urlencode($params['subject_type']);
@@ -458,8 +539,6 @@ class bhl_access_controller //extends ControllerBase
         
         $agent_url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:{$wiki_user}";
         fwrite($file, "<br /><span class=\"plainlinks\">Contributing User: [$agent_url <b>{$wiki_user}</b>]</span>\n");
-        
-        $color_green = "color:green; background-color:#ffffcc;";
         
         if($loop = @$xml->Result)
         {
@@ -1356,22 +1435,12 @@ class bhl_access_controller //extends ControllerBase
     function get_licenses()
     {
         return array(
-        array("value" => "http://creativecommons.org/licenses/by/3.0/",         "t" => "CC BY"),            //
-        array("value" => "http://creativecommons.org/licenses/by-nc/3.0/",      "t" => "CC BY NC"),         //
-        array("value" => "http://creativecommons.org/licenses/by-sa/3.0/",      "t" => "CC BY SA"),         //
-        array("value" => "http://creativecommons.org/licenses/by-nc-sa/3.0/",   "t" => "CC BY NC SA"),      //
-        array("value" => "http://creativecommons.org/licenses/publicdomain/",   "t" => "Puclic Domain"),    //
-        array("value" => "no known copyright restrictions",                     "t" => "no known copyright restrictions"));
-    }
-
-    function get_license_value()
-    {   //from http://creativecommons.org
-        return array("http://creativecommons.org/licenses/by/3.0/"       => "Attribution 3.0",
-                     "http://creativecommons.org/licenses/by-nc/3.0/"    => "Attribution-NonCommercial 3.0",
-                     "http://creativecommons.org/licenses/by-sa/3.0/"    => "Attribution-ShareAlike 3.0",
-                     "http://creativecommons.org/licenses/by-nc-sa/3.0/" => "Attribution-NonCommercial-ShareAlike 3.0",
-                     "http://creativecommons.org/licenses/publicdomain/" => "Puclic Domain",
-                     "no known copyright restrictions"                   => "no known copyright restrictions");
+        array("value" => "Attribution 3.0",                             "t" => "CC BY",                           "url" => "http://creativecommons.org/licenses/by/3.0/"),
+        array("value" => "Attribution-NonCommercial 3.0",               "t" => "CC BY NC",                        "url" => "http://creativecommons.org/licenses/by-nc/3.0/"),
+        array("value" => "Attribution-ShareAlike 3.0",                  "t" => "CC BY SA",                        "url" => "http://creativecommons.org/licenses/by-sa/3.0/"),
+        array("value" => "Attribution-NonCommercial-ShareAlike 3.0",    "t" => "CC BY NC SA",                     "url" => "http://creativecommons.org/licenses/by-nc-sa/3.0/"),
+        array("value" => "Puclic Domain",                               "t" => "Puclic Domain",                   "url" => "http://creativecommons.org/licenses/publicdomain/"),
+        array("value" => "no known copyright restrictions",             "t" => "no known copyright restrictions", "url" => ""));
     }
 
     function get_languages()

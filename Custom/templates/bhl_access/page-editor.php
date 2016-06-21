@@ -24,6 +24,7 @@ if(!isset($params['header_title']))
     $copyrightstatus = self::get_ItemInfo_using_item_id($Page->ItemID, 'copyrightstatus');
     $license_url = self::get_ItemInfo_using_item_id($Page->ItemID, 'license url');
     $license_type = self::get_license_type($license_url, $copyrightstatus); //default is based on specs from mapping doc.
+    $license_type = self::get_license_value($license_type);
     
     $citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
     $bibliographicCitation = $citation_and_authors['citation'];
