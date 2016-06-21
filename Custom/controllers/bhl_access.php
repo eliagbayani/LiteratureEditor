@@ -385,8 +385,6 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "'''Compiler''': " . @$params['compiler']  . "\n\n");
                 fwrite($file, "'''Supplier''': " . @$params['supplier']  . "\n\n");
                 fwrite($file, "'''Language''': " . @$params['language']  . "\n\n");
-                
-                
             }
             else
             {   //ver 1
@@ -448,7 +446,6 @@ class bhl_access_controller //extends ControllerBase
         $back .= "&license_type=" . urlencode($params['license_type']);
         $back .= "&agents=" . urlencode($params['agents']);
         $back .= "&taxon_names=" . urlencode($params['taxon_names']);
-        
         
         fwrite($file, "<span class=\"plainlinks\">[$back Back to BHL API result page]</span>[[Image:Back icon.png|link=$back|Back to BHL API result page]]\n");
 
@@ -560,7 +557,6 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "<ref name=\"ref1\"/>\n\n...and this will display the auto-numbered superscripts as link text in that part of the wiki.\n");
                 fwrite($file, "-->\n");
                 fwrite($file, "<br>\n");
-                
                 
                 //page summary
                 fwrite($file, "===Page Summary===\n");
@@ -755,7 +751,6 @@ class bhl_access_controller //extends ControllerBase
         if(substr($wiki, 0, 1) == "-") $wiki = "&ndash;" . trim(substr($wiki, 1, strlen($wiki))); //replace first char to &dash; if it is "-" dash.
         */
         $wiki = str_replace("-", "&ndash;", $wiki);
-        
         $wiki = str_replace(array("\n"), "", $wiki);
         return $wiki;
     }
@@ -1006,7 +1001,6 @@ class bhl_access_controller //extends ControllerBase
             if($val = self::check_arr(@$Part['Issue']))          $citation .= "(".trim($val).")";
             if($val = self::check_arr(@$Part['PageRange']))      $citation .= ":".self::format_citation_part($val);
             
-            
             //start of 3rd option -- page_id = 6705246
             $citation = trim($citation);
             if($citation == "." || $citation == "")
@@ -1162,7 +1156,6 @@ class bhl_access_controller //extends ControllerBase
     {
         //manual
         $title = str_ireplace("Journal / Entomological Exchange and Correspondence Club.", "Journal of the Entomological Exchange and Correspondence Club", $title);
-        
         
         $title_without_ending_period = self::remove_ending_period($title);
         // echo "<br>[$title_without_ending_period]<br>"; exit;
