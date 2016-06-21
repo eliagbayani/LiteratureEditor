@@ -75,8 +75,8 @@ $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
     
     <?php /* working but workflow changed...
     $pass_title = $Page->PageID;
-    $export_url = "../bhl_access/index.php?page_id=" . $Page->PageID . "&item_id=" . $Page->ItemID . "&title_id=" . $title_id . "&pass_title=" . urlencode($pass_title) . "&search_type=move2wiki";
-    if($url_params = self::check_if_this_title_has_wiki($pass_title))
+    // $export_url = "../bhl_access/index.php?page_id=" . $Page->PageID . "&item_id=" . $Page->ItemID . "&title_id=" . $title_id . "&pass_title=" . urlencode($pass_title) . "&search_type=move2wiki"; working but not used anymore...
+    if($url_params = self::check_if_this_title_has_wiki($pass_title, "v1"))
     {
         $wiki = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $Page->PageID;
         // self::image_with_text(array("text" => "Wiki already exists for this excerpt.", "src" => "../images/wiki-icon.png", "alt_text" => "View Wiki here", "href" => $wiki)); working script

@@ -62,6 +62,8 @@ else //this means a form-submit
     $title_form     = $params['title_form'];
     $header_title   = $params['header_title'];
     
+    $copyrightstatus = $params['copyrightstatus'];
+    
     $subject_type   = $params['subject_type'];
 
     $ItemID         = $params['ItemID'];
@@ -156,12 +158,11 @@ $subjects = self::get_subjects();
 $languages = self::get_languages();
 $licenses = self::get_licenses();
 $msgs = self::page_editor_msgs();
-
-// print_r($page_IDs); exit;
 ?>
 <div id="tabs-0">
-
-    <table><tr><td><big><?php echo $header_title ?></big></td></tr>
+    <?php require_once("page-editor-pre.php") ?>
+    
+    <table><tr><td colspan="2"><big><?php echo $header_title ?></big></td></tr>
     <tr>
     <td><b>Processing Page <?php echo "<a href='http://biodiversitylibrary.org/page/$PageID'>$PageID</a>" ?></b></td>
     <td>
@@ -191,12 +192,14 @@ $msgs = self::page_editor_msgs();
     <input type="hidden" name="label_added_ref" value="<?php echo $label_added_ref ?>">
     
     <input type="hidden" name="header_title" value="<?php echo $header_title ?>">
+    <input type="hidden" name="copyrightstatus" value="<?php echo $copyrightstatus ?>">
+
     <input type="hidden" name="next_page" value="<?php echo $next_page ?>">
     <input type="hidden" name="ItemID" value="<?php echo $ItemID ?>">
     <input type="hidden" name="AddPage" id="AddPage">
     <input type="hidden" name="accordion_item" id="accordion_item">
     <tr>
-    <td>
+    <td colspan="2">
         <!--- working ok but commented by Katja
         <?php 
         if(in_array($next_page, $page_IDs)) echo "You can <a href='index.php?page_id=" . ($PageID + 1) . "&search_type=pagesearch'>skip to next page</a> to remove the current text excerpt and replace it with the content of the next page.";
@@ -207,8 +210,6 @@ $msgs = self::page_editor_msgs();
         &nbsp;&nbsp; or &nbsp;&nbsp;<button id="" onClick="document.getElementById('AddPage').value=1;spinner_on();">Add a page</button>
         -->
         <?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
-    </td>
-    <td>
     </td>
     </tr>
     <!-- working
@@ -286,7 +287,9 @@ $msgs = self::page_editor_msgs();
             </td></tr>
             <tr><td bgcolor="AliceBlue"><?php echo $msgs["taxon_asso"] ?></td></tr>
             <tr><td>
-                <?php 
+                <?php
+                $separated_names = array_map("trim", $separated_names);
+                $separated_names = array_filter($separated_names);
                 echo "n=" . count($separated_names) . "<br>";
                 foreach($separated_names as $names) echo "$names<br>"; ?>
                 <input type="hidden" name="separated_names" value="<?php echo implode("|", $separated_names); ?>">

@@ -38,7 +38,7 @@ class bhl_access_controller //extends ControllerBase
         $this->id_url['eol'] = "http://www.eol.org/pages/";
         $this->id_url['creator'] = "http://www.biodiversitylibrary.org/creator/";
         
-        $this->parag_separator = "==================== added ====================";
+        $this->parag_separator = "==================== paragraph separator ====================";
         
         
     }
@@ -388,6 +388,11 @@ class bhl_access_controller //extends ControllerBase
             {   //ver 2
                 $p['page_id']         = $params['page_id'];
                 $params['pass_title'] = $params['page_id'];
+
+                /* working but not yet requested
+                $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?page_id=" . $params['page_id'] . "&search_type=pagesearch";
+                fwrite($file, "<span class=\"plainlinks\">[$back Back to BHL API result page]</span>[[Image:Back icon.png|link=$back|Back to BHL API result page]]\n");
+                */
                 
                 fwrite($file, "=== Review excerpt ===\n");
                 fwrite($file, "Excerpt from " . "'''" . $params['header_title'] . "'''" . "\n\n");
@@ -398,7 +403,7 @@ class bhl_access_controller //extends ControllerBase
                 {
                     $info = self::get_label_added_pageInfo($id);
                     $link = "[http://biodiversitylibrary.org/page/$id $id]";
-                    fwrite($file, $info['prefix'] . " " . $info['number'] . " (" . $info['type'] . ") &nbsp;&nbsp;&nbsp; PageID: $link \n\n");
+                    fwrite($file, trim(@$info['prefix'] . " " . @$info['number'] . " (" . @$info['type'] . ") &nbsp;&nbsp;&nbsp; PageID: $link") . "\n\n");
                 }
 
                 fwrite($file, "== Bibliographic Citation ==\n");
@@ -486,7 +491,7 @@ class bhl_access_controller //extends ControllerBase
         }
         
         $temp_wiki_file = DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/Custom/temp/wiki/" . $p['page_id'] . ".wiki";
-        $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -s 'BHL data to Wiki' -m " . $params['pass_title'] . " < " . $temp_wiki_file;
+        $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -s 'BHL data to Wiki " . $p['page_id'] . "' -m " . $params['pass_title'] . " < " . $temp_wiki_file;
 
         $status = shell_exec($cmdline . " 2>&1");
         $status = str_ireplace("done", "done. &nbsp;", $status);
@@ -834,10 +839,10 @@ class bhl_access_controller //extends ControllerBase
         return $wiki;
     }
     
-    function check_if_this_title_has_wiki($title)
+    function check_if_this_title_has_wiki($title, $version)
     {
-        return false;
-        exit("<p>should not pass here anymore since workflow changed already.");
+        // return false;
+        // exit("<p>should not pass here anymore since workflow changed already.");
         // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&titles=9407451&format=json
         $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&prop=revisions&rvprop=content&titles=" . urlencode($title) . "&format=json";
         // $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&titles=" . urlencode($title) . "&format=json";
@@ -847,8 +852,8 @@ class bhl_access_controller //extends ControllerBase
         if(@$arr['query']['pages']['-1']) return false;
         else
         {
-            return self::get_url_params_from_wiki(@$arr['query']['pages']);
-            return true;
+            if($version == "v1") return self::get_url_params_from_wiki(@$arr['query']['pages']);
+            if($version == "v2") return true;
         }
     }
     
@@ -861,6 +866,7 @@ class bhl_access_controller //extends ControllerBase
             if(preg_match("/\[(.*?) Back to BHL API result page/ims", $str, $arr))
             {
                 $str = urldecode($arr[1]);
+                $final = array();
                 if(preg_match("/subject_type=(.*?)\&/ims", $str, $arr))         $final['subject_type']  = $arr[1];
                 if(preg_match("/audience_type=(.*?)\&/ims", $str, $arr))        $final['audience_type'] = $arr[1];
                 if(preg_match("/license_type=(.*?)\&/ims", $str, $arr))         $final['license_type']  = $arr[1];
@@ -1439,8 +1445,8 @@ class bhl_access_controller //extends ControllerBase
         array("value" => "Attribution-NonCommercial 3.0",               "t" => "CC BY NC",                        "url" => "http://creativecommons.org/licenses/by-nc/3.0/"),
         array("value" => "Attribution-ShareAlike 3.0",                  "t" => "CC BY SA",                        "url" => "http://creativecommons.org/licenses/by-sa/3.0/"),
         array("value" => "Attribution-NonCommercial-ShareAlike 3.0",    "t" => "CC BY NC SA",                     "url" => "http://creativecommons.org/licenses/by-nc-sa/3.0/"),
-        array("value" => "Puclic Domain",                               "t" => "Puclic Domain",                   "url" => "http://creativecommons.org/licenses/publicdomain/"),
-        array("value" => "no known copyright restrictions",             "t" => "no known copyright restrictions", "url" => ""));
+        array("value" => "Public Domain",                               "t" => "Public Domain",                   "url" => "http://creativecommons.org/licenses/publicdomain/"),
+        array("value" => "no known copyright restrictions",             "t" => "no known copyright restrictions", "url" => "no known copyright restrictions"));
     }
 
     function get_languages()
