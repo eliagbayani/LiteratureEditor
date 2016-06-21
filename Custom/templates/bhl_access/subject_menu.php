@@ -19,13 +19,12 @@ if(isset($url_params['audience_type']))
 //====================================================
 $licenses = self::get_licenses();
 $license_type = self::get_license_type($license_url, $copyrightstatus); //default is based on specs from mapping doc.
+$license_type = self::get_license_value($license_type);
 if(isset($url_params['license_type']))
 {
     if($val = $url_params['license_type']) $license_type = $val;
 }
-
 // echo "<br>[$license_type]</br>";
-
 //====================================================
 $citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
 $bibliographicCitation = $citation_and_authors['citation'];
@@ -35,27 +34,22 @@ if(isset($url_params['agents']))
 {
     if($val = $url_params['agents']) $agents = $val;
 }
-
 //====================================================
 $taxon_names = self::get_taxa_list($Page->PageID);
 if(isset($url_params['taxon_names']))
 {
     if($val = $url_params['taxon_names']) $taxon_names = $val;
 }
-
 //====================================================
-
 if(isset($params))
 {
     if($val = @$params['subject_type']) $subject_type = $val;
     if($val = @$params['audience_type']) $audience_type = $val;
     if($val = @$params['license_type']) $license_type = $val;
     if($val = @$params['agents']) $agents = $val;
-    
 }
 //====================================================
 ?>
-
 <form action="../bhl_access/index.php">
     <input type="hidden" name="page_id" value="<?php echo $Page->PageID ?>">
     <input type="hidden" name="item_id" value="<?php echo $Page->ItemID ?>">
