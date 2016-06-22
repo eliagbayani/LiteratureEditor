@@ -14,22 +14,10 @@ error_reporting(E_ALL);
 $params =& $_GET;
 if(!$params) $params =& $_POST;
 
-if(isset($params['page_id']))
-{
-    if(substr($params['page_id'],0,4) == "http") $params['page_id'] = pathinfo($params['page_id'], PATHINFO_FILENAME);
-}
-if(isset($params['ref_page_id']))
-{
-    if(substr($params['ref_page_id'],0,4) == "http") $params['ref_page_id'] = pathinfo($params['ref_page_id'], PATHINFO_FILENAME);
-}
-if(isset($params['item_id']))
-{
-    if(substr($params['item_id'],0,4) == "http") $params['item_id'] = pathinfo($params['item_id'], PATHINFO_FILENAME);
-}
-if(isset($params['title_id']))
-{
-    if(substr($params['title_id'],0,4) == "http") $params['title_id'] = pathinfo($params['title_id'], PATHINFO_FILENAME);
-}
+if(isset($params['page_id']))     { if(substr($params['page_id'],0,4) == "http")     $params['page_id'] = pathinfo($params['page_id'], PATHINFO_FILENAME); }
+if(isset($params['ref_page_id'])) { if(substr($params['ref_page_id'],0,4) == "http") $params['ref_page_id'] = pathinfo($params['ref_page_id'], PATHINFO_FILENAME); }
+if(isset($params['item_id']))     { if(substr($params['item_id'],0,4) == "http")     $params['item_id'] = pathinfo($params['item_id'], PATHINFO_FILENAME); }
+if(isset($params['title_id']))    { if(substr($params['title_id'],0,4) == "http")    $params['title_id'] = pathinfo($params['title_id'], PATHINFO_FILENAME); }
 
 // print_r($params);// exit;
 
@@ -50,7 +38,7 @@ else                                                                    require_
 <script type="text/javascript">
 var spinner = new Spinner().spin();
 target.appendChild(spinner.el);
-$('#el').spin('large');
+$('#el').spin('large'); //start spinning
 </script>
 
 <?php

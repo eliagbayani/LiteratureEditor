@@ -39,8 +39,6 @@ class bhl_access_controller //extends ControllerBase
         $this->id_url['creator'] = "http://www.biodiversitylibrary.org/creator/";
         
         $this->parag_separator = "==================== paragraph separator ====================";
-        
-        
     }
 
     function user_is_logged_in_wiki()
@@ -70,7 +68,8 @@ class bhl_access_controller //extends ControllerBase
         }
         else
         {
-            // echo "<p>Login OK.<p>";
+            $arr = json_decode($string);
+            $this->wiki_username = $arr->query->userinfo->name;
             return true;
         }
     }

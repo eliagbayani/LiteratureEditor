@@ -5,7 +5,7 @@ if($url_params = self::check_if_this_title_has_wiki($pass_title, "v2"))
     $wiki = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $Page->PageID;
     self::display_message(array('type' => "highlight", 'msg' => "Wiki already exists for this excerpt. &nbsp; <a href='$wiki'>View Wiki</a>. &nbsp; Or you can proceed here and overwrite existing wiki."));
     $submit_text = "Proceed overwrite Wiki page";
-    if(!count($Page_xml->Names->Name)) self::display_message(array('type' => "highlight", 'msg' => "Original excerpt does not have any taxon associated with it."));
+    if(!count($Page_xml->Names->Name)) self::display_message(array('type' => "highlight", 'msg' => "This excerpt does not have any taxon associated with it.")); //"This" formerly "Original"
 }
 else
 {
