@@ -164,7 +164,7 @@ $msgs = self::page_editor_msgs();
     
     <table><tr><td colspan="2"><big><?php echo $header_title ?></big></td></tr>
     <tr>
-    <td><b>Processing Page <?php echo "<a href='http://biodiversitylibrary.org/page/$PageID'>$PageID</a>" ?></b></td>
+    <td><b>Processing Page <?php echo "<a href='http://biodiversitylibrary.org/page/$PageID'>$PageID</a>" ?></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td>
         <form name="" action="index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="search_type" value="pagesearch">
@@ -198,6 +198,7 @@ $msgs = self::page_editor_msgs();
     <input type="hidden" name="ItemID" value="<?php echo $ItemID ?>">
     <input type="hidden" name="AddPage" id="AddPage">
     <input type="hidden" name="accordion_item" id="accordion_item">
+    <input type="hidden" name="compiler" value="<?php echo $this->wiki_realname ?>">
     <tr>
     <td colspan="2">
         <!--- working ok but commented by Katja

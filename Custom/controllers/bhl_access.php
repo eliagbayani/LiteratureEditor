@@ -37,41 +37,57 @@ class bhl_access_controller //extends ControllerBase
         $this->id_url['pagethumb'] = "http://www.biodiversitylibrary.org/pagethumb/";
         $this->id_url['eol'] = "http://www.eol.org/pages/";
         $this->id_url['creator'] = "http://www.biodiversitylibrary.org/creator/";
-        
         $this->parag_separator = "==================== paragraph separator ====================";
     }
 
     function user_is_logged_in_wiki()
     {
+        $url = "/LiteratureEditor/api.php?action=query&meta=userinfo&format=json";
+        $json = self::get_api_result($url);
+        /* string possible values:
+        Array ( [wiki_literatureeditor_session] => qm1skkoagkoke0pejoke12uti2 ) {"query":{"userinfo":{"id":0,"name":"127.0.0.1","anon":""}}}
+        Array ( [wiki_literatureeditor_session] => q1hjhuk9108ufr6l1c6jfmli06 ) {"query":{"userinfo":{"id":1,"name":"EAgbayani"}}}
+        */
+        if(stripos($json, "\"anon\"") !== false) //string is found
+        {
+            echo "<h3><p>Cannot proceed.<p>";
+            echo "<a href='" . "http://" . $_SERVER['SERVER_NAME'] . "/LiteratureEditor/wiki/Special:UserLogin'>You must login from the wiki first</a></h3>";
+            return false;
+        }
+        else
+        {
+            $obj = json_decode($json);
+            $this->wiki_username = $obj->query->userinfo->name;
+            $this->wiki_realname = self::get_realname($this->wiki_username);
+            return true;
+        }
+        /*
+        https://www.mediawiki.org/wiki/API:Users    e.g. http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=users&ususers=EAgbayani|Contributor1&usprop=blockinfo|groups|editcount|registration|emailable
+        https://www.mediawiki.org/wiki/API:Userinfo e.g. http://editors.eol.localhost/LiteratureEditor/api.php?action=query&meta=userinfo&uiprop=groups|realname
+        */
+    }
+    
+    function get_realname($username)
+    {
+        $url = "/LiteratureEditor/api.php?action=query&meta=userinfo&uiprop=groups|realname&format=json";
+        $json = self::get_api_result($url);
+        $obj = json_decode($json);
+        if($val = @$obj->query->userinfo->realname) return $val;
+        return $username;
+    }
+    
+    function get_api_result($url)
+    {
         $session_cookie = 'wiki_literatureeditor_session';
         if(!isset($_COOKIE[$session_cookie])) return false;
-
-        $path = "http://" . $_SERVER['SERVER_NAME'];
-        $url  = $path . "/LiteratureEditor/api.php?action=query&meta=userinfo&format=json";
-
+        $url = "http://" . $_SERVER['SERVER_NAME'] . $url;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_COOKIE, $session_cookie . '=' . $_COOKIE[$session_cookie]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         $string = curl_exec($ch);
         curl_close($ch);
-
-        /* string possible values:
-        Array ( [wiki_literatureeditor_session] => qm1skkoagkoke0pejoke12uti2 ) {"query":{"userinfo":{"id":0,"name":"127.0.0.1","anon":""}}}
-        Array ( [wiki_literatureeditor_session] => q1hjhuk9108ufr6l1c6jfmli06 ) {"query":{"userinfo":{"id":1,"name":"EAgbayani"}}}
-        */
-        if(stripos($string, "\"anon\"") !== false) //string is found
-        {
-            echo "<h3><p>Cannot proceed.<p>";
-            echo "<a href='" . $path . "/LiteratureEditor/wiki/Special:UserLogin'>You must login from the wiki first</a></h3>";
-            return false;
-        }
-        else
-        {
-            $arr = json_decode($string);
-            $this->wiki_username = $arr->query->userinfo->name;
-            return true;
-        }
+        return $string;
     }
     
     /*
