@@ -48,7 +48,7 @@ class bhl_access_controller //extends ControllerBase
         Array ( [wiki_literatureeditor_session] => qm1skkoagkoke0pejoke12uti2 ) {"query":{"userinfo":{"id":0,"name":"127.0.0.1","anon":""}}}
         Array ( [wiki_literatureeditor_session] => q1hjhuk9108ufr6l1c6jfmli06 ) {"query":{"userinfo":{"id":1,"name":"EAgbayani"}}}
         */
-        if(stripos($json, "\"anon\"") !== false) //string is found
+        if(stripos($json, "\"anon\"") !== false || !$json) //string is found
         {
             echo "<h3><p>Cannot proceed.<p>";
             echo "<a href='" . "http://" . $_SERVER['SERVER_NAME'] . "/LiteratureEditor/wiki/Special:UserLogin'>You must login from the wiki first</a></h3>";
