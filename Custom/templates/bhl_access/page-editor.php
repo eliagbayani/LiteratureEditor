@@ -198,7 +198,7 @@ $msgs = self::page_editor_msgs();
     <input type="hidden" name="ItemID" value="<?php echo $ItemID ?>">
     <input type="hidden" name="AddPage" id="AddPage">
     <input type="hidden" name="accordion_item" id="accordion_item">
-    <input type="hidden" name="compiler" value="<?php echo $this->wiki_realname ?>">
+    <input type="hidden" name="compiler" value="<?php echo $this->compiler ?>">
     <tr>
     <td colspan="2">
         <!--- working ok but commented by Katja

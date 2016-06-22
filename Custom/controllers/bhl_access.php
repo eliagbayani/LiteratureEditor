@@ -57,8 +57,13 @@ class bhl_access_controller //extends ControllerBase
         else
         {
             $obj = json_decode($json);
-            $this->wiki_username = $obj->query->userinfo->name;
-            $this->wiki_realname = self::get_realname($this->wiki_username);
+            $username = $obj->query->userinfo->name;
+            $realname = self::get_realname($username);
+            $this->compiler = $realname;
+            
+            $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:{$username}";
+            // $this->compiler = "<span class=\'plainlinks\'>[$url {$realname}]</span>";
+            $this->compiler = "[$url {$realname}]";
             return true;
         }
         /*
