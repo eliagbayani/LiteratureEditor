@@ -51,6 +51,8 @@ if(isset($params['search_type']))
 {
     if    ($params['search_type'] == "titlelist") print $ctrler->render_template('titlelist-result', array('letter' => @$params['radio']));
     elseif($params['search_type'] == "move2wiki") print $ctrler->render_template('move2wiki-result', array('params' => @$params));
+    elseif($params['search_type'] == "reviewexcerpt") print $ctrler->render_template('reviewexcerpt-result', array('params' => @$params));
+    
 }
 
 require_once("../config/script-below-entry.html");
@@ -60,7 +62,7 @@ if    (@$params['search_type'] == 'itemsearch')      print '<script>$( "#tabs_ma
 elseif(@$params['search_type'] == 'titlesearch')     print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
 elseif(@$params['search_type'] == 'pagetaxasearch')  print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
 elseif(@$params['search_type'] == 'pagesearch')      print '<script>$( "#tabs_main" ).tabs( "option", "active", 0 );</script>';
-elseif(@$params['search_type'] == 'move2wiki')       print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
+elseif(@$params['search_type'] == 'move2wiki')       print '<script>$( "#tabs_main" ).tabs( "option", "active", 0 );</script>';
 
 if(isset($params['part_more_info'])) print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
 

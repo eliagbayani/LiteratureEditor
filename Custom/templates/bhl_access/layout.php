@@ -30,10 +30,8 @@
         print $ctrler->render_layout(@$params, 'pagesearch-form');
         ?>
     </div>
-    <div id="tabs_main-6">Loading other searches...</div>
-    <div id="tabs_main-5">
-    Loading wiki...
-    </div>
+    <div id="tabs_main-6">Loading...</div>
+    <div id="tabs_main-5">Loading...</div>
 </div>
 <?php 
     $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/";

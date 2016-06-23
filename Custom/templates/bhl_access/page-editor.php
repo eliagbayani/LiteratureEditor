@@ -1,6 +1,7 @@
 <?php
 // if(isset($Page))
 
+$accordion_item = '';
 $scientists = '';
 $public = '';
 $children = '';
@@ -57,6 +58,8 @@ if(!isset($params['header_title']))
 }
 else //this means a form-submit
 {
+    $accordion_item         = $params['accordion_item'];
+    
     $PageID         = $params['PageID'];
     $search_type    = $params['search_type'];
     $title_form     = $params['title_form'];
@@ -120,7 +123,7 @@ else //this means a form-submit
         $separated_names = explode("|", $old_list);
     }
     
-    $save_status[$params['accordion_item']] = 'Saved OK';
+    if(!isset($params['fromReview'])) $save_status[$params['accordion_item']] = 'Saved OK';
     
     //for references
     $label_added_ref = $params['label_added_ref'];
@@ -186,18 +189,15 @@ $msgs = self::page_editor_msgs();
     <input type="hidden" name="search_type" id="search_type" value="pagesearch">
     <input type="hidden" name="page_id" value="<?php echo $PageID ?>">
     <input type="hidden" name="PageID" value="<?php echo $PageID ?>">
-
     <input type="hidden" name="recently_added" value="<?php echo $next_page ?>">
     <input type="hidden" name="label_added" value="<?php echo $label_added ?>">
     <input type="hidden" name="label_added_ref" value="<?php echo $label_added_ref ?>">
-    
     <input type="hidden" name="header_title" value="<?php echo $header_title ?>">
     <input type="hidden" name="copyrightstatus" value="<?php echo $copyrightstatus ?>">
-
     <input type="hidden" name="next_page" value="<?php echo $next_page ?>">
     <input type="hidden" name="ItemID" value="<?php echo $ItemID ?>">
     <input type="hidden" name="AddPage" id="AddPage">
-    <input type="hidden" name="accordion_item" id="accordion_item">
+    <input type="hidden" name="accordion_item" id="accordion_item" value="<?php echo $accordion_item ?>">
     <input type="hidden" name="compiler" value="<?php echo $this->compiler ?>">
     <tr>
     <td colspan="2">
@@ -361,7 +361,7 @@ $msgs = self::page_editor_msgs();
         
     
     </div>
-    <button onClick="document.getElementById('search_type').value='move2wiki';spinner_on();">Review Excerpt & Metadata</button>
+    <button onClick="document.getElementById('search_type').value='reviewexcerpt';spinner_on();">Review Excerpt & Metadata</button>
     </form>
     
 </div>

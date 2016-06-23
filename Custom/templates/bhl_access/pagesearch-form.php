@@ -1,11 +1,3 @@
-<?php
-// namespace php_active_record;
-    /* 
-        Expects:
-            page_id
-    */
-?>
-
 <form name="validator_form" action="index.php" method="post" enctype="multipart/form-data">
 <input type="hidden" name="search_type" value="pagesearch">
 <table>

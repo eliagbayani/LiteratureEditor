@@ -3,13 +3,10 @@
     /* 
         Expects:
     */
-    
     $total = count(@$xml->Result);
     // print_r(@$xml->Result); exit;
     // print_r($params);
-    
 ?>
-
 <!--- <h3 class="demoHeaders">Page(s): <?php echo $total ?></h3> --->
 <?php if($loop = @$xml->Result)
 {

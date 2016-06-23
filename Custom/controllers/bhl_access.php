@@ -397,6 +397,102 @@ class bhl_access_controller //extends ControllerBase
     )    
     */
 
+    function prep_pageids_4disp($params)
+    {
+        $ids = array($params['page_id']);
+        $ids = array_merge($ids, explode(" ", $params['label_added']));
+        $ids = array_filter($ids);
+        return $ids; 
+    }
+    
+    function prep_audience_4disp($params)
+    {
+        $audience = '';
+        if(isset($params['scientists'])) $audience .= "scientists; ";
+        if(isset($params['children'])) $audience .= "children; ";
+        if(isset($params['public'])) $audience .= "public ";
+        return self::remove_ending_char($audience);
+    }
+    
+    function prep_names_4disp($params)
+    {
+        $names = explode(";", $params['taxon_asso']);
+        $names = array_filter($names);
+        $names = array_map("trim", $names);
+        return $names;
+    }
+    
+    function prep_ocrs_4disp($textarea) //for ocr_text & references
+    {
+        $ocrs = explode($this->parag_separator, $textarea);
+        $ocrs = array_filter($ocrs);
+        $ocrs = array_map("trim", $ocrs);
+        return $ocrs;
+    }
+    function conv_wikilink_2html($str)
+    { //e.g. "[http://editors.eol.localhost/LiteratureEditor/wiki/User:EAgbayani Eli E. Agbayani]"
+        $str = str_replace(array("[", "]"), "", $str);
+        $arr = explode(" ", $str);
+        $url = $arr[0];
+        $text = str_replace($url." ", "", $str);
+        return "<a href='$url'>$text</a>";
+    }
+    
+    function review_excerpt($params)
+    {
+        echo "Excerpt from " . "<b>" . $params['header_title'] . "</b>" . "<br><br>";
+        $ids = self::prep_pageids_4disp($params);
+        foreach($ids as $id)
+        {
+            $info = self::get_label_added_pageInfo($id);
+            $link = "<a href='http://biodiversitylibrary.org/page/$id'>$id</a>";
+            echo trim(@$info['prefix'] . " " . @$info['number'] . " (" . @$info['type'] . ") &nbsp;&nbsp;&nbsp; PageID: $link") . "<br><br>";
+        }
+        
+        echo "<h3>Bibliographic Citation";
+        ?> <button onClick="document.getElementById('accordion_item').value=4;spinner_on();">Edit</button><?php echo"</h3>";
+        echo $params['bibliographicCitation'] . "<br><br>";
+        
+        echo "<h3>Excerpt Metadata";
+        ?> <button onClick="document.getElementById('accordion_item').value=4;spinner_on();">Edit</button><?php echo"</h3>";
+        echo "<b>Authors</b>: " . $params['agents']  . "<br><br>";
+        $link = "<a href='" . self::get_license_url($params['license_type']) . "'>" . $params['license_type'] . "</a>";
+        echo "<b>License</b>: " . $link . "<br><br>";
+        echo "<b>Rights Holder</b>: " . $params['rightsholder']  . "<br><br>";
+        echo "<b>Compiler</b>: " . self::conv_wikilink_2html(@$params['compiler'])  . "<br><br>";
+        echo "<b>Supplier</b>: " . "Biodiversity Heritage Library"  . "<br><br>";
+        echo "<b>Language</b>: " . @$params['language']  . "<br><br>";
+        $audience = self::prep_audience_4disp($params);
+        echo "<b>Audience</b>: " . $audience . "<br><br>";
+        
+        echo "<h3>Taxon Associations";
+        ?> <button onClick="document.getElementById('accordion_item').value=3;spinner_on();">Edit</button><?php echo"</h3>";
+        $names = self::prep_names_4disp($params);
+        foreach($names as $name)
+        {
+            $link = "http://www.eol.org/pages/" . str_replace(" ", "%20", $name);
+            $link = "<a href='$link'>$name</a>";
+            echo $link . "<br><br>";
+        }
+        
+        echo "<h3>Title & Subchapter";
+        ?> <button onClick="document.getElementById('accordion_item').value=0;spinner_on();">Edit</button><?php echo"</h3>";
+        echo "<b>Subchapter</b>: " . self::get_subject_desc(@$params['subject_type']) . "<br><br>";
+        echo "<b>Title</b>: " . $params['title_form'] . "<br><br>";
+        
+        echo "<h3>Excerpt";
+        ?> <button onClick="document.getElementById('accordion_item').value=1;spinner_on();">Edit</button><?php echo"</h3>";
+        $ocrs = self::prep_ocrs_4disp($params['ocr_text']);
+        // foreach($ocrs as $ocr) echo "<p>" . self::format_wiki((string) $ocr) . "</p>";
+        foreach($ocrs as $ocr) echo "<p> " . str_replace("\n", "<br>", $ocr) . "</p>";
+        
+        echo "<h3>References";
+        ?> <button onClick="document.getElementById('accordion_item').value=2;spinner_on();">Edit</button><?php echo"</h3>";
+        $ocrs = self::prep_ocrs_4disp($params['references']);
+        // foreach($ocrs as $ocr) echo "<p>" . self::format_wiki((string) $ocr) . "</p>";
+        foreach($ocrs as $ocr) echo "<p> " . str_replace("\n", "<br>", $ocr) . "</p>";
+    }
+
     function move2wiki($params)
     {
         $filename = "../temp/wiki/" . $params['page_id'] . ".wiki";
@@ -416,9 +512,7 @@ class bhl_access_controller //extends ControllerBase
                 
                 fwrite($file, "=== Review excerpt ===\n");
                 fwrite($file, "Excerpt from " . "'''" . $params['header_title'] . "'''" . "\n\n");
-                $ids = array($params['page_id']);
-                $ids = array_merge($ids, explode(" ", $params['label_added']));
-                $ids = array_filter($ids);
+                $ids = self::prep_pageids_4disp($params);
                 foreach($ids as $id)
                 {
                     $info = self::get_label_added_pageInfo($id);
@@ -439,17 +533,11 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "'''Compiler''': " . @$params['compiler']  . "\n\n");
                 fwrite($file, "'''Supplier''': " . "Biodiversity Heritage Library"  . "\n\n");
                 fwrite($file, "'''Language''': " . @$params['language']  . "\n\n");
-                $audience = '';
-                if(isset($params['scientists'])) $audience .= "scientists; ";
-                if(isset($params['children'])) $audience .= "children; ";
-                if(isset($params['public'])) $audience .= "public ";
-                $audience = self::remove_ending_char($audience);
+                $audience = self::prep_audience_4disp($params);
                 fwrite($file, "'''Audience''': " . $audience . "\n\n");
                 
                 fwrite($file, "== Taxon Associations ==\n");
-                $names = explode(";", $params['taxon_asso']);
-                $names = array_filter($names);
-                $names = array_map("trim", $names);
+                $names = self::prep_names_4disp($params);
                 foreach($names as $name)
                 {
                     $link = "http://www.eol.org/pages/" . str_replace(" ", "%20", $name);
@@ -462,9 +550,7 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "'''Title''': " . $params['title_form'] . "\n\n");
                 
                 fwrite($file, "== Excerpt ==\n");
-                $ocrs = explode($this->parag_separator, $params['ocr_text']);
-                $ocrs = array_filter($ocrs);
-                $ocrs = array_map("trim", $ocrs);
+                $ocrs = self::prep_ocrs_4disp($params['ocr_text']);
                 foreach($ocrs as $ocr)
                 {
                     fwrite($file, "{| class=\"wikitable\" style=\"" . "" . "\" name=\"OCR Text\"\n");
@@ -475,9 +561,7 @@ class bhl_access_controller //extends ControllerBase
                 }
 
                 fwrite($file, "== References ==\n");
-                $ocrs = explode($this->parag_separator, $params['references']);
-                $ocrs = array_filter($ocrs);
-                $ocrs = array_map("trim", $ocrs);
+                $ocrs = self::prep_ocrs_4disp($params['references']);
                 foreach($ocrs as $ocr)
                 {
                     fwrite($file, "{| class=\"wikitable\" style=\"" . "" . "\" name=\"References\"\n");
@@ -486,9 +570,6 @@ class bhl_access_controller //extends ControllerBase
                     fwrite($file, "|-\n");
                     fwrite($file, "|}\n");
                 }
-                
-                
-                
             }
             else
             {   //ver 1
@@ -515,13 +596,25 @@ class bhl_access_controller //extends ControllerBase
 
         $status = shell_exec($cmdline . " 2>&1");
         $status = str_ireplace("done", "done. &nbsp;", $status);
+        
+        $wiki_page = "../../wiki/" . $params['pass_title'];
+
+        // /*
+        // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
+        ?>
+        <script type="text/javascript">
+        location.href = '<?php echo $wiki_page ?>';
+        </script>
+        <?php
+        // */
+
         if(stripos($status, "Your edit was ignored because no change was made to the text") !== false) 
         {
             $status = "Your edit was ignored because no change was made to the text."; //string is found
             $status2 = "See Wiki for Page ID:";
         }
         else $status2 = "See newly generated Wiki for Page ID:";
-        
+
         // echo "<br>$cmdline<br>";
         self::display_message(array('type' => "highlight", 'msg' => $status));
         
@@ -529,8 +622,6 @@ class bhl_access_controller //extends ControllerBase
         $wiki_page = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id'];
         echo "<br><a href=\"$wiki_page\">Wiki for Page ID: " . $p['page_id'] . " </a><br>";
         */
-        
-        $wiki_page = "../../wiki/" . $params['pass_title'];
         
         self::display_message(array('type' => "highlight", 'msg' => "$status2 <a href=\"$wiki_page\">" . $params['pass_title'] . " </a>"));
 
@@ -848,7 +939,7 @@ class bhl_access_controller //extends ControllerBase
             }
         }
     }
-
+    
     function format_wiki($wiki)
     {
         /* works but only replaces the first char dash.
