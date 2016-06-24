@@ -163,209 +163,213 @@ $licenses = self::get_licenses();
 $msgs = self::page_editor_msgs();
 ?>
 <div id="tabs-0">
-    <?php require_once("page-editor-pre.php") ?>
-    
-    <table><tr><td colspan="2"><big><?php echo $header_title ?></big></td></tr>
-    <tr>
-    <td><b>Processing Page <?php echo "<a href='http://biodiversitylibrary.org/page/$PageID'>$PageID</a>" ?></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td>
-        <form name="" action="index.php" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="search_type" value="pagesearch">
-        Go to another page:
-        <select name="page_id" id="">
-            <?php foreach($page_IDs as $page_ID)
-            {
-                $selected = "";
-                if($PageID == $page_ID) $selected = "selected";
-                echo '<option value="' . $page_ID . '" ' . $selected . '>' . $page_ID . '</option>';
-            }?>
-        </select>
-        <button id="" onClick="spinner_on()">Go</button>
-        </form>
-    </td>
-    </tr>
-    
-    <form name="" action="index.php" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="search_type" id="search_type" value="pagesearch">
-    <input type="hidden" name="page_id" value="<?php echo $PageID ?>">
-    <input type="hidden" name="PageID" value="<?php echo $PageID ?>">
-    <input type="hidden" name="recently_added" value="<?php echo $next_page ?>">
-    <input type="hidden" name="label_added" value="<?php echo $label_added ?>">
-    <input type="hidden" name="label_added_ref" value="<?php echo $label_added_ref ?>">
-    <input type="hidden" name="header_title" value="<?php echo $header_title ?>">
-    <input type="hidden" name="copyrightstatus" value="<?php echo $copyrightstatus ?>">
-    <input type="hidden" name="next_page" value="<?php echo $next_page ?>">
-    <input type="hidden" name="ItemID" value="<?php echo $ItemID ?>">
-    <input type="hidden" name="AddPage" id="AddPage">
-    <input type="hidden" name="accordion_item" id="accordion_item" value="<?php echo $accordion_item ?>">
-    <input type="hidden" name="compiler" value="<?php echo $this->compiler ?>">
-    <tr>
-    <td colspan="2">
-        <!--- working ok but commented by Katja
-        <?php 
-        if(in_array($next_page, $page_IDs)) echo "You can <a href='index.php?page_id=" . ($PageID + 1) . "&search_type=pagesearch'>skip to next page</a> to remove the current text excerpt and replace it with the content of the next page.";
-        else                                echo "No more succeeding page.";
-        ?> 
-        --->
-        <!-- working but a copy was moved to the 'Text Excerpt' section
-        &nbsp;&nbsp; or &nbsp;&nbsp;<button id="" onClick="document.getElementById('AddPage').value=1;spinner_on();">Add a page</button>
-        -->
-        <?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
-    </td>
-    </tr>
-    <!-- working
-    <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["intro"] ?></td></tr>
-    -->
-    </table>
-
-    <div id="accordion_open2">
-        <h2>Title & Subchapter</h2>
-        <div>
-            <table>
-            <tr><td><b>EOL subchapter</b>:</td>
-                <td>
-                <select name="subject_type" id="selectmenu_4"><option>Choose a subchapter</option>
-                    <?php 
-                    foreach($subjects as $s)
-                    {
-                        $selected = "";
-                        if($subject_type == $s['url']) $selected = "selected";
-                        echo '<option value="' . $s['url'] . '" ' . $selected . '>' . $s['t'] . '</option>';
-                    }
-                    ?>
-                </select>
-                </td>
-            </tr>
-            <tr><td><b>Title</b> (optional):</td>
-                <td><input size="100" type="text" name="title_form" value="<?php echo $title_form; ?>"></td>
-            </tr>
-            <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["title"] ?></td></tr>
-            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=0;spinner_on();">Save</button> <i><?php echo $save_status[0] ?></i></td></tr>
-            </table>
-        </div>
-    
-        <h2>Text Excerpt for EOL</h2>
-        <div>
-            <table>
-            <tr><td><button id="" onClick="document.getElementById('AddPage').value=1;document.getElementById('accordion_item').value=1;spinner_on();">Add a page</button> &nbsp;&nbsp;<?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
-            </td></tr>
-            
-            <tr><td bgcolor="AliceBlue">
-            <?php echo $msgs["text_excerpt_pre"] ?>
-            </td></tr>
-            
-            <tr><td>
-                <textarea id="" rows="15" cols="100" name="ocr_text"><?php echo self::format_wiki($ocr_text); ?></textarea> 
-            </td></tr>
-            <tr><td bgcolor="AliceBlue"><?php echo $msgs["text_excerpt"] ?></td></tr>
-            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=1;spinner_on();">Save</button> <i><?php echo $save_status[1] ?></i></td></tr>
-            </table>
-        </div>
-    
-        <h2>References</h2>
-        <div>
-            <table>
-            <tr><td><b>Fetch References from Page</b>: <input type="text" name="ref_page_id"> 
-            <button id="" onClick="document.getElementById('accordion_item').value=2;document.getElementById('ref_prioritized').value=1;spinner_on();">Add a page</button>
-            &nbsp;&nbsp;<?php if($label_added_ref) echo "<i>Page added: $label_added_ref</i>"; ?>
-            <input type="hidden" name="ref_prioritized" id="ref_prioritized">
-            </td></tr>
-            
-            <tr><td>
-                <textarea id="" rows="15" cols="100" name="references"><?php echo self::format_wiki($references); ?></textarea>
-            </td></tr>
-            <tr><td bgcolor="AliceBlue"><?php echo $msgs["references"] ?></td></tr>
-            <tr><td><button id="" onClick="document.getElementById('accordion_item').value=2;spinner_on();">Save</button> <i><?php echo $save_status[2] ?></i></td></tr>
-            </table>
-        </div>
-        
-        <h2>Taxon Associations</h2>
-        <div>
-            <table>
-            <tr><td>
-                <b>Taxon associations for this excerpt</b>:
-                <input size="100" type="text" name="taxon_asso" value="<?php echo $taxon_asso; ?>"> <button id="" onClick="document.getElementById('accordion_item').value=3;spinner_on();">Save</button> <i><?php echo $save_status[3] ?></i>
-            </td></tr>
-            <tr><td bgcolor="AliceBlue"><?php echo $msgs["taxon_asso"] ?></td></tr>
-            <tr><td>
-                <?php
-                $separated_names = array_map("trim", $separated_names);
-                $separated_names = array_filter($separated_names);
-                echo "n=" . count($separated_names) . "<br>";
-                foreach($separated_names as $names) echo "$names<br>"; ?>
-                <input type="hidden" name="separated_names" value="<?php echo implode("|", $separated_names); ?>">
-            </td></tr>
-            </table>
-        </div>
-        
-        <h2>Excerpt Metadata</h2>
-        <div>
-        <table>
-        <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["excerpt_meta"] ?></td></tr>
-        <tr><td width="95"><b>Language</b>:</td>
+    <?php require_once("page-editor-pre.php");
+    if($cont_editor)
+    {
+        ?>
+        <!--- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --->
+            <table><tr><td colspan="2"><big><?php echo $header_title ?></big></td></tr>
+            <tr>
+            <td><b>Processing Page <?php echo "<a href='http://biodiversitylibrary.org/page/$PageID'>$PageID</a>" ?></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td>
-                <select name="language" id="">
-                    <?php 
-                    foreach($languages as $s)
+                <form name="" action="index.php" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="search_type" value="pagesearch">
+                Go to another page:
+                <select name="page_id" id="">
+                    <?php foreach($page_IDs as $page_ID)
                     {
                         $selected = "";
-                        if($language == $s['abb']) $selected = "selected";
-                        echo '<option value="' . $s['abb'] . '" ' . $selected . '>' . $s['name'] . '</option>';
-                    }
-                    ?>
-                </select>
-            </td>
-        </tr>
-        
-        <tr>
-            <td><b>License</b>:</td>
-            <td>
-                <select name="license_type" id="selectmenu_3">
-                    <option></option>
-                    <?php foreach($licenses as $s)
-                    {
-                        $selected = "";
-                        if($license_type == $s['value']) $selected = "selected";
-                        echo '<option value="' . $s['value'] . '" ' . $selected . '>' . $s['t'] . '</option>';
+                        if($PageID == $page_ID) $selected = "selected";
+                        echo '<option value="' . $page_ID . '" ' . $selected . '>' . $page_ID . '</option>';
                     }?>
                 </select>
+                <button id="" onClick="spinner_on()">Go</button>
+                </form>
             </td>
-        </tr>
-        
-        <tr><td><b>Rights holder</b>:</td>
-            <td><input size="100" type="text" name="rightsholder" value="<?php echo $rightsholder; ?>"></td>
-        </tr>
-        
-        <tr>
-            <td><b>Authors</b>:</td>
-            <td><input size="100" type="text" name="agents" value="<?php echo $agents ?>"></td>
-        </tr>
-        <tr>
-            <td><b>Bibliographic citation</b>:</td>
-            <td><textarea id="" rows="4" cols="100" name="bibliographicCitation"><?php echo $bibliographicCitation; ?></textarea></td>
-        </tr>
+            </tr>
 
-        <tr><td><b>Contributor</b>:</td>
-            <td><input size="100" type="text" name="contributor" value="<?php echo $contributor; ?>"></td>
-        </tr>
-
-        <tr><td><b>Audience</b>:</td>
-            <td><input type="checkbox" name="scientists" <?php echo $scientists; ?>> scientists &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="checkbox" name="public"     <?php echo $public; ?>> public &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="checkbox" name="children"   <?php echo $children; ?>> children
+            <form name="" action="index.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="search_type" id="search_type" value="pagesearch">
+            <input type="hidden" name="page_id" value="<?php echo $PageID ?>">
+            <input type="hidden" name="PageID" value="<?php echo $PageID ?>">
+            <input type="hidden" name="recently_added" value="<?php echo $next_page ?>">
+            <input type="hidden" name="label_added" value="<?php echo $label_added ?>">
+            <input type="hidden" name="label_added_ref" value="<?php echo $label_added_ref ?>">
+            <input type="hidden" name="header_title" value="<?php echo $header_title ?>">
+            <input type="hidden" name="copyrightstatus" value="<?php echo $copyrightstatus ?>">
+            <input type="hidden" name="next_page" value="<?php echo $next_page ?>">
+            <input type="hidden" name="ItemID" value="<?php echo $ItemID ?>">
+            <input type="hidden" name="AddPage" id="AddPage">
+            <input type="hidden" name="accordion_item" id="accordion_item" value="<?php echo $accordion_item ?>">
+            <input type="hidden" name="compiler" value="<?php echo $this->compiler ?>">
+            <tr>
+            <td colspan="2">
+                <!--- working ok but commented by Katja
+                <?php 
+                if(in_array($next_page, $page_IDs)) echo "You can <a href='index.php?page_id=" . ($PageID + 1) . "&search_type=pagesearch'>skip to next page</a> to remove the current text excerpt and replace it with the content of the next page.";
+                else                                echo "No more succeeding page.";
+                ?> 
+                --->
+                <!-- working but a copy was moved to the 'Text Excerpt' section
+                &nbsp;&nbsp; or &nbsp;&nbsp;<button id="" onClick="document.getElementById('AddPage').value=1;spinner_on();">Add a page</button>
+                -->
+                <?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
             </td>
-        </tr>
-        <tr><td colspan="2"><button id="" onClick="document.getElementById('accordion_item').value=4;spinner_on();">Save</button> <i><?php echo $save_status[4] ?></i></td></tr>
-        </table>
-        </div>
-        
-    
-    </div>
-    <button onClick="document.getElementById('search_type').value='reviewexcerpt';spinner_on();">Review Excerpt & Metadata</button>
-    </form>
-    
+            </tr>
+            <!-- working
+            <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["intro"] ?></td></tr>
+            -->
+            </table>
+
+            <div id="accordion_open2">
+                <h2>Title & Subchapter</h2>
+                <div>
+                    <table>
+                    <tr><td><b>EOL subchapter</b>:</td>
+                        <td>
+                        <select name="subject_type" id="selectmenu_4"><option>Choose a subchapter</option>
+                            <?php 
+                            foreach($subjects as $s)
+                            {
+                                $selected = "";
+                                if($subject_type == $s['url']) $selected = "selected";
+                                echo '<option value="' . $s['url'] . '" ' . $selected . '>' . $s['t'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                        </td>
+                    </tr>
+                    <tr><td><b>Title</b> (optional):</td>
+                        <td><input size="100" type="text" name="title_form" value="<?php echo $title_form; ?>"></td>
+                    </tr>
+                    <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["title"] ?></td></tr>
+                    <tr><td><button id="" onClick="document.getElementById('accordion_item').value=0;spinner_on();">Save</button> <i><?php echo $save_status[0] ?></i></td></tr>
+                    </table>
+                </div>
+
+                <h2>Text Excerpt for EOL</h2>
+                <div>
+                    <table>
+                    <tr><td><button id="" onClick="document.getElementById('AddPage').value=1;document.getElementById('accordion_item').value=1;spinner_on();">Add a page</button> &nbsp;&nbsp;<?php if($label_added) echo "<i>Page added: $label_added</i>"; ?>
+                    </td></tr>
+
+                    <tr><td bgcolor="AliceBlue">
+                    <?php echo $msgs["text_excerpt_pre"] ?>
+                    </td></tr>
+
+                    <tr><td>
+                        <textarea id="" rows="15" cols="100" name="ocr_text"><?php echo self::format_wiki($ocr_text); ?></textarea> 
+                    </td></tr>
+                    <tr><td bgcolor="AliceBlue"><?php echo $msgs["text_excerpt"] ?></td></tr>
+                    <tr><td><button id="" onClick="document.getElementById('accordion_item').value=1;spinner_on();">Save</button> <i><?php echo $save_status[1] ?></i></td></tr>
+                    </table>
+                </div>
+
+                <h2>References</h2>
+                <div>
+                    <table>
+                    <tr><td><b>Fetch References from Page</b>: <input type="text" name="ref_page_id"> 
+                    <button id="" onClick="document.getElementById('accordion_item').value=2;document.getElementById('ref_prioritized').value=1;spinner_on();">Add a page</button>
+                    &nbsp;&nbsp;<?php if($label_added_ref) echo "<i>Page added: $label_added_ref</i>"; ?>
+                    <input type="hidden" name="ref_prioritized" id="ref_prioritized">
+                    </td></tr>
+
+                    <tr><td>
+                        <textarea id="" rows="15" cols="100" name="references"><?php echo self::format_wiki($references); ?></textarea>
+                    </td></tr>
+                    <tr><td bgcolor="AliceBlue"><?php echo $msgs["references"] ?></td></tr>
+                    <tr><td><button id="" onClick="document.getElementById('accordion_item').value=2;spinner_on();">Save</button> <i><?php echo $save_status[2] ?></i></td></tr>
+                    </table>
+                </div>
+
+                <h2>Taxon Associations</h2>
+                <div>
+                    <table>
+                    <tr><td>
+                        <b>Taxon associations for this excerpt</b>:
+                        <input size="100" type="text" name="taxon_asso" value="<?php echo $taxon_asso; ?>"> <button id="" onClick="document.getElementById('accordion_item').value=3;spinner_on();">Save</button> <i><?php echo $save_status[3] ?></i>
+                    </td></tr>
+                    <tr><td bgcolor="AliceBlue"><?php echo $msgs["taxon_asso"] ?></td></tr>
+                    <tr><td>
+                        <?php
+                        $separated_names = array_map("trim", $separated_names);
+                        $separated_names = array_filter($separated_names);
+                        echo "n=" . count($separated_names) . "<br>";
+                        foreach($separated_names as $names) echo "$names<br>"; ?>
+                        <input type="hidden" name="separated_names" value="<?php echo implode("|", $separated_names); ?>">
+                    </td></tr>
+                    </table>
+                </div>
+
+                <h2>Excerpt Metadata</h2>
+                <div>
+                <table>
+                <tr><td colspan="2" bgcolor="AliceBlue"><?php echo $msgs["excerpt_meta"] ?></td></tr>
+                <tr><td width="95"><b>Language</b>:</td>
+                    <td>
+                        <select name="language" id="">
+                            <?php 
+                            foreach($languages as $s)
+                            {
+                                $selected = "";
+                                if($language == $s['abb']) $selected = "selected";
+                                echo '<option value="' . $s['abb'] . '" ' . $selected . '>' . $s['name'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><b>License</b>:</td>
+                    <td>
+                        <select name="license_type" id="selectmenu_3">
+                            <option></option>
+                            <?php foreach($licenses as $s)
+                            {
+                                $selected = "";
+                                if($license_type == $s['value']) $selected = "selected";
+                                echo '<option value="' . $s['value'] . '" ' . $selected . '>' . $s['t'] . '</option>';
+                            }?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr><td><b>Rights holder</b>:</td>
+                    <td><input size="100" type="text" name="rightsholder" value="<?php echo $rightsholder; ?>"></td>
+                </tr>
+
+                <tr>
+                    <td><b>Authors</b>:</td>
+                    <td><input size="100" type="text" name="agents" value="<?php echo $agents ?>"></td>
+                </tr>
+                <tr>
+                    <td><b>Bibliographic citation</b>:</td>
+                    <td><textarea id="" rows="4" cols="100" name="bibliographicCitation"><?php echo $bibliographicCitation; ?></textarea></td>
+                </tr>
+
+                <tr><td><b>Contributor</b>:</td>
+                    <td><input size="100" type="text" name="contributor" value="<?php echo $contributor; ?>"></td>
+                </tr>
+
+                <tr><td><b>Audience</b>:</td>
+                    <td><input type="checkbox" name="scientists" <?php echo $scientists; ?>> scientists &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="public"     <?php echo $public; ?>> public &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="children"   <?php echo $children; ?>> children
+                    </td>
+                </tr>
+                <tr><td colspan="2"><button id="" onClick="document.getElementById('accordion_item').value=4;spinner_on();">Save</button> <i><?php echo $save_status[4] ?></i></td></tr>
+                </table>
+                </div>
+
+            </div>
+            <button onClick="document.getElementById('search_type').value='reviewexcerpt';spinner_on();">Review Excerpt & Metadata</button>
+            </form>
+        <!--- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --->
+        <?php
+    }
+    ?>
 </div>
-
 <?php
 if(isset($params['accordion_item'])) print '<script>$("#accordion_open2").accordion({ active: ' . $params['accordion_item'] . ', heightStyle: "content" });</script>';
 ?>

@@ -20,7 +20,7 @@
         {
             // echo "<input type='hidden' name='" . $field . "' value='" . $params[$field] . "' ";
             
-            if(in_array($field, array("ocr_text", "references")))
+            if(in_array($field, array("ocr_text", "references", "bibliographicCitation")))
             {
                 echo "<textarea name='" . $field . "' style='display:none;'>" . $params[$field] . "</textarea>";
             }

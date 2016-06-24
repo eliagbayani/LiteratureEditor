@@ -396,6 +396,21 @@ class bhl_access_controller //extends ControllerBase
         [children] => on
     )    
     */
+    
+    function create_title($p)
+    {
+        /*
+        $arr = explode("›", self::get_subject_desc($p['subject_type']));
+        $subj_part = str_replace(" ", "_", trim(array_pop($arr)));
+        */
+
+        $subj_part = self::get_subject_desc($p['subject_type']);
+        $subj_part = str_replace(" ", "_", trim($subj_part));
+        
+        $title = $p['page_id'] . "__" . $subj_part . "__" . md5($p['label_added'].$p['label_added_ref'].$p['subject_type'].$p['title_form'].$p['ocr_text'].$p['taxon_asso'].$p['references']);
+        echo "<br>[$title]<br>";
+        return $title;
+    }
 
     function prep_pageids_4disp($params)
     {
@@ -440,6 +455,7 @@ class bhl_access_controller //extends ControllerBase
     
     function review_excerpt($params)
     {
+        echo "<br>" . self::create_title($params) . "<br>";
         echo "Excerpt from " . "<b>" . $params['header_title'] . "</b>" . "<br><br>";
         $ids = self::prep_pageids_4disp($params);
         foreach($ids as $id)
@@ -591,23 +607,25 @@ class bhl_access_controller //extends ControllerBase
             fclose($file);
         }
         
+        $new_title = self::create_title($params);
         $temp_wiki_file = DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/Custom/temp/wiki/" . $p['page_id'] . ".wiki";
-        $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -u '" . $_COOKIE['wiki_literatureeditorUserName'] . "' -s 'BHL data to Wiki " . $p['page_id'] . "' -m " . $params['pass_title'] . " < " . $temp_wiki_file;
+        $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -u '" . $_COOKIE['wiki_literatureeditorUserName'] . "' -s 'BHL data to Wiki " . $p['page_id'] . "' -m " . $new_title . " < " . $temp_wiki_file;
 
         $status = shell_exec($cmdline . " 2>&1");
         $status = str_ireplace("done", "done. &nbsp;", $status);
         
-        $wiki_page = "../../wiki/" . $params['pass_title'];
+        $wiki_page = "../../wiki/" . $new_title;
 
-        // /*
+        /*
         // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
         ?>
         <script type="text/javascript">
         location.href = '<?php echo $wiki_page ?>';
         </script>
         <?php
-        // */
+        */
 
+        // /* working but not needed anymore since location.href above
         if(stripos($status, "Your edit was ignored because no change was made to the text") !== false) 
         {
             $status = "Your edit was ignored because no change was made to the text."; //string is found
@@ -615,21 +633,20 @@ class bhl_access_controller //extends ControllerBase
         }
         else $status2 = "See newly generated Wiki for Page ID:";
 
-        // echo "<br>$cmdline<br>";
         self::display_message(array('type' => "highlight", 'msg' => $status));
         
-        /* working also
-        $wiki_page = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id'];
-        echo "<br><a href=\"$wiki_page\">Wiki for Page ID: " . $p['page_id'] . " </a><br>";
-        */
+        // working also
+        // $wiki_page = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id'];
+        // echo "<br><a href=\"$wiki_page\">Wiki for Page ID: " . $p['page_id'] . " </a><br>";
         
-        self::display_message(array('type' => "highlight", 'msg' => "$status2 <a href=\"$wiki_page\">" . $params['pass_title'] . " </a>"));
+        self::display_message(array('type' => "highlight", 'msg' => "$status2 <a href=\"$wiki_page\">" . $new_title . " </a>"));
 
         // echo "<br>getcwd() = " . getcwd();
         // echo "<br>doc_root = " . $_SERVER['DOCUMENT_ROOT'];
         // echo "<br>doc_root = " . DOC_ROOT;
         // echo "<br>script = " . $_SERVER['SCRIPT_FILENAME'];
         // echo "<br>server = " . $_SERVER['SERVER_NAME'];
+        // */
     }
     
     function write_page_info($xml, $file, $params, $go_top)
@@ -948,6 +965,14 @@ class bhl_access_controller //extends ControllerBase
         $wiki = str_replace("-", "&ndash;", $wiki);
         $wiki = str_replace(array("\n"), "", $wiki);
         return $wiki;
+    }
+    
+    function check_if_this_title_has_wiki_v2($page_id)
+    {
+        $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&list=search&srsearch=" . $page_id . "&srprop=timestamp" . "&format=json";
+        $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
+        $obj = json_decode($json); //have 2nd param as boolean true, to return array(); otherwise it is object
+        return $obj->query->search;
     }
     
     function check_if_this_title_has_wiki($title, $version)
@@ -1576,9 +1601,9 @@ class bhl_access_controller //extends ControllerBase
     {
         return array(
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#TaxonBiology", "t" => "Overview › Brief Summary"), 
-        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Description", "t" => "Overview › Comprehensive Description > Description"), 
-        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription", "t" => "Overview › Comprehensive Description > General Description"), 
-        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Biology", "t" => "Overview › Comprehensive Description > Biology"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Description", "t" => "Overview › Comprehensive Description › Description"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription", "t" => "Overview › Comprehensive Description › General Description"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Biology", "t" => "Overview › Comprehensive Description › Biology"), 
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Distribution", "t" => "Overview › Distribution"), 
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Morphology", "t" => "Physical Description › Morphology"), 
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Size", "t" => "Physical Description › Size"), 
@@ -1608,11 +1633,11 @@ class bhl_access_controller //extends ControllerBase
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Genetics", "t" => "Molecular Biology and Genetics › Genetics"), 
         array("url" => "http://eol.org/schema/eol_info_items.xml#Genome", "t" => "Molecular Biology and Genetics › Genome"), 
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#MolecularBiology", "t" => "Molecular Biology and Genetics › Molecular Biology"), 
-        array("url" => "http://eol.org/schema/eol_info_items.xml#Barcode", "t" => "Molecular Biology and Genetics › Molecular Biology > Barcode"), 
+        array("url" => "http://eol.org/schema/eol_info_items.xml#Barcode", "t" => "Molecular Biology and Genetics › Molecular Biology › Barcode"), 
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#ConservationStatus", "t" => "Conservation › Conservation Status"), 
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Conservation", "t" => "Conservation › Conservation"), 
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Trends", "t" => "Conservation › Trends"), 
-        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Procedures", "t" => "Conservation › Threats > Procedures"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Procedures", "t" => "Conservation › Threats › Procedures"), 
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Threats", "t" => "Conservation › Threats"), 
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Management", "t" => "Conservation › Management"), 
         array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Use", "t" => "Relevance to Humans and Ecosystems › Benefits"), 
@@ -1623,7 +1648,7 @@ class bhl_access_controller //extends ControllerBase
         array("url" => "http://eol.org/schema/eol_info_items.xml#EducationResources", "t" => "Education Resources"), 
         array("url" => "http://eol.org/schema/eol_info_items.xml#Education", "t" => "Education"), 
         array("url" => "http://eol.org/schema/eol_info_items.xml#CitizenScience", "t" => "Citizen Science Links"), 
-        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Key", "t" => "Identification Resources > Key"), 
+        array("url" => "http://rs.tdwg.org/ontology/voc/SPMInfoItems#Key", "t" => "Identification Resources › Key"), 
         array("url" => "http://eol.org/schema/eol_info_items.xml#IdentificationResources", "t" => "Identification Resources"), 
         array("url" => "http://eol.org/schema/eol_info_items.xml#NucleotideSequences", "t" => "Nucleotide Sequences"));
     }
