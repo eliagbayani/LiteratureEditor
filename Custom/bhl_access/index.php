@@ -52,7 +52,7 @@ if(isset($params['search_type']))
     if    ($params['search_type'] == "titlelist") print $ctrler->render_template('titlelist-result', array('letter' => @$params['radio']));
     elseif($params['search_type'] == "move2wiki") print $ctrler->render_template('move2wiki-result', array('params' => @$params));
     elseif($params['search_type'] == "reviewexcerpt") print $ctrler->render_template('reviewexcerpt-result', array('params' => @$params));
-    
+    elseif($params['search_type'] == "wiki2php") print $ctrler->render_template('wiki2php-result', array('params' => @$params));
 }
 
 require_once("../config/script-below-entry.html");

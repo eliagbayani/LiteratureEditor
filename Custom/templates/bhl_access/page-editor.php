@@ -187,10 +187,9 @@ $msgs = self::page_editor_msgs();
                 </form>
             </td>
             </tr>
-
             <form name="" action="index.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="search_type" id="search_type" value="pagesearch">
-            <input type="hidden" name="page_id" value="<?php echo $PageID ?>">
+            <input type="hidden" name="page_id" value="<?php echo $PageID ?>"> <!--- this may not be needed --->
             <input type="hidden" name="PageID" value="<?php echo $PageID ?>">
             <input type="hidden" name="recently_added" value="<?php echo $next_page ?>">
             <input type="hidden" name="label_added" value="<?php echo $label_added ?>">

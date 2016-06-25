@@ -38,6 +38,9 @@ class bhl_access_controller //extends ControllerBase
         $this->id_url['eol'] = "http://www.eol.org/pages/";
         $this->id_url['creator'] = "http://www.biodiversitylibrary.org/creator/";
         $this->parag_separator = "==================== paragraph separator ====================";
+        
+        $this->mediawiki_api = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php";
+        
     }
 
     function user_is_logged_in_wiki()
@@ -355,48 +358,6 @@ class bhl_access_controller //extends ControllerBase
         }
     }
     
-    /*
-    Array
-    (
-        [search_type] => move2wiki_v2
-        [page_id] => 16194405
-        [PageID] => 16194405
-        [recently_added] => 16194408
-        [label_added] =>  16194406 16194407
-        [label_added_ref] =>  16194324 16194325 16194407
-        [header_title] => Proceedings of the Entomological Society of Washington. v 101 1998
-        [next_page] => 16194408
-        [ItemID] => 54810
-        [AddPage] => 
-        [accordion_item] => 
-        [subject_type] => http://rs.tdwg.org/ontology/voc/SPMInfoItems#Morphology
-        [title_form] => The Answer
-        [ocr_text] => the first ocr text
-    ==================== added ====================
-    the 2nd ocr text
-    ==================== added ====================
-    The 3rd ocr text
-        [ref_page_id] => 
-        [ref_prioritized] => 
-        [references] => ==================== added ====================
-    first parag reference
-    ==================== added ====================
-    2nd parag refrence
-    ==================== added ====================
-    third part referece...
-        [taxon_asso] => Asteraceae; Diptera; Trixis californica
-        [separated_names] => Asteraceae|Bebbia juncea|Diptera|Pteromalidae|Pteromalus|Tephritidae|Tomoplagia|Trixis|Trixis californica|Trupanea|Trupanea arizonensis|Trupanea conjuncta|Acamptopappus|Aciurina thoracica Curran, 1932|Baccharis sarothroides|Cirsium californicum|Cirsium proteanum J. T. Howell|Paracantha gentilis|Porophyllum gracile|Trupanea actinobola|Trupanea bisetosa|Trupanea californica|Trupanea jonesi|Trupanea nigricornis|Trypetidae|Agarodes|Agarodes alabamensis|Agarodes crassicornis|Agarodes distincta|Agarodes grisea|Agarodes libalis|Agarodes logani|Agarodes stannardi|Agarodes tuskaloosa|Agarodes ziczac|Sericostomatidae|Trichoptera
-        [language] => en
-        [license_type] => http://creativecommons.org/licenses/by-nc/3.0/
-        [rightsholder] => Eli E. Agbayani
-        [agents] => Goeden, R D; Teerink, J A
-        [bibliographicCitation] => Goeden, R D; Teerink, J A. 1999. LIFE HISTORY AND DESCRIPTION OF IMMATURE STAGES OF TRUPANEA ARIZONENSIS MALLOCH (DIPTERA : TEPHRITIDAE) ON TRIXIS CALIFORNICA KELLOGG VAR. CALIFORNICA (ASTERACEAE) IN SOUTHERN CALIFORNIA. Proceedings of the Entomological Society of Washington 101 :75--85.
-        [contributor] => the contributor
-        [public] => on
-        [children] => on
-    )    
-    */
-    
     function create_title($p)
     {
         /*
@@ -576,7 +537,7 @@ class bhl_access_controller //extends ControllerBase
                     fwrite($file, "|}\n");
                 }
 
-                fwrite($file, "== References ==\n");
+                fwrite($file, "== References == {{^|A lengthy comment here}} <!-- " . trim($params['label_added_ref']) . " -->\n");
                 $ocrs = self::prep_ocrs_4disp($params['references']);
                 foreach($ocrs as $ocr)
                 {
@@ -966,6 +927,76 @@ class bhl_access_controller //extends ControllerBase
         $wiki = str_replace(array("\n"), "", $wiki);
         return $wiki;
     }
+    
+    //=======================================================
+    function wiki2html($p)
+    {
+        /*
+        $url = "/LiteratureEditor/api.php?action=query&meta=userinfo&uiprop=groups|realname&format=json";
+        $json = self::get_api_result($url);
+        */
+        $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($p['title']) . "&format=json&prop=revisions&rvprop=content";
+        $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
+        $arr = json_decode($json, true);
+        echo "<pre>";print_r($arr);echo "</pre>";
+        foreach(@$arr['query']['pages'] as $page) //there is really just one page here...
+        {
+            if($val = @$page['revisions'][0]['*'])
+            {
+                $data = self::parse_wiki_text($val);
+            }
+        }
+    }
+    /*
+    Array
+    (
+        [search_type] => reviewexcerpt
+        [page_id] => 16194405
+        [PageID] => 16194405
+        [recently_added] => 16194408
+        [label_added] =>  16194406 16194407
+        [label_added_ref] =>  16194410
+        [header_title] => Proceedings of the Entomological Society of Washington. v 101 1998
+        [copyrightstatus] => In copyright. Digitized with the permission of the rights holder.
+        [next_page] => 16194408
+        [ItemID] => 54810
+        [AddPage] => 
+        [accordion_item] => 1
+        [compiler] => [http://editors.eol.localhost/LiteratureEditor/wiki/User:EAgbayani Eli E. Agbayani]
+        [subject_type] => http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription
+        [title_form] => My Title
+        [ocr_text] => aaabbb ccc==================== paragraph separator ====================ddd eee ffff==================== paragraph separator ====================ggg hhh iiijjjkkk lll
+        [ref_page_id] => 
+        [ref_prioritized] => 
+        [references] => ==================== paragraph separator ====================VOLUME 101. NUMBER 1 89 stannardi differing only in the pair of short  processes extending from apex of the dor–  sum of segment IX. These processes in A.  stannardi are divergent and basally lobate  in dorsal view (Fig. 3) and in A. logani nar–  row and lacking basal lobes (Fig. 4).
+        [taxon_asso] => Asteraceae;Bebbia juncea
+        [separated_names] => Asteraceae|Bebbia juncea|Diptera|Pteromalidae|Pteromalus|Tephritidae|Tomoplagia|Trixis|Trixis californica|Trupanea|Trupanea arizonensis|Trupanea conjuncta|Acamptopappus|Aciurina thoracica Curran, 1932|Baccharis sarothroides|Cirsium californicum|Cirsium proteanum J. T. Howell|Paracantha gentilis|Porophyllum gracile|Trupanea actinobola|Trupanea bisetosa|Trupanea californica|Trupanea jonesi|Trupanea nigricornis|Trypetidae|Agarodes|Agarodes alabamensis|Agarodes crassicornis|Agarodes distincta|Agarodes grisea|Agarodes libalis|Agarodes logani|Agarodes stannardi|Agarodes tuskaloosa|Agarodes ziczac|Sericostomatidae|Trichoptera
+        [language] => English
+        [license_type] => Attribution-NonCommercial 3.0
+        [rightsholder] => Cha Badder
+        [agents] => Goeden, R D; Teerink, J A; Eli
+        [bibliographicCitation] => Goeden, R D; Teerink, J A. 1999. LIFE HISTORY AND DESCRIPTION OF IMMATURE STAGES OF TRUPANEA ARIZONENSIS MALLOCH (DIPTERA : TEPHRITIDAE) ON TRIXIS CALIFORNICA KELLOGG VAR. CALIFORNICA (ASTERACEAE) IN SOUTHERN CALIFORNIA. Proceedings of the Entomological Society of Washington 101 :75--85.
+        [contributor] => the contributor
+        [public] => on
+        [children] => on
+    )
+    */
+    
+    function parse_wiki_text($str)
+    {
+        $d = array();
+        echo "<pre>";print($str);echo"</pre>";
+        
+        if(preg_match("/Excerpt from '''(.*?)'''/ims", $str, $arr)) $d['header_title'] = $arr[1];
+        if(preg_match("/== Bibliographic Citation ==(.*?)== Excerpt Metadata ==/ims", $str, $arr)) $d['bibliographicCitation'] = trim($arr[1]);
+        // '''Authors''': Goeden, R D; Teerink, J A
+
+        if(preg_match("/'''Authors''': (.*?)\\n/ims", $str, $arr)) $d['agents'] = $arr[1];
+        
+        
+        echo "<pre>";print_r($d);echo"</pre>";
+    }
+    //=======================================================
     
     function check_if_this_title_has_wiki_v2($page_id)
     {

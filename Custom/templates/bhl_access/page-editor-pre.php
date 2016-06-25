@@ -19,19 +19,18 @@ if(count(array_keys($params)) == 2)
             if(count($titles > 1)) $str = "excerpts have";
             else                   $str = "excerpt has";
             self::display_message(array('type' => "error", 'msg' => "Page $Page->PageID has already been processed. &nbsp;The following $str been created:"));
-
-
             foreach($titles as $r)
             {
                 $desc = str_replace("$Page->PageID ", "", $r->title);
                 $desc = explode(" ", $desc);
                 array_pop($desc);
                 $desc = implode(" ", $desc);
-                echo "<br> - $desc";
+                echo "<br>$desc - <a href='index.php?search_type=wiki2php&title=$r->title'>view</a>";
+                
+                
+                
             }
-
             echo "<p><a href='index.php?search_type=pagesearch&page_id=$Page->PageID&continue'>Create new excerpt for this page</a>";
-
             //Overview › Brief Summary - view
             //Ecology › Associations - view
         }
