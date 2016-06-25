@@ -364,12 +364,9 @@ class bhl_access_controller //extends ControllerBase
         $arr = explode("›", self::get_subject_desc($p['subject_type']));
         $subj_part = str_replace(" ", "_", trim(array_pop($arr)));
         */
-
         $subj_part = self::get_subject_desc($p['subject_type']);
         $subj_part = str_replace(" ", "_", trim($subj_part));
-        
         $title = $p['page_id'] . "__" . $subj_part . "__" . md5($p['label_added'].$p['label_added_ref'].$p['subject_type'].$p['title_form'].$p['ocr_text'].$p['taxon_asso'].$p['references']);
-        echo "<br>[$title]<br>";
         return $title;
     }
 
@@ -487,6 +484,13 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "<span class=\"plainlinks\">[$back Back to BHL API result page]</span>[[Image:Back icon.png|link=$back|Back to BHL API result page]]\n");
                 */
                 
+                // fwrite($file, "{{Void|[label_added_ref:" . trim($params['label_added_ref']) . "]" . "}}\n");
+                $pass_params = json_encode($params);
+                $pass_params = substr($pass_params,1,strlen($pass_params)); //remove first char
+                $pass_params = substr($pass_params, 0, -1);                 //remove last char
+                fwrite($file, "{{Void|" . $pass_params . "}}\n");
+                
+                
                 fwrite($file, "=== Review excerpt ===\n");
                 fwrite($file, "Excerpt from " . "'''" . $params['header_title'] . "'''" . "\n\n");
                 $ids = self::prep_pageids_4disp($params);
@@ -537,7 +541,7 @@ class bhl_access_controller //extends ControllerBase
                     fwrite($file, "|}\n");
                 }
 
-                fwrite($file, "== References == {{^|A lengthy comment here}} <!-- " . trim($params['label_added_ref']) . " -->\n");
+                fwrite($file, "== References ==\n");
                 $ocrs = self::prep_ocrs_4disp($params['references']);
                 foreach($ocrs as $ocr)
                 {
@@ -610,314 +614,6 @@ class bhl_access_controller //extends ControllerBase
         // */
     }
     
-    function write_page_info($xml, $file, $params, $go_top)
-    {
-        $color_green = "color:green; background-color:#ffffcc;";
-        
-        // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=42194842&search_type=pagesearch
-        $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?page_id=" . $xml->Result->PageID . "&search_type=pagesearch";
-        $back .= "&subject_type=" . urlencode($params['subject_type']);
-        $back .= "&audience_type=" . urlencode($params['audience_type']);
-        $back .= "&license_type=" . urlencode($params['license_type']);
-        $back .= "&agents=" . urlencode($params['agents']);
-        $back .= "&taxon_names=" . urlencode($params['taxon_names']);
-        
-        fwrite($file, "<span class=\"plainlinks\">[$back Back to BHL API result page]</span>[[Image:Back icon.png|link=$back|Back to BHL API result page]]\n");
-
-        // fwrite($file, "[[Contributing User::{{subst:REVISIONUSER}}]]\n");
-        // fwrite($file, "[[Contributing User::{{subst:USERNAME}}]]\n");
-        // fwrite($file, "[[Contributing User::{{subst:CURRENTUSER}}]]\n");
-        
-        $wiki_user = "";
-        if(isset($_COOKIE['wiki_literatureeditorUserName'])) $wiki_user = $_COOKIE['wiki_literatureeditorUserName'];
-        
-        $agent_url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:{$wiki_user}";
-        fwrite($file, "<br /><span class=\"plainlinks\">Contributing User: [$agent_url <b>{$wiki_user}</b>]</span>\n");
-        
-        if($loop = @$xml->Result)
-        {
-            foreach($loop as $Page)
-            {
-                $Page_xml = $Page;
-                $Page = json_decode(json_encode($Page)); //converting SimpleXMLElement Object to stdClass Object
-
-                // print_r($Page); exit;
-
-                //User-defined Title
-                fwrite($file, "===User-defined Title (optional)===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"User-defined Title\"\n");
-                fwrite($file, "$go_top\n");
-                fwrite($file, "|" . "''enter title here''" . "\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-
-                //Taxa List
-                fwrite($file, "===Taxa Found in Page===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Taxa Found in Page\"\n");
-                fwrite($file, "$go_top\n");
-                fwrite($file, "|" . $params['taxon_names']."\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-                
-                if(@$params['licensor'])
-                {
-                    //Licensor
-                    fwrite($file, "===Licensor===\n");
-                    fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Licensor\"\n");
-                    fwrite($file, "$go_top\n");
-                    fwrite($file, "|" . self::format_wiki($params['licensor'])."\n");
-                    fwrite($file, "|-\n");
-                    fwrite($file, "|}\n");
-                }
-
-                //Subject Type
-                fwrite($file, "===Subject Type===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Subject Type\"\n");
-                fwrite($file, "$go_top\n");
-                fwrite($file, "|" . self::format_wiki($params['subject_type'])."\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-
-                //License Type
-                fwrite($file, "===License Type===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"License Type\"\n");
-                fwrite($file, "$go_top\n");
-                fwrite($file, "|" . self::format_wiki($params['license_type'])."\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-
-                //Bibliographic Citation
-                fwrite($file, "===Bibliographic Citation===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Bibliographic Citation\"\n");
-                fwrite($file, "$go_top\n");
-                fwrite($file, "|" . self::format_wiki($params['bibliographicCitation'])."\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-
-                //Authors
-                fwrite($file, "===Authors===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Authors\"\n");
-                fwrite($file, "$go_top\n");
-                $agents = explode("; ", @$params['agents']);
-                foreach($agents as $agent)
-                {
-                    fwrite($file, "|" . self::format_wiki($agent)."\n");
-                    fwrite($file, "|-\n");
-                }
-                fwrite($file, "|}\n");
-
-
-                //Audience Type
-                fwrite($file, "===Audience Type===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Audience Type\"\n");
-                fwrite($file, "$go_top\n");
-                fwrite($file, "|" . self::format_wiki($params['audience_type'])."\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-
-                //References
-                fwrite($file, "===User-defined References (optional)===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"User-defined References\"\n");
-                fwrite($file, "$go_top\n");
-                fwrite($file, "|" . "\n");
-                fwrite($file, "<ref name=\"ref1\">John's Handbook, Third Edition, Doe-Roe Co., 1972.</ref><!-- Put your reference here or leave it as is. This sample won't be imported -->" . "\n");
-                fwrite($file, "<ref name=\"ref2\">[http://www.eol.org Link text], my 2nd sample reference.</ref><!-- Put your reference here or leave it as is. This sample won't be imported -->" . "\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-                // fwrite($file, "<references/><!-- Put this line \"<references/>\" elsewhere to display the reference or footnote list in that part of the wiki. -->\n");
-                fwrite($file, "<!--\n");
-                fwrite($file, "Then, if you want to add citation points at any part of your wiki, just enter: e.g.\n\n");
-                fwrite($file, "<ref name=\"ref1\"/>\n\n...and this will display the auto-numbered superscripts as link text in that part of the wiki.\n");
-                fwrite($file, "-->\n");
-                fwrite($file, "<br>\n");
-                
-                //page summary
-                fwrite($file, "===Page Summary===\n");
-                fwrite($file, "{| class=\"wikitable\" name=\"Page Summary\"\n");
-                fwrite($file, "$go_top\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PageID\n");             fwrite($file, "| $Page->PageID\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ItemID\n");             fwrite($file, "| $Page->ItemID\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Volume\n");             fwrite($file, "| " . @$Page->Volume."\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Issue\n");              fwrite($file, "| " . @$Page->Issue."\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Year\n");               fwrite($file, "| " . @$Page->Year."\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PageUrl\n");            fwrite($file, "| " . @$Page->PageUrl."\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ThumbnailUrl\n");       fwrite($file, "| " . @$Page->ThumbnailUrl."\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| FullSizeImageUrl\n");   fwrite($file, "| " . @$Page->FullSizeImageUrl."\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| OcrUrl\n");             fwrite($file, "| " . @$Page->OcrUrl."\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-
-                //OCR Text
-                fwrite($file, "===OCR Text===\n");
-                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"OCR Text\"\n");
-                fwrite($file, "$go_top\n");
-                fwrite($file, "|" . self::format_wiki($Page->OcrText)."\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-
-                //taxa
-                fwrite($file, "===Taxa Found in Page (tabular)===\n");
-                $total_taxa = count($Page_xml->Names->Name);
-                fwrite($file, "Name(s): " . $total_taxa . "<br />\n");
-                // if($total_taxa)
-                // {
-                    fwrite($file, "{| class=\"wikitable\" name=\"Taxa Found in Page (tabular)\"\n");
-                    fwrite($file, "$go_top\n");
-                    fwrite($file, "|-\n");
-                    fwrite($file, "! scope=\"col\"|NameBankID   ||! scope=\"col\"|EOLID ||! scope=\"col\"|NameFound ||! scope=\"col\"|NameConfirmed\n");
-                    if($total_taxa)
-                    {
-                        foreach($Page_xml->Names->Name as $Name)
-                        {
-                            fwrite($file, "|-\n");
-                            fwrite($file, "|$Name->NameBankID   ||$Name->EOLID  ||$Name->NameFound  ||$Name->NameConfirmed\n");
-                        }
-                    }
-                    // else
-                    // {
-                        /*
-                        fwrite($file, "|-\n");
-                        fwrite($file, "|NameBankID1   ||EOLID1  ||NameFound1  ||NameConfirmed1 <!-- This is just sample entry, will be ignored. Overwrite to add taxon. -->\n");
-                        fwrite($file, "|-\n");
-                        fwrite($file, "|NameBankID2   ||EOLID2  ||NameFound2  ||NameConfirmed2 <!-- This is just sample entry, will be ignored. Overwrite to add taxon. -->\n");
-                        */
-                    // }
-                    
-                    fwrite($file, "|-\n");
-                    fwrite($file, "|}\n");
-                    
-                    /*
-                    fwrite($file, "<!-- Only the field NameConfirmed is required. The other three fields (NameBankID, EOLID, NameFound) are optional. -->" . "\n");
-                    */
-                    
-                // }
-                
-                //Page Types
-                fwrite($file, "===Page Types===\n");
-                $total_page_types = count(@$Page->PageTypes->PageType);
-                if($total_page_types)
-                {
-                    fwrite($file, "{| class=\"wikitable\" name=\"Page Types\"\n");
-                    fwrite($file, "$go_top\n");
-                    fwrite($file, "|-\n");
-                    fwrite($file, "! scope=\"col\"|PageTypeName\n");
-                    if($total_page_types == 1)
-                    {
-                        foreach($Page->PageTypes as $PageType)
-                        {
-                            fwrite($file, "|-\n");
-                            fwrite($file, "|" . (string) @$PageType->PageTypeName . "\n");
-                        }
-                    }
-                    elseif($total_page_types > 1)
-                    {
-                        foreach($Page->PageTypes->PageType as $PageType)
-                        {
-                            fwrite($file, "|-\n");
-                            fwrite($file, "|" . (string) @$PageType->PageTypeName . "\n");
-                        }
-                    }
-                    fwrite($file, "|-\n");
-                    fwrite($file, "|}\n");
-                }
-                
-                //Page Numbers
-                fwrite($file, "===Page Numbers===\n");
-                $total_page_numbers = count(@$Page->PageNumbers->PageNumber);
-                if($total_page_numbers)
-                {
-                    fwrite($file, "{| class=\"wikitable\" name=\"Page Numbers\"\n");
-                    fwrite($file, "$go_top\n");
-                    fwrite($file, "|-\n");
-                    fwrite($file, "! scope=\"col\"|Prefix   ||! scope=\"col\"|Number\n");
-                    
-                    if($total_page_numbers == 1)
-                    {
-                        foreach($Page->PageNumbers as $PageNumber)
-                        {
-                            fwrite($file, "|-\n");
-                            fwrite($file, "|" . @$PageNumber->Prefix . "   ||" . @$PageNumber->Number . "\n");
-                        }
-                    }
-                    elseif($total_page_numbers > 1)
-                    {
-                        foreach($Page->PageNumbers->PageNumber as $PageNumber)
-                        {
-                            fwrite($file, "|-\n");
-                            fwrite($file, "|" . @$PageNumber->Prefix . "   ||" . self::string_or_object(@$PageNumber->Number) . "\n");
-                        }
-                    }
-                    fwrite($file, "|-\n");
-                    fwrite($file, "|}\n");
-                }
-                
-            }//foreach loop ends
-        }
-    }
-    
-    function write_item_info($xml, $file, $go_top)
-    {
-        if($loop = @$xml->Result)
-        {
-            foreach($loop as $item)
-            {
-                fwrite($file, "===Item Summary===\n");
-                fwrite($file, "{| class=\"wikitable\" name=\"Item Summary\"\n");
-                fwrite($file, "$go_top\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ItemID\n");             fwrite($file, "| $item->ItemID\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PrimaryTitleID\n");     fwrite($file, "| $item->PrimaryTitleID\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ThumbnailPageID\n");    fwrite($file, "| $item->ThumbnailPageID\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Source\n");             fwrite($file, "| $item->Source\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| SourceIdentifier\n");   fwrite($file, "| $item->SourceIdentifier\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Volume\n");             fwrite($file, "| $item->Volume\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Year\n");               fwrite($file, "| $item->Year\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Contributor\n");        fwrite($file, "| $item->Contributor\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Sponsor\n");            fwrite($file, "| $item->Sponsor\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Language\n");           fwrite($file, "| $item->Language\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| LicenseUrl\n");         fwrite($file, "| $item->LicenseUrl\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Rights\n");             fwrite($file, "| $item->Rights\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| DueDiligence\n");       fwrite($file, "| $item->DueDiligence\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| CopyrightStatus\n");    fwrite($file, "| $item->CopyrightStatus\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| CopyrightRegion\n");    fwrite($file, "| $item->CopyrightRegion\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ExternalUrl\n");        fwrite($file, "| $item->ExternalUrl\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ItemUrl\n");            fwrite($file, "| $item->ItemUrl\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| TitleUrl\n");           fwrite($file, "| $item->TitleUrl\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ItemThumbUrl\n");       fwrite($file, "| $item->ItemThumbUrl\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-            }
-        }
-    }
-
-    function write_title_info($xml, $file, $go_top)
-    {
-        if($loop = @$xml->Result)
-        {
-            foreach($loop as $title)
-            {
-                fwrite($file, "===Title Summary===\n");
-                fwrite($file, "{| class=\"wikitable\" name=\"Title Summary\"\n");
-                fwrite($file, "$go_top\n");    
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| TitleID\n");                fwrite($file, "| $title->TitleID\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| BibliographicLevel\n");     fwrite($file, "| $title->BibliographicLevel\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| FullTitle\n");              fwrite($file, "| $title->FullTitle\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ShortTitle\n");             fwrite($file, "| $title->ShortTitle\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| SortTitle\n");              fwrite($file, "| $title->SortTitle\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PartNumber\n");             fwrite($file, "| $title->PartNumber\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PartName\n");               fwrite($file, "| $title->PartName\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| CallNumber\n");             fwrite($file, "| $title->CallNumber\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Edition\n");                fwrite($file, "| $title->Edition\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PublisherPlace\n");         fwrite($file, "| $title->PublisherPlace\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PublisherName\n");          fwrite($file, "| $title->PublisherName\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PublicationDate\n");        fwrite($file, "| $title->PublicationDate\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PublicationFrequency\n");   fwrite($file, "| $title->PublicationFrequency\n");
-                fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| TitleUrl\n");               fwrite($file, "| $title->TitleUrl\n");
-                fwrite($file, "|-\n");
-                fwrite($file, "|}\n");
-            }
-        }
-    }
-    
     function format_wiki($wiki)
     {
         /* works but only replaces the first char dash.
@@ -926,26 +622,6 @@ class bhl_access_controller //extends ControllerBase
         $wiki = str_replace("-", "&ndash;", $wiki);
         $wiki = str_replace(array("\n"), "", $wiki);
         return $wiki;
-    }
-    
-    //=======================================================
-    function wiki2html($p)
-    {
-        /*
-        $url = "/LiteratureEditor/api.php?action=query&meta=userinfo&uiprop=groups|realname&format=json";
-        $json = self::get_api_result($url);
-        */
-        $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($p['title']) . "&format=json&prop=revisions&rvprop=content";
-        $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
-        $arr = json_decode($json, true);
-        echo "<pre>";print_r($arr);echo "</pre>";
-        foreach(@$arr['query']['pages'] as $page) //there is really just one page here...
-        {
-            if($val = @$page['revisions'][0]['*'])
-            {
-                $data = self::parse_wiki_text($val);
-            }
-        }
     }
     /*
     Array
@@ -981,20 +657,48 @@ class bhl_access_controller //extends ControllerBase
         [children] => on
     )
     */
+    //=======================================================
+    function wiki2html($p)
+    {
+        /*
+        $url = "/LiteratureEditor/api.php?action=query&meta=userinfo&uiprop=groups|realname&format=json";
+        $json = self::get_api_result($url);
+        */
+        $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($p['title']) . "&format=json&prop=revisions&rvprop=content";
+        $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
+        $arr = json_decode($json, true);
+        // echo "<pre>";print_r($arr);echo "</pre>";
+        foreach(@$arr['query']['pages'] as $page) //there is really just one page here...
+        {
+            if($val = @$page['revisions'][0]['*'])
+            {
+                $data = self::parse_wiki_text($val);
+            }
+        }
+    }
     
     function parse_wiki_text($str)
     {
+        if(preg_match("/Void\|(.*?)\}\}/ims", $str, $arr)) 
+        {
+            $json = "{" . $arr[1] . "}";
+            $params = json_decode($json, true);
+            // echo "<pre>";print_r($params);echo"</pre>";
+            print self::render_template('reviewexcerpt-result', array('params' => @$params));
+        }
+        /* not needed, since there is a short-cut, the one above this :-)
         $d = array();
         echo "<pre>";print($str);echo"</pre>";
-        
         if(preg_match("/Excerpt from '''(.*?)'''/ims", $str, $arr)) $d['header_title'] = $arr[1];
         if(preg_match("/== Bibliographic Citation ==(.*?)== Excerpt Metadata ==/ims", $str, $arr)) $d['bibliographicCitation'] = trim($arr[1]);
-        // '''Authors''': Goeden, R D; Teerink, J A
-
         if(preg_match("/'''Authors''': (.*?)\\n/ims", $str, $arr)) $d['agents'] = $arr[1];
-        
-        
+        if(preg_match("/== References ==(.*?)\}\}/ims", $str, $arr))
+        {
+            $temp = $arr[1]."xx";
+            if(preg_match("/Void\|(.*?)xx/ims", $temp, $arr2)) $d['label_added_ref'] = $arr2[1];
+        }
         echo "<pre>";print_r($d);echo"</pre>";
+        */
     }
     //=======================================================
     
@@ -1684,6 +1388,284 @@ class bhl_access_controller //extends ControllerBase
         array("url" => "http://eol.org/schema/eol_info_items.xml#NucleotideSequences", "t" => "Nucleotide Sequences"));
     }
 }
+
+/*
+function write_page_info($xml, $file, $params, $go_top)
+{
+    $color_green = "color:green; background-color:#ffffcc;";
+    // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?page_id=42194842&search_type=pagesearch
+    $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?page_id=" . $xml->Result->PageID . "&search_type=pagesearch";
+    $back .= "&subject_type=" . urlencode($params['subject_type']);
+    $back .= "&audience_type=" . urlencode($params['audience_type']);
+    $back .= "&license_type=" . urlencode($params['license_type']);
+    $back .= "&agents=" . urlencode($params['agents']);
+    $back .= "&taxon_names=" . urlencode($params['taxon_names']);
+    fwrite($file, "<span class=\"plainlinks\">[$back Back to BHL API result page]</span>[[Image:Back icon.png|link=$back|Back to BHL API result page]]\n");
+    // fwrite($file, "[[Contributing User::{{subst:REVISIONUSER}}]]\n");
+    // fwrite($file, "[[Contributing User::{{subst:USERNAME}}]]\n");
+    // fwrite($file, "[[Contributing User::{{subst:CURRENTUSER}}]]\n");
+    $wiki_user = "";
+    if(isset($_COOKIE['wiki_literatureeditorUserName'])) $wiki_user = $_COOKIE['wiki_literatureeditorUserName'];
+    $agent_url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:{$wiki_user}";
+    fwrite($file, "<br /><span class=\"plainlinks\">Contributing User: [$agent_url <b>{$wiki_user}</b>]</span>\n");
+    if($loop = @$xml->Result)
+    {
+        foreach($loop as $Page)
+        {
+            $Page_xml = $Page;
+            $Page = json_decode(json_encode($Page)); //converting SimpleXMLElement Object to stdClass Object
+            //User-defined Title
+            fwrite($file, "===User-defined Title (optional)===\n");
+            fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"User-defined Title\"\n");
+            fwrite($file, "$go_top\n");
+            fwrite($file, "|" . "''enter title here''" . "\n");
+            fwrite($file, "|-\n");
+            fwrite($file, "|}\n");
+            //Taxa List
+            fwrite($file, "===Taxa Found in Page===\n");
+            fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Taxa Found in Page\"\n");
+            fwrite($file, "$go_top\n");
+            fwrite($file, "|" . $params['taxon_names']."\n");
+            fwrite($file, "|-\n");
+            fwrite($file, "|}\n");
+            if(@$params['licensor'])
+            {
+                //Licensor
+                fwrite($file, "===Licensor===\n");
+                fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Licensor\"\n");
+                fwrite($file, "$go_top\n");
+                fwrite($file, "|" . self::format_wiki($params['licensor'])."\n");
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
+            }
+            //Subject Type
+            fwrite($file, "===Subject Type===\n");
+            fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Subject Type\"\n");
+            fwrite($file, "$go_top\n");
+            fwrite($file, "|" . self::format_wiki($params['subject_type'])."\n");
+            fwrite($file, "|-\n");
+            fwrite($file, "|}\n");
+            //License Type
+            fwrite($file, "===License Type===\n");
+            fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"License Type\"\n");
+            fwrite($file, "$go_top\n");
+            fwrite($file, "|" . self::format_wiki($params['license_type'])."\n");
+            fwrite($file, "|-\n");
+            fwrite($file, "|}\n");
+            //Bibliographic Citation
+            fwrite($file, "===Bibliographic Citation===\n");
+            fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Bibliographic Citation\"\n");
+            fwrite($file, "$go_top\n");
+            fwrite($file, "|" . self::format_wiki($params['bibliographicCitation'])."\n");
+            fwrite($file, "|-\n");
+            fwrite($file, "|}\n");
+            //Authors
+            fwrite($file, "===Authors===\n");
+            fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Authors\"\n");
+            fwrite($file, "$go_top\n");
+            $agents = explode("; ", @$params['agents']);
+            foreach($agents as $agent)
+            {
+                fwrite($file, "|" . self::format_wiki($agent)."\n");
+                fwrite($file, "|-\n");
+            }
+            fwrite($file, "|}\n");
+            //Audience Type
+            fwrite($file, "===Audience Type===\n");
+            fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"Audience Type\"\n");
+            fwrite($file, "$go_top\n");
+            fwrite($file, "|" . self::format_wiki($params['audience_type'])."\n");
+            fwrite($file, "|-\n");
+            fwrite($file, "|}\n");
+            //References
+            fwrite($file, "===User-defined References (optional)===\n");
+            fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"User-defined References\"\n");
+            fwrite($file, "$go_top\n");
+            fwrite($file, "|" . "\n");
+            fwrite($file, "<ref name=\"ref1\">John's Handbook, Third Edition, Doe-Roe Co., 1972.</ref><!-- Put your reference here or leave it as is. This sample won't be imported -->" . "\n");
+            fwrite($file, "<ref name=\"ref2\">[http://www.eol.org Link text], my 2nd sample reference.</ref><!-- Put your reference here or leave it as is. This sample won't be imported -->" . "\n");
+            fwrite($file, "|-\n");
+            fwrite($file, "|}\n");
+            // fwrite($file, "<references/><!-- Put this line \"<references/>\" elsewhere to display the reference or footnote list in that part of the wiki. -->\n");
+            fwrite($file, "<!--\n");
+            fwrite($file, "Then, if you want to add citation points at any part of your wiki, just enter: e.g.\n\n");
+            fwrite($file, "<ref name=\"ref1\"/>\n\n...and this will display the auto-numbered superscripts as link text in that part of the wiki.\n");
+            fwrite($file, "-->\n");
+            fwrite($file, "<br>\n");
+            //page summary
+            fwrite($file, "===Page Summary===\n");
+            fwrite($file, "{| class=\"wikitable\" name=\"Page Summary\"\n");
+            fwrite($file, "$go_top\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PageID\n");             fwrite($file, "| $Page->PageID\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ItemID\n");             fwrite($file, "| $Page->ItemID\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Volume\n");             fwrite($file, "| " . @$Page->Volume."\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Issue\n");              fwrite($file, "| " . @$Page->Issue."\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Year\n");               fwrite($file, "| " . @$Page->Year."\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PageUrl\n");            fwrite($file, "| " . @$Page->PageUrl."\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ThumbnailUrl\n");       fwrite($file, "| " . @$Page->ThumbnailUrl."\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| FullSizeImageUrl\n");   fwrite($file, "| " . @$Page->FullSizeImageUrl."\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| OcrUrl\n");             fwrite($file, "| " . @$Page->OcrUrl."\n");
+            fwrite($file, "|-\n");
+            fwrite($file, "|}\n");
+            //OCR Text
+            fwrite($file, "===OCR Text===\n");
+            fwrite($file, "{| class=\"wikitable\" style=\"" . $color_green . "\" name=\"OCR Text\"\n");
+            fwrite($file, "$go_top\n");
+            fwrite($file, "|" . self::format_wiki($Page->OcrText)."\n");
+            fwrite($file, "|-\n");
+            fwrite($file, "|}\n");
+            //taxa
+            fwrite($file, "===Taxa Found in Page (tabular)===\n");
+            $total_taxa = count($Page_xml->Names->Name);
+            fwrite($file, "Name(s): " . $total_taxa . "<br />\n");
+            // if($total_taxa)
+            // {
+                fwrite($file, "{| class=\"wikitable\" name=\"Taxa Found in Page (tabular)\"\n");
+                fwrite($file, "$go_top\n");
+                fwrite($file, "|-\n");
+                fwrite($file, "! scope=\"col\"|NameBankID   ||! scope=\"col\"|EOLID ||! scope=\"col\"|NameFound ||! scope=\"col\"|NameConfirmed\n");
+                if($total_taxa)
+                {
+                    foreach($Page_xml->Names->Name as $Name)
+                    {
+                        fwrite($file, "|-\n");
+                        fwrite($file, "|$Name->NameBankID   ||$Name->EOLID  ||$Name->NameFound  ||$Name->NameConfirmed\n");
+                    }
+                }
+                // else
+                // {
+                    // fwrite($file, "|-\n");
+                    // fwrite($file, "|NameBankID1   ||EOLID1  ||NameFound1  ||NameConfirmed1 <!-- This is just sample entry, will be ignored. Overwrite to add taxon. -->\n");
+                    // fwrite($file, "|-\n");
+                    // fwrite($file, "|NameBankID2   ||EOLID2  ||NameFound2  ||NameConfirmed2 <!-- This is just sample entry, will be ignored. Overwrite to add taxon. -->\n");
+                // }
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
+                //
+                //fwrite($file, "<!-- Only the field NameConfirmed is required. The other three fields (NameBankID, EOLID, NameFound) are optional. -->" . "\n");
+                //
+            // }
+            //Page Types
+            fwrite($file, "===Page Types===\n");
+            $total_page_types = count(@$Page->PageTypes->PageType);
+            if($total_page_types)
+            {
+                fwrite($file, "{| class=\"wikitable\" name=\"Page Types\"\n");
+                fwrite($file, "$go_top\n");
+                fwrite($file, "|-\n");
+                fwrite($file, "! scope=\"col\"|PageTypeName\n");
+                if($total_page_types == 1)
+                {
+                    foreach($Page->PageTypes as $PageType)
+                    {
+                        fwrite($file, "|-\n");
+                        fwrite($file, "|" . (string) @$PageType->PageTypeName . "\n");
+                    }
+                }
+                elseif($total_page_types > 1)
+                {
+                    foreach($Page->PageTypes->PageType as $PageType)
+                    {
+                        fwrite($file, "|-\n");
+                        fwrite($file, "|" . (string) @$PageType->PageTypeName . "\n");
+                    }
+                }
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
+            }
+            //Page Numbers
+            fwrite($file, "===Page Numbers===\n");
+            $total_page_numbers = count(@$Page->PageNumbers->PageNumber);
+            if($total_page_numbers)
+            {
+                fwrite($file, "{| class=\"wikitable\" name=\"Page Numbers\"\n");
+                fwrite($file, "$go_top\n");
+                fwrite($file, "|-\n");
+                fwrite($file, "! scope=\"col\"|Prefix   ||! scope=\"col\"|Number\n");
+                if($total_page_numbers == 1)
+                {
+                    foreach($Page->PageNumbers as $PageNumber)
+                    {
+                        fwrite($file, "|-\n");
+                        fwrite($file, "|" . @$PageNumber->Prefix . "   ||" . @$PageNumber->Number . "\n");
+                    }
+                }
+                elseif($total_page_numbers > 1)
+                {
+                    foreach($Page->PageNumbers->PageNumber as $PageNumber)
+                    {
+                        fwrite($file, "|-\n");
+                        fwrite($file, "|" . @$PageNumber->Prefix . "   ||" . self::string_or_object(@$PageNumber->Number) . "\n");
+                    }
+                }
+                fwrite($file, "|-\n");
+                fwrite($file, "|}\n");
+            }
+        }//foreach loop ends
+    }
+}
+function write_item_info($xml, $file, $go_top)
+{
+    if($loop = @$xml->Result)
+    {
+        foreach($loop as $item)
+        {
+            fwrite($file, "===Item Summary===\n");
+            fwrite($file, "{| class=\"wikitable\" name=\"Item Summary\"\n");
+            fwrite($file, "$go_top\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ItemID\n");             fwrite($file, "| $item->ItemID\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PrimaryTitleID\n");     fwrite($file, "| $item->PrimaryTitleID\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ThumbnailPageID\n");    fwrite($file, "| $item->ThumbnailPageID\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Source\n");             fwrite($file, "| $item->Source\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| SourceIdentifier\n");   fwrite($file, "| $item->SourceIdentifier\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Volume\n");             fwrite($file, "| $item->Volume\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Year\n");               fwrite($file, "| $item->Year\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Contributor\n");        fwrite($file, "| $item->Contributor\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Sponsor\n");            fwrite($file, "| $item->Sponsor\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Language\n");           fwrite($file, "| $item->Language\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| LicenseUrl\n");         fwrite($file, "| $item->LicenseUrl\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Rights\n");             fwrite($file, "| $item->Rights\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| DueDiligence\n");       fwrite($file, "| $item->DueDiligence\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| CopyrightStatus\n");    fwrite($file, "| $item->CopyrightStatus\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| CopyrightRegion\n");    fwrite($file, "| $item->CopyrightRegion\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ExternalUrl\n");        fwrite($file, "| $item->ExternalUrl\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ItemUrl\n");            fwrite($file, "| $item->ItemUrl\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| TitleUrl\n");           fwrite($file, "| $item->TitleUrl\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ItemThumbUrl\n");       fwrite($file, "| $item->ItemThumbUrl\n");
+            fwrite($file, "|-\n");
+            fwrite($file, "|}\n");
+        }
+    }
+}
+function write_title_info($xml, $file, $go_top)
+{
+    if($loop = @$xml->Result)
+    {
+        foreach($loop as $title)
+        {
+            fwrite($file, "===Title Summary===\n");
+            fwrite($file, "{| class=\"wikitable\" name=\"Title Summary\"\n");
+            fwrite($file, "$go_top\n");    
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| TitleID\n");                fwrite($file, "| $title->TitleID\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| BibliographicLevel\n");     fwrite($file, "| $title->BibliographicLevel\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| FullTitle\n");              fwrite($file, "| $title->FullTitle\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| ShortTitle\n");             fwrite($file, "| $title->ShortTitle\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| SortTitle\n");              fwrite($file, "| $title->SortTitle\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PartNumber\n");             fwrite($file, "| $title->PartNumber\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PartName\n");               fwrite($file, "| $title->PartName\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| CallNumber\n");             fwrite($file, "| $title->CallNumber\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| Edition\n");                fwrite($file, "| $title->Edition\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PublisherPlace\n");         fwrite($file, "| $title->PublisherPlace\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PublisherName\n");          fwrite($file, "| $title->PublisherName\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PublicationDate\n");        fwrite($file, "| $title->PublicationDate\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| PublicationFrequency\n");   fwrite($file, "| $title->PublicationFrequency\n");
+            fwrite($file, "|-\n");  fwrite($file, "! scope=\"row\"| TitleUrl\n");               fwrite($file, "| $title->TitleUrl\n");
+            fwrite($file, "|-\n");
+            fwrite($file, "|}\n");
+        }
+    }
+}
+*/
 
 /*
 class dwc_validator_controller //extends ControllerBase

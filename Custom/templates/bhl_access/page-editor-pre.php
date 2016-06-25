@@ -11,7 +11,7 @@ if(count(array_keys($params)) == 2)
         $mwiki = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/";
         $wiki = $mwiki . $Page->PageID;
 
-        echo "<pre>"; print_r($titles); print_r($params);echo "</pre>";
+        // echo "<pre>"; print_r($titles); print_r($params);echo "</pre>";
 
         if($titles)
         {

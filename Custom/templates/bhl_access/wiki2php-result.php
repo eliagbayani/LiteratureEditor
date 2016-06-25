@@ -3,8 +3,12 @@
     /* 
         Expects: $params
     */
+    
+    self::wiki2html($params);
+    
 ?>
 
+<!---
 <div id="accordion_open">
     <h3>Wiki to HTML</h3>
     <div>
@@ -13,3 +17,4 @@
     ?>
     </div>
 </div>
+--->
