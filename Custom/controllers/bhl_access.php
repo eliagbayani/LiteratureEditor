@@ -467,6 +467,10 @@ class bhl_access_controller //extends ControllerBase
 
     function move2wiki($params)
     {
+        if($val = @$params['wiki_title']) $new_title = str_replace(" ", "_", $val);
+        else                              $new_title = self::create_title($params);
+        
+        
         $filename = "../temp/wiki/" . $params['page_id'] . ".wiki";
         if($file = Functions::file_open($filename, 'w'))
         {
@@ -477,8 +481,8 @@ class bhl_access_controller //extends ControllerBase
                 $params['pass_title'] = $params['page_id'];
 
                 // /* working but not yet requested
-                $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . str_replace(" ","_",$params['wiki_title']) . "&search_type=wiki2php&overwrite=1";
-                fwrite($file, "<span class=\"plainlinks\">[$back Review Excerpt - Page Editor]</span>[[Image:Back icon.png|link=$back|Review Excerpt - Page Editor]]\n");
+                $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $new_title . "&search_type=wiki2php&overwrite=1";
+                fwrite($file, "<span class=\"plainlinks\">[$back Go Review Excerpt - Page Editor]</span>[[Image:Back icon.png|link=$back|Go Review Excerpt - Page Editor]]\n");
                 // */
                 
                 // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?search_type=wiki2php&wiki_title=42010506&overwrite=1
@@ -489,7 +493,7 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "{{Void|" . $pass_params . "}}\n");
                 
                 
-                fwrite($file, "=== Review excerpt ===\n");
+                fwrite($file, "=== For EOL Ingestion ===\n");
                 fwrite($file, "Excerpt from " . "'''" . $params['header_title'] . "'''" . "\n\n");
                 $ids = self::prep_pageids_4disp($params);
                 foreach($ids as $id)
@@ -570,8 +574,6 @@ class bhl_access_controller //extends ControllerBase
             fclose($file);
         }
         
-        if($val = @$params['wiki_title']) $new_title = str_replace(" ", "_", $val);
-        else                              $new_title = self::create_title($params);
         $temp_wiki_file = DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/Custom/temp/wiki/" . $p['page_id'] . ".wiki";
         $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -u '" . $_COOKIE['wiki_literatureeditorUserName'] . "' -s 'BHL data to Wiki " . $p['page_id'] . "' -m " . $new_title . " < " . $temp_wiki_file;
         $status = shell_exec($cmdline . " 2>&1");
@@ -655,7 +657,7 @@ class bhl_access_controller //extends ControllerBase
         $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($wiki_title) . "&format=json&prop=revisions&rvprop=content";
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
         $arr = json_decode($json, true);
-        // echo "<pre>";print_r($arr);echo "</pre>";
+        echo "<pre>";print_r($arr);echo "</pre>";
         foreach(@$arr['query']['pages'] as $page) //there is really just one page here...
         {
             if($val = @$page['revisions'][0]['*']) return $val;
