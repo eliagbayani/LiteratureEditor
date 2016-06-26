@@ -3,18 +3,9 @@
     /* 
         Expects: $params
     */
+
+    $wiki_text = self::get_wiki_text($params['wiki_title']);
+    self::parse_wiki_text($wiki_text, $params);
     
-    self::wiki2html($params);
     
 ?>
-
-<!---
-<div id="accordion_open">
-    <h3>Wiki to HTML</h3>
-    <div>
-    <?php 
-        self::wiki2html($params);
-    ?>
-    </div>
-</div>
---->

@@ -413,7 +413,7 @@ class bhl_access_controller //extends ControllerBase
     
     function review_excerpt($params)
     {
-        echo "<br>" . self::create_title($params) . "<br>";
+        // echo "<br>" . self::create_title($params) . "<br>";
         echo "Excerpt from " . "<b>" . $params['header_title'] . "</b>" . "<br><br>";
         $ids = self::prep_pageids_4disp($params);
         foreach($ids as $id)
@@ -572,15 +572,13 @@ class bhl_access_controller //extends ControllerBase
             fclose($file);
         }
         
-        $new_title = self::create_title($params);
+        if($val = @$params['wiki_title']) $new_title = str_replace(" ", "_", $val);
+        else                              $new_title = self::create_title($params);
         $temp_wiki_file = DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/Custom/temp/wiki/" . $p['page_id'] . ".wiki";
         $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -u '" . $_COOKIE['wiki_literatureeditorUserName'] . "' -s 'BHL data to Wiki " . $p['page_id'] . "' -m " . $new_title . " < " . $temp_wiki_file;
-
         $status = shell_exec($cmdline . " 2>&1");
         $status = str_ireplace("done", "done. &nbsp;", $status);
-        
         $wiki_page = "../../wiki/" . $new_title;
-
         /*
         // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
         ?>
@@ -597,20 +595,11 @@ class bhl_access_controller //extends ControllerBase
             $status2 = "See Wiki for Page ID:";
         }
         else $status2 = "See newly generated Wiki for Page ID:";
-
         self::display_message(array('type' => "highlight", 'msg' => $status));
-        
         // working also
         // $wiki_page = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id'];
         // echo "<br><a href=\"$wiki_page\">Wiki for Page ID: " . $p['page_id'] . " </a><br>";
-        
         self::display_message(array('type' => "highlight", 'msg' => "$status2 <a href=\"$wiki_page\">" . $new_title . " </a>"));
-
-        // echo "<br>getcwd() = " . getcwd();
-        // echo "<br>doc_root = " . $_SERVER['DOCUMENT_ROOT'];
-        // echo "<br>doc_root = " . DOC_ROOT;
-        // echo "<br>script = " . $_SERVER['SCRIPT_FILENAME'];
-        // echo "<br>server = " . $_SERVER['SERVER_NAME'];
         // */
     }
     
@@ -658,33 +647,45 @@ class bhl_access_controller //extends ControllerBase
     )
     */
     //=======================================================
-    function wiki2html($p)
+    function get_wiki_text($wiki_title)
     {
         /*
         $url = "/LiteratureEditor/api.php?action=query&meta=userinfo&uiprop=groups|realname&format=json";
         $json = self::get_api_result($url);
         */
-        $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($p['title']) . "&format=json&prop=revisions&rvprop=content";
+        $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($wiki_title) . "&format=json&prop=revisions&rvprop=content";
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
         $arr = json_decode($json, true);
         // echo "<pre>";print_r($arr);echo "</pre>";
         foreach(@$arr['query']['pages'] as $page) //there is really just one page here...
         {
-            if($val = @$page['revisions'][0]['*'])
-            {
-                $data = self::parse_wiki_text($val);
-            }
+            if($val = @$page['revisions'][0]['*']) return $val;
         }
+        return false;
     }
     
-    function parse_wiki_text($str)
+    function get_void_part($str)
     {
-        if(preg_match("/Void\|(.*?)\}\}/ims", $str, $arr)) 
+        if(preg_match("/Void\|(.*?)\}\}/ims", $str, $arr))
         {
             $json = "{" . $arr[1] . "}";
             $params = json_decode($json, true);
+            return $params;
+        }
+        return false;
+    }
+    
+    function parse_wiki_text($str, $p)
+    {
+        if($params = self::get_void_part($str))
+        {
+            if(isset($p['overwrite']))
+            {
+                $params['overwrite']  = $p['overwrite'];
+                $params['wiki_title'] = $p['wiki_title'];
+            }
             // echo "<pre>";print_r($params);echo"</pre>";
-            print self::render_template('reviewexcerpt-result', array('params' => @$params));
+            print self::render_template('reviewexcerpt-result', array('params' => $params));
         }
         /* not needed, since there is a short-cut, the one above this :-)
         $d = array();
@@ -1734,5 +1735,10 @@ class dwc_validator_controller //extends ControllerBase
         }
     }
 }
+// echo "<br>getcwd() = " . getcwd();
+// echo "<br>doc_root = " . $_SERVER['DOCUMENT_ROOT'];
+// echo "<br>doc_root = " . DOC_ROOT;
+// echo "<br>script = " . $_SERVER['SCRIPT_FILENAME'];
+// echo "<br>server = " . $_SERVER['SERVER_NAME'];
 */
 ?>

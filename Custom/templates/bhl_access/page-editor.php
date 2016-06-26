@@ -16,6 +16,10 @@ if(!isset($params['header_title']))
 {
     $PageID = $Page->PageID;
     $search_type = "pagesearch";
+
+    $overwrite = 0;
+    $wiki_title = "";
+
     $title_form = "";
     
     $title_id = self::get_ItemInfo_using_item_id($Page->ItemID, "PrimaryTitleID");
@@ -58,7 +62,10 @@ if(!isset($params['header_title']))
 }
 else //this means a form-submit
 {
-    $accordion_item         = $params['accordion_item'];
+    $accordion_item = $params['accordion_item'];
+    $overwrite      = $params['overwrite'];
+    $wiki_title      = @$params['wiki_title'];
+    
     
     $PageID         = $params['PageID'];
     $search_type    = $params['search_type'];
@@ -189,6 +196,10 @@ $msgs = self::page_editor_msgs();
             </tr>
             <form name="" action="index.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="search_type" id="search_type" value="pagesearch">
+            
+            <input type="text" name="overwrite" value="<?php echo $overwrite ?>">
+            <input type="text" name="wiki_title" value="<?php echo $wiki_title ?>" size="200">
+            
             <input type="hidden" name="page_id" value="<?php echo $PageID ?>"> <!--- this may not be needed --->
             <input type="hidden" name="PageID" value="<?php echo $PageID ?>">
             <input type="hidden" name="recently_added" value="<?php echo $next_page ?>">
