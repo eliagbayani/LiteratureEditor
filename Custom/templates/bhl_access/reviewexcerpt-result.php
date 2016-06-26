@@ -11,7 +11,7 @@
     <form name="" action="index.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="fromReview">
     <?php
-        echo"<pre>";print_r($params);echo"</pre>";
+        // echo"<pre>";print_r($params);echo"</pre>";
         self::review_excerpt($params);
         $fields = array_keys($params);
         $params['search_type'] = "pagesearch"; //goes to the form

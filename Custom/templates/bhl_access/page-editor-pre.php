@@ -10,13 +10,10 @@ if(count(array_keys($params)) == 2)
     {
         $mwiki = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/";
         $wiki = $mwiki . $Page->PageID;
-
-        echo "<pre>"; print_r($titles);echo "</pre>";
+        // echo "<pre>"; print_r($titles);echo "</pre>";
         // echo "<pre>"; print_r($params);echo "</pre>";
-
         if($titles)
         {
-            
             $cont_editor = false;
             if(count($titles > 1)) $str = "excerpts have";
             else                   $str = "excerpt has";
@@ -32,7 +29,7 @@ if(count(array_keys($params)) == 2)
                 $wiki_text = self::get_wiki_text($r->title);
                 $p = self::get_void_part($wiki_text);
                 
-                echo "<br>$desc " . self::get_subject_desc(@$p['subject_type']) . " - <a href='index.php?search_type=wiki2php&wiki_title=$r->title&overwrite=1'>view</a>";
+                echo "<br>$desc " . self::get_subject_desc(@$p['subject_type']) . " - <a href='index.php?search_type=wiki2php&wiki_title=$r->title&overwrite=1'>view</a><br>";
             }
             echo "<p><a href='index.php?search_type=pagesearch&page_id=$Page->PageID&continue'>Create new excerpt for this page</a>";
             //Overview › Brief Summary - view

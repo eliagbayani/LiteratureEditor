@@ -477,12 +477,13 @@ class bhl_access_controller //extends ControllerBase
                 $p['page_id']         = $params['page_id'];
                 $params['pass_title'] = $params['page_id'];
 
-                /* working but not yet requested
-                $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?page_id=" . $params['page_id'] . "&search_type=pagesearch";
-                fwrite($file, "<span class=\"plainlinks\">[$back Back to BHL API result page]</span>[[Image:Back icon.png|link=$back|Back to BHL API result page]]\n");
-                */
+                // /* working but not yet requested
+                $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . str_replace(" ","_",$params['wiki_title']) . "&search_type=wiki2php&overwrite=1";
+                fwrite($file, "<span class=\"plainlinks\">[$back Review Excerpt - Page Editor]</span>[[Image:Back icon.png|link=$back|Review Excerpt - Page Editor]]\n");
+                // */
                 
-                // fwrite($file, "{{Void|[label_added_ref:" . trim($params['label_added_ref']) . "]" . "}}\n");
+                // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?search_type=wiki2php&wiki_title=42010506&overwrite=1
+                
                 $pass_params = json_encode($params);
                 $pass_params = substr($pass_params,1,strlen($pass_params)); //remove first char
                 $pass_params = substr($pass_params, 0, -1);                 //remove last char

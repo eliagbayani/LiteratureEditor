@@ -312,10 +312,11 @@ $wgSpecialPageLockdown['Export']    = array('EoL_Contributor', 'EoL_Administrato
 $wgNamespacePermissionLockdown[NS_ForHarvesting]['*']      = array('EoL_Contributor', 'EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_ForHarvesting_TALK]['*'] = array('EoL_Contributor', 'EoL_Administrator');
 
-$wgNamespacePermissionLockdown[NS_MAIN]['*']             = array('EoL_Contributor', 'EoL_Administrator');
+// $wgNamespacePermissionLockdown[NS_MAIN]['*']             = array('EoL_Contributor', 'EoL_Administrator'); //new - comment since no one should edit NS_MAIN
 $wgNamespacePermissionLockdown[NS_TALK]['*']             = array('EoL_Contributor', 'EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['read']          = array('developer', 'script', 'maintenance script', 'maintenance', 'user', 'bot', 'sysop', 'administrator', 'bureaucrat', 'api', 'user', 'autoconfirmed');
 $wgNamespacePermissionLockdown[NS_MAIN]['read']          = array('*');
+$wgNamespacePermissionLockdown[NS_MAIN]['edit']          = array(''); //no one can edit //new - comment since no one should edit NS_MAIN
 
 
 /* To modify NS_MEDIAWIKI & NS_MEDIAWIKI_TALK user must be both 'administrator' and 'EoL_Administrator' */
@@ -330,7 +331,7 @@ foreach($spaces as $space)
 }
 
 
-$wgNamespacePermissionLockdown[NS_MAIN]['edit']         = array('EoL_Contributor', 'EoL_Administrator');
+// $wgNamespacePermissionLockdown[NS_MAIN]['edit']         = array('EoL_Contributor', 'EoL_Administrator'); //new - comment since no one should edit NS_MAIN
 $wgNamespacePermissionLockdown[NS_MAIN]['createpage']   = array('EoL_Contributor', 'EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['delete']       = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['undelete']     = array('EoL_Administrator');
