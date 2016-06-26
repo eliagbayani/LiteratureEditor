@@ -1,10 +1,9 @@
 <?php
 // namespace php_active_record;
     /* 
-        Expects: $letter
+        Expects: $params
     */
 ?>
-
 <div id="accordion_open">
     <h3>Move to Wiki</h3>
     <div>

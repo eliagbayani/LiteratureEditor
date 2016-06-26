@@ -34,6 +34,7 @@ if(!isset($params['header_title']))
     $citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
     $bibliographicCitation = $citation_and_authors['citation'];
     $agents                = $citation_and_authors['authors']; // Authors
+    if(!$agents) $agents = "";
     
     $ItemID = $Page->ItemID;
     $ocr_text = self::string_or_object(@$Page->OcrText);
@@ -196,10 +197,8 @@ $msgs = self::page_editor_msgs();
             </tr>
             <form name="" action="index.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="search_type" id="search_type" value="pagesearch">
-            
-            <input type="text" name="overwrite" value="<?php echo $overwrite ?>">
-            <input type="text" name="wiki_title" value="<?php echo $wiki_title ?>" size="200">
-            
+            <input type="hidden" name="overwrite" value="<?php echo $overwrite ?>">
+            <input type="hidden" name="wiki_title" value="<?php echo $wiki_title ?>" size="200">
             <input type="hidden" name="page_id" value="<?php echo $PageID ?>"> <!--- this may not be needed --->
             <input type="hidden" name="PageID" value="<?php echo $PageID ?>">
             <input type="hidden" name="recently_added" value="<?php echo $next_page ?>">

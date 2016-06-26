@@ -471,7 +471,6 @@ class bhl_access_controller //extends ControllerBase
         if($file = Functions::file_open($filename, 'w'))
         {
             $go_top = "|+ style=\"caption-side:right;\"|[[Image:arrow-up icon.png|link=#top|Go top]]";
-            
             if(isset($params['header_title']))
             {   //ver 2
                 $p['page_id']         = $params['page_id'];
@@ -578,14 +577,15 @@ class bhl_access_controller //extends ControllerBase
         $status = shell_exec($cmdline . " 2>&1");
         $status = str_ireplace("done", "done. &nbsp;", $status);
         $wiki_page = "../../wiki/" . $new_title;
-        /*
+        
+        // /*
         // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
         ?>
         <script type="text/javascript">
         location.href = '<?php echo $wiki_page ?>';
         </script>
         <?php
-        */
+        // */
 
         // /* working but not needed anymore since location.href above
         if(stripos($status, "Your edit was ignored because no change was made to the text") !== false) 
