@@ -470,7 +470,6 @@ class bhl_access_controller //extends ControllerBase
         if($val = @$params['wiki_title']) $new_title = str_replace(" ", "_", $val);
         else                              $new_title = self::create_title($params);
         
-        
         $filename = "../temp/wiki/" . $params['page_id'] . ".wiki";
         if($file = Functions::file_open($filename, 'w'))
         {
@@ -491,7 +490,6 @@ class bhl_access_controller //extends ControllerBase
                 $pass_params = substr($pass_params,1,strlen($pass_params)); //remove first char
                 $pass_params = substr($pass_params, 0, -1);                 //remove last char
                 fwrite($file, "{{Void|" . $pass_params . "}}\n");
-                
                 
                 fwrite($file, "=== For EOL Ingestion ===\n");
                 fwrite($file, "Excerpt from " . "'''" . $params['header_title'] . "'''" . "\n\n");
@@ -657,7 +655,7 @@ class bhl_access_controller //extends ControllerBase
         $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($wiki_title) . "&format=json&prop=revisions&rvprop=content";
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
         $arr = json_decode($json, true);
-        echo "<pre>";print_r($arr);echo "</pre>";
+        // echo "<pre>";print_r($arr);echo "</pre>";
         foreach(@$arr['query']['pages'] as $page) //there is really just one page here...
         {
             if($val = @$page['revisions'][0]['*']) return $val;
