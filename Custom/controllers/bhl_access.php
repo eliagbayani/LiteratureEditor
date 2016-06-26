@@ -360,13 +360,11 @@ class bhl_access_controller //extends ControllerBase
     
     function create_title($p)
     {
-        /*
-        $arr = explode("›", self::get_subject_desc($p['subject_type']));
-        $subj_part = str_replace(" ", "_", trim(array_pop($arr)));
-        */
+        /* removed
         $subj_part = self::get_subject_desc($p['subject_type']);
         $subj_part = str_replace(" ", "_", trim($subj_part));
-        $title = $p['page_id'] . "__" . $subj_part . "__" . md5($p['label_added'].$p['label_added_ref'].$p['subject_type'].$p['title_form'].$p['ocr_text'].$p['taxon_asso'].$p['references']);
+        */
+        $title = $p['page_id'] . "__" . md5($p['label_added'].$p['label_added_ref'].$p['subject_type'].$p['title_form'].$p['ocr_text'].$p['taxon_asso'].$p['references']);
         return $title;
     }
 
