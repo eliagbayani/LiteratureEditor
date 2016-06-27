@@ -442,7 +442,7 @@ class bhl_access_controller //extends ControllerBase
         }
         else
         {
-            echo "<br>-no changes-<br>";
+            // echo "<br>-no changes-<br>";
             return $compiler;
         }
     }
