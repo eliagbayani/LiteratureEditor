@@ -62,8 +62,6 @@ class bhl_access_controller //extends ControllerBase
             $obj = json_decode($json);
             $username = $obj->query->userinfo->name;
             $realname = self::get_realname($username);
-            $this->compiler = $realname;
-            
             $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:{$username}";
             // $this->compiler = "<span class=\'plainlinks\'>[$url {$realname}]</span>";
             $this->compiler = "[$url {$realname}]";
@@ -364,7 +362,7 @@ class bhl_access_controller //extends ControllerBase
         $subj_part = self::get_subject_desc($p['subject_type']);
         $subj_part = str_replace(" ", "_", trim($subj_part));
         */
-        $title = $p['page_id'] . "__" . md5($p['label_added'].$p['label_added_ref'].$p['subject_type'].$p['title_form'].$p['ocr_text'].$p['taxon_asso'].$p['references']);
+        $title = $p['page_id'] . "_" . md5($p['label_added'].$p['label_added_ref'].$p['subject_type'].$p['title_form'].$p['ocr_text'].$p['taxon_asso'].$p['references']);
         return $title;
     }
 
@@ -400,6 +398,7 @@ class bhl_access_controller //extends ControllerBase
         $ocrs = array_map("trim", $ocrs);
         return $ocrs;
     }
+    
     function conv_wikilink_2html($str)
     { //e.g. "[http://editors.eol.localhost/LiteratureEditor/wiki/User:EAgbayani Eli E. Agbayani]"
         $str = str_replace(array("[", "]"), "", $str);
@@ -409,9 +408,47 @@ class bhl_access_controller //extends ControllerBase
         return "<a href='$url'>$text</a>";
     }
     
+    function disp_compiler($str)
+    {
+        $out = "";
+        $arr = explode(";", $str);
+        $arr = array_map('trim', $arr);
+        // echo"<pre>"; print_r($arr); echo"</pre>";
+        foreach($arr as $a)
+        {
+            $out .= self::conv_wikilink_2html($a)."; ";
+        }
+        $out = trim($out);
+        $out = substr($out, 0, -1);
+        return $out;
+    }
+    
+    function cumulatime_compiler($p)
+    {
+        $compiler = $p['compiler'];
+        $comparison = self::create_title($p);
+        // echo "<br>[". $p['wiki_title'] ."] == [$comparison]<br>";
+        if($p['wiki_title'] != $comparison) //remarkable changes were done
+        {
+            if(stripos($compiler, $this->compiler) !== false) //string is found
+            {
+                return $compiler;
+            }
+            else
+            {
+                if($compiler) return $compiler . "; " . $this->compiler; //append new compiler
+                else          return $this->compiler;                    //first compiler
+            }
+        }
+        else
+        {
+            echo "<br>-no changes-<br>";
+            return $compiler;
+        }
+    }
+    
     function review_excerpt($params)
     {
-        // echo "<br>" . self::create_title($params) . "<br>";
         echo "Excerpt from " . "<b>" . $params['header_title'] . "</b>" . "<br><br>";
         $ids = self::prep_pageids_4disp($params);
         foreach($ids as $id)
@@ -431,7 +468,7 @@ class bhl_access_controller //extends ControllerBase
         $link = "<a href='" . self::get_license_url($params['license_type']) . "'>" . $params['license_type'] . "</a>";
         echo "<b>License</b>: " . $link . "<br><br>";
         echo "<b>Rights Holder</b>: " . $params['rightsholder']  . "<br><br>";
-        echo "<b>Compiler</b>: " . self::conv_wikilink_2html(@$params['compiler'])  . "<br><br>";
+        echo "<b>Compiler</b>: " . self::disp_compiler(@$params['compiler'])  . "<br><br>";
         echo "<b>Supplier</b>: " . "Biodiversity Heritage Library"  . "<br><br>";
         echo "<b>Language</b>: " . @$params['language']  . "<br><br>";
         $audience = self::prep_audience_4disp($params);
@@ -1262,7 +1299,6 @@ class bhl_access_controller //extends ControllerBase
         $lists = array("not in copyright", "no longer under copyright", "no copyright restriction");
         foreach($lists as $a) $lists[] = str_replace(" ", "_", $a);
         foreach($lists as $a) $lists[] = $a . ".";
-        // print_r($lists);
 
         //1st test
         if(in_array($status, $lists)) return true;

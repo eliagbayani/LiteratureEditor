@@ -19,6 +19,7 @@ if(!isset($params['header_title']))
 
     $overwrite = 0;
     $wiki_title = "";
+    $compiler = "";
 
     $title_form = "";
     
@@ -66,6 +67,7 @@ else //this means a form-submit
     $accordion_item = $params['accordion_item'];
     $overwrite      = $params['overwrite'];
     $wiki_title      = @$params['wiki_title'];
+    $compiler      = $params['compiler'];
     
     
     $PageID         = $params['PageID'];
@@ -210,7 +212,7 @@ $msgs = self::page_editor_msgs();
             <input type="hidden" name="ItemID" value="<?php echo $ItemID ?>">
             <input type="hidden" name="AddPage" id="AddPage">
             <input type="hidden" name="accordion_item" id="accordion_item" value="<?php echo $accordion_item ?>">
-            <input type="hidden" name="compiler" value="<?php echo $this->compiler ?>">
+            <input type="hidden" name="compiler" value="<?php echo $compiler ?>">
             <tr>
             <td colspan="2">
                 <!--- working ok but commented by Katja

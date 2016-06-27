@@ -4,7 +4,6 @@
         Expects: $params
     */
 ?>
-
 <div id="accordion_open2">
     <h3>Review Excerpt</h3>
     <div>
@@ -12,13 +11,12 @@
     <input type="hidden" name="fromReview">
     <?php
         // echo"<pre>";print_r($params);echo"</pre>";
-        self::review_excerpt($params);
+        $params['compiler'] = self::cumulatime_compiler($params);
+        self::review_excerpt($params); //this displays all the fields in HTML
         $fields = array_keys($params);
         $params['search_type'] = "pagesearch"; //goes to the form
         foreach($fields as $field)
         {
-            // echo "<input type='hidden' name='" . $field . "' value='" . $params[$field] . "' ";
-            
             if(in_array($field, array("ocr_text", "references", "bibliographicCitation")))
             {
                 echo "<textarea name='" . $field . "' style='display:none;'>" . $params[$field] . "</textarea>";
