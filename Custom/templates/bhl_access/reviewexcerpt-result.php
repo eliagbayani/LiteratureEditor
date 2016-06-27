@@ -29,9 +29,13 @@
                 echo '>';
             }
         }
+        
+        if(@$params['overwrite']) $submit_txt = "Overwrite existing Wiki - for EOL Ingestion";
+        else                      $submit_txt = "Save to Wiki - for EOL Ingestion";
+        
     ?>
     <button onClick="document.getElementById('accordion_item').value=0;spinner_on();">Edit All</button>
-    <button onClick="document.getElementById('search_type').value='move2wiki';spinner_on();">Save to Wiki for EOL Ingestion >></button>
+    <button onClick="document.getElementById('search_type').value='move2wiki';spinner_on();"><?php echo $submit_txt ?> >></button>
     </form>
     </div>
 </div>
