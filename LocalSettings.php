@@ -312,7 +312,7 @@ $wgSpecialPageLockdown['Export']    = array('EoL_Contributor', 'EoL_Administrato
 /* orig
 $wgNamespacePermissionLockdown[NS_ForHarvesting]['*']      = array('EoL_Contributor', 'EoL_Administrator');
 */
-$wgNamespacePermissionLockdown[NS_ForHarvesting]['read']      = array('EoL_Contributor');
+$wgNamespacePermissionLockdown[NS_ForHarvesting]['read']      = array('*'); //this is needed so that API can read wiki
 $wgNamespacePermissionLockdown[NS_ForHarvesting]['edit']      = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_ForHarvesting]['move']      = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_ForHarvesting]['delete']    = array('EoL_Administrator');
@@ -321,7 +321,7 @@ $wgNamespacePermissionLockdown[NS_ForHarvesting]['protect']   = array('');
 
 $wgNamespacePermissionLockdown[NS_ForHarvesting_TALK]['*'] = array('EoL_Contributor', 'EoL_Administrator');
 
-// $wgNamespacePermissionLockdown[NS_MAIN]['*']             = array('EoL_Contributor', 'EoL_Administrator'); //new - comment since no one should edit NS_MAIN
+$wgNamespacePermissionLockdown[NS_MAIN]['*']             = array('EoL_Contributor', 'EoL_Administrator'); //new - comment since no one should edit NS_MAIN
 $wgNamespacePermissionLockdown[NS_TALK]['*']             = array('EoL_Contributor', 'EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['read']          = array('developer', 'script', 'maintenance script', 'maintenance', 'user', 'bot', 'sysop', 'administrator', 'bureaucrat', 'api', 'user', 'autoconfirmed');
 $wgNamespacePermissionLockdown[NS_MAIN]['read']          = array('*');

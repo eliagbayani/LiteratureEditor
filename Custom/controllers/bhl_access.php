@@ -690,9 +690,10 @@ class bhl_access_controller //extends ControllerBase
         $json = self::get_api_result($url);
         */
         $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($wiki_title) . "&format=json&prop=revisions&rvprop=content";
+        echo "<br>[$url]<br>";
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
         $arr = json_decode($json, true);
-        // echo "<pre>";print_r($arr);echo "</pre>";
+        // echo "<pre>";print_r($arr);echo "</pre>";exit;
         foreach(@$arr['query']['pages'] as $page) //there is really just one page here...
         {
             if($val = @$page['revisions'][0]['*']) return $val;
@@ -739,12 +740,17 @@ class bhl_access_controller //extends ControllerBase
     }
     //=======================================================
     
-    function check_if_this_title_has_wiki_v2($page_id)
+    function check_if_this_title_has_wiki_v2($page_id) //https://www.mediawiki.org/wiki/API:Search
     {
-        $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&list=search&srsearch=" . $page_id . "&srprop=timestamp" . "&format=json";
+        $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&list=search&srsearch=" . $page_id . "&srprop=timestamp" . "&srnamespace=5000|0&format=json";
+        // echo "<br>$url<br>";
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
         $obj = json_decode($json); //have 2nd param as boolean true, to return array(); otherwise it is object
         return $obj->query->search;
+        
+        
+        // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=search&srsearch=16194405&srnamespace=5000&srprop=timestamp
+        
     }
     
     function check_if_this_title_has_wiki($title, $version)

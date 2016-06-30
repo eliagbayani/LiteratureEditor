@@ -20,16 +20,20 @@ if(count(array_keys($params)) == 2)
             self::display_message(array('type' => "error", 'msg' => "Page $Page->PageID has already been processed. &nbsp;The following $str been created:"));
             foreach($titles as $r)
             {
+                /* not working anymore, changed implementation
                 $desc = str_replace("$Page->PageID ", "", $r->title);
                 $desc = explode(" ", $desc);
                 array_pop($desc);
                 $desc = implode(" ", $desc);
+                */
                 
                 //get subject from wiki
-                $wiki_text = self::get_wiki_text($r->title);
+                $wiki_text = self::get_wiki_text(str_replace(":", ":", $r->title));
+                // if($wiki_text) echo "- 1<br>";
+                // else           echo "- 0<br>";
                 $p = self::get_void_part($wiki_text);
 
-                echo "<br>$desc " . self::get_subject_desc(@$p['subject_type']) . " - <a href='index.php?search_type=wiki2php&wiki_title=$r->title&overwrite=1'>view</a><br>";
+                echo "<br>" . self::get_subject_desc(@$p['subject_type']) . " - <a href='index.php?search_type=wiki2php&wiki_title=$r->title&overwrite=1'>view</a><br>";
             }
             echo "<p><br><a href='index.php?search_type=pagesearch&page_id=$Page->PageID&continue'>Create new excerpt for this page</a>";
             //Overview › Brief Summary - view
