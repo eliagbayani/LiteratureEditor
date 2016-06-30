@@ -738,6 +738,13 @@ class bhl_access_controller //extends ControllerBase
         echo "<pre>";print_r($d);echo"</pre>";
         */
     }
+    
+    function page_status($title)
+    {
+        if(strpos($title, "ForHarvesting") !== false) return "{Draft}";//string is found
+        else                                          return "{Approved}";
+        
+    }
     //=======================================================
     
     function check_if_this_title_has_wiki_v2($page_id) //https://www.mediawiki.org/wiki/API:Search

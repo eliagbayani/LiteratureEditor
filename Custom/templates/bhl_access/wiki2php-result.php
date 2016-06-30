@@ -9,7 +9,7 @@
             [overwrite] => 1
         )
     */
-    echo "<pre>"; print_r($params); echo "</pre>";
+    // echo "<pre>"; print_r($params); echo "</pre>";
     $wiki_text = self::get_wiki_text($params['wiki_title']);
 
     /* working but redundant

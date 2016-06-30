@@ -5,7 +5,7 @@
     */
 ?>
 <div id="accordion_open2">
-    <h3>Review Excerpt</h3>
+    <h3>Review Excerpt <?php echo " - <i>" . self::page_status($params['wiki_title']) . "</i>" ?></h3>
     <div>
     <form name="" action="index.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="fromReview">

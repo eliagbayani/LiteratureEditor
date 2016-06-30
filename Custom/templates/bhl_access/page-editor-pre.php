@@ -33,8 +33,7 @@ if(count(array_keys($params)) == 2)
                     // if($wiki_text) echo "- 1<br>";
                     // else           echo "- 0<br>";
                     $p = self::get_void_part($wiki_text);
-                    if(strpos($r->title, "ForHarvesting") !== false) $post = "{for Harvesting}";//string is found
-                    else                                             $post = "{for Review}";
+                    $post = self::page_status($r->title);
                     echo "<br>" . self::get_subject_desc(@$p['subject_type']) . " - <a href='index.php?search_type=wiki2php&wiki_title=$r->title&overwrite=1'>view</a> &nbsp; <i>$post</i><br>";
                 }
             }
