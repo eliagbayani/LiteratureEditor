@@ -309,7 +309,16 @@ $wgSpecialPageLockdown['BlockList'] = array('EoL_Contributor', 'EoL_Administrato
 $wgSpecialPageLockdown['Export']    = array('EoL_Contributor', 'EoL_Administrator');
 // $wgSpecialPageLockdown['Version'] = array('bureaucrat', 'sysop'); not sure yet what it does "Version"
 
+/* orig
 $wgNamespacePermissionLockdown[NS_ForHarvesting]['*']      = array('EoL_Contributor', 'EoL_Administrator');
+*/
+$wgNamespacePermissionLockdown[NS_ForHarvesting]['read']      = array('EoL_Contributor');
+$wgNamespacePermissionLockdown[NS_ForHarvesting]['edit']      = array('EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_ForHarvesting]['move']      = array('EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_ForHarvesting]['delete']    = array('EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_ForHarvesting]['protect']   = array('');
+
+
 $wgNamespacePermissionLockdown[NS_ForHarvesting_TALK]['*'] = array('EoL_Contributor', 'EoL_Administrator');
 
 // $wgNamespacePermissionLockdown[NS_MAIN]['*']             = array('EoL_Contributor', 'EoL_Administrator'); //new - comment since no one should edit NS_MAIN
@@ -331,8 +340,11 @@ foreach($spaces as $space)
 }
 
 
-// $wgNamespacePermissionLockdown[NS_MAIN]['edit']         = array('EoL_Contributor', 'EoL_Administrator'); //new - comment since no one should edit NS_MAIN
-$wgNamespacePermissionLockdown[NS_MAIN]['createpage']   = array('EoL_Contributor', 'EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_MAIN]['edit']         = array('EoL_Administrator'); //new - comment since no one should edit NS_MAIN
+$wgNamespacePermissionLockdown[NS_MAIN]['move']         = array('EoL_Administrator'); //new - comment since no one should edit NS_MAIN
+$wgNamespacePermissionLockdown[NS_MAIN]['protect']      = array(''); //new - comment since no one should edit NS_MAIN
+
+$wgNamespacePermissionLockdown[NS_MAIN]['createpage']   = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['delete']       = array('EoL_Administrator');
 $wgNamespacePermissionLockdown[NS_MAIN]['undelete']     = array('EoL_Administrator');
 
