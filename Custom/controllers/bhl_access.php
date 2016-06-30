@@ -690,7 +690,7 @@ class bhl_access_controller //extends ControllerBase
         $json = self::get_api_result($url);
         */
         $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($wiki_title) . "&format=json&prop=revisions&rvprop=content";
-        echo "<br>[$url]<br>";
+        // echo "<br>[$url]<br>";
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
         $arr = json_decode($json, true);
         // echo "<pre>";print_r($arr);echo "</pre>";exit;

@@ -28,12 +28,15 @@ if(count(array_keys($params)) == 2)
                 */
                 
                 //get subject from wiki
-                $wiki_text = self::get_wiki_text(str_replace(":", ":", $r->title));
-                // if($wiki_text) echo "- 1<br>";
-                // else           echo "- 0<br>";
-                $p = self::get_void_part($wiki_text);
-
-                echo "<br>" . self::get_subject_desc(@$p['subject_type']) . " - <a href='index.php?search_type=wiki2php&wiki_title=$r->title&overwrite=1'>view</a><br>";
+                if($wiki_text = self::get_wiki_text($r->title))
+                {
+                    // if($wiki_text) echo "- 1<br>";
+                    // else           echo "- 0<br>";
+                    $p = self::get_void_part($wiki_text);
+                    if(strpos($r->title, "ForHarvesting") !== false) $post = "{for Harvesting}";//string is found
+                    else                                             $post = "{for Review}";
+                    echo "<br>" . self::get_subject_desc(@$p['subject_type']) . " - <a href='index.php?search_type=wiki2php&wiki_title=$r->title&overwrite=1'>view</a> &nbsp; <i>$post</i><br>";
+                }
             }
             echo "<p><br><a href='index.php?search_type=pagesearch&page_id=$Page->PageID&continue'>Create new excerpt for this page</a>";
             //Overview › Brief Summary - view
