@@ -11,5 +11,23 @@
     */
     // echo "<pre>"; print_r($params); echo "</pre>";
     $wiki_text = self::get_wiki_text($params['wiki_title']);
-    self::parse_wiki_text($wiki_text, $params);
+    if($wiki_text) self::parse_wiki_text($wiki_text, $params);
+    else
+    {
+        ?>
+        <div id="accordion_open2">
+            <h3>Review Excerpt</h3>
+            <div>
+
+            <?php
+            self::display_message(array('type' => "error", 'msg' => "You cannot review nor edit wiki that are already for harvesting."));
+            self::display_message(array('type' => "error", 'msg' => "An admin must move this to drafts (Main namespace) before you can review/edit it."));
+            
+            echo "<br><a href='#' onClick='window.history.back()'>Go Back</a>";
+            ?>
+            
+            </div>
+        </div>
+        <?php
+    }
 ?>
