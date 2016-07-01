@@ -741,8 +741,8 @@ class bhl_access_controller //extends ControllerBase
     
     function page_status($title)
     {
-        if(strpos($title, "ForHarvesting") !== false) return "{Draft}";//string is found
-        else                                          return "{Approved}";
+        if(strpos($title, "ForHarvesting") !== false) return "{Approved}";//string is found
+        else                                          return "{Draft}";
         
     }
     //=======================================================
