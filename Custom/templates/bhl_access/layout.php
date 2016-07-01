@@ -6,6 +6,7 @@
         <li><a href="#tabs_main-1">Book Search</a></li>
         <li><a href="#tabs_main-3">Pick A Title</a></li>
         --->
+        <li><a onClick="tab7_clicked()" href="#tabs_main-7">Article List >></a></li>
         <li><a onClick="other_clicked()" href="#tabs_main-6">Other Searches >></a></li>
         <li><a onClick="tab4_clicked()" href="#tabs_main-5">Back to Wiki</a></li>
     </ul>
@@ -30,15 +31,18 @@
         print $ctrler->render_layout(@$params, 'pagesearch-form');
         ?>
     </div>
-    <div id="tabs_main-6">Loading...</div>
     <div id="tabs_main-5">Loading...</div>
+    <div id="tabs_main-6">Loading...</div>
+    <div id="tabs_main-7">Loading...</div>
 </div>
 <?php 
     $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/";
     $other = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?search2=";
+    $article_list = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?article_list=";
 ?>
 <script>
 function other_clicked() { location.href = '<?php echo $other ?>'; }
 function tab4_clicked() { location.href = '<?php echo $back ?>'; }
+function tab7_clicked() { location.href = '<?php echo $article_list ?>'; }
 </script>
 

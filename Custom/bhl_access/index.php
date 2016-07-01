@@ -29,8 +29,10 @@ $ctrler = new bhl_access_controller($params);
 if(!$ctrler->user_is_logged_in_wiki()) return;
 
 if(isset($params['search2']) || @$params['search_type'] == 'booksearch'
-                             || @$params['search_type'] == 'titlelist') require_once("../templates/bhl_access/layout2.php");
-else                                                                    require_once("../templates/bhl_access/layout.php");
+                             || @$params['search_type'] == 'titlelist')   require_once("../templates/bhl_access/layout2.php");
+elseif(isset($params['article_list']) 
+                             || @$params['search_type'] == 'articlelist') require_once("../templates/bhl_access/layout3.php");
+else                                                                      require_once("../templates/bhl_access/layout.php");
 ?>
 
 <!--- for spinner effect: http://spin.js.org/ --->
@@ -50,6 +52,7 @@ if(isset($params['part_more_info'])) print $ctrler->render_template('part-more-i
 if(isset($params['search_type']))
 {
     if    ($params['search_type'] == "titlelist")     print $ctrler->render_template('titlelist-result', array('letter' => @$params['radio']));
+    elseif($params['search_type'] == "articlelist")   print $ctrler->render_template('articlelist-result', array('letter' => @$params['radio']));
     elseif($params['search_type'] == "move2wiki")     print $ctrler->render_template('move2wiki-result', array('params' => @$params));
     elseif($params['search_type'] == "reviewexcerpt") print $ctrler->render_template('reviewexcerpt-result', array('params' => @$params));
     elseif($params['search_type'] == "wiki2php")      print $ctrler->render_template('wiki2php-result', array('params' => @$params));
