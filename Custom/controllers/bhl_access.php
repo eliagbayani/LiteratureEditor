@@ -713,14 +713,29 @@ class bhl_access_controller //extends ControllerBase
     
     function get_titles_by_type($type)
     {
-        if($type == "draft")        $ns = 0;
-        elseif($type == "approved") $ns = 5000;
-        // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=allpages&apnamespace=5000
-        $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns";
-        // echo "<br>[$url]<br>";
-        $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
-        $arr = json_decode($json, true);
-        return $arr;
+        if($type == "all")
+        {
+            $final['query']['allpages'] = array();
+            foreach(array(0,5000) as $ns)
+            {
+                $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns";
+                $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
+                $arr = json_decode($json, true);
+                $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
+            }
+            return $final;
+        }
+        else
+        {
+            if($type == "draft")        $ns = 0;
+            elseif($type == "approved") $ns = 5000;
+            // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=allpages&apnamespace=5000
+            $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns";
+            // echo "<br>[$url]<br>";
+            $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
+            $arr = json_decode($json, true);
+            return $arr;
+        }
     }
 
     //=======================================================
