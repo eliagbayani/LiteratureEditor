@@ -1,8 +1,8 @@
 <div id="tabs_main">
     <ul>
         <li><a href="#tabs_main-1">Article List</a></li>
-        <li><a onClick="tab2_clicked()" href="#tabs_main-2">BHL ID Search >></a></li>
-        <li><a onClick="tab3_clicked()" href="#tabs_main-3">Back to Wiki</a></li>
+        <li><a onClick="tab2_clicked()" href="#tabs_main-2">BHL ID Search ››</a></li>
+        <li><a onClick="tab3_clicked()" href="#tabs_main-3">Back to Wiki ››</a></li>
     </ul>
     <div id="tabs_main-1">
         <?php 

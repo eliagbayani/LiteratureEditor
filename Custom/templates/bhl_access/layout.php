@@ -6,9 +6,9 @@
         <li><a href="#tabs_main-1">Book Search</a></li>
         <li><a href="#tabs_main-3">Pick A Title</a></li>
         --->
-        <li><a onClick="tab7_clicked()" href="#tabs_main-7">Article List >></a></li>
-        <li><a onClick="other_clicked()" href="#tabs_main-6">Other Searches >></a></li>
-        <li><a onClick="tab4_clicked()" href="#tabs_main-5">Back to Wiki</a></li>
+        <li><a onClick="tab7_clicked()" href="#tabs_main-7">Article List ››</a></li>
+        <li><a onClick="other_clicked()" href="#tabs_main-6">Other Searches ››</a></li>
+        <li><a onClick="tab4_clicked()" href="#tabs_main-5">Back to Wiki ››</a></li>
     </ul>
     <div id="tabs_main-1">
         <?php //print $ctrler->render_layout(@$params, 'booksearch-form') 
