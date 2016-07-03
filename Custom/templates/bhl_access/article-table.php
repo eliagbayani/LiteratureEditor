@@ -6,17 +6,12 @@
 <!--- <link rel="stylesheet" href="../jquery-datatables/jquery-ui.css"> --->
 <link rel="stylesheet" href="../jquery-datatables/dataTables.jqueryui.min.css">
 <style>
-body{
-    font: 70% Arial, "Trebuchet MS", sans-serif; /* 62.5% */
-    /* margin: 50px; */
-}
-
+body{font: 70% Arial, "Trebuchet MS", sans-serif; /* 62.5% */ /* margin: 50px; */}
 tfoot input {
         width: 100%;
         padding: 1px;
         box-sizing: border-box;
     }
-
 #example {
     font-family: Arial, Helvetica, sans-serif;
     font-size: small;
@@ -39,6 +34,7 @@ Subchapter
             <th>Title</th>
             <th>Subchapter</th>
             <th>Compiler</th>
+            <th style="display:none">Wiki</th>
         </tr>
     </thead>
     <tfoot>
@@ -47,27 +43,37 @@ Subchapter
             <th>Title</th>
             <th>Subchapter</th>
             <th>Compiler</th>
+            <th style="display:none">Wiki</th>
         </tr>
     </tfoot>
     <tbody>
         <?php foreach($rows as $r)
         {
+            /*
+            [timestamp] => 2016-07-01T17:09:43Z
+            [compiler] => Contributor one; Eli E. Agbayani
+            [subject_type] => Conservation › Threats
+            [title] => ForHarvesting:16194405 ae66e9b6f430af7e694cad4cf1d6f295
+            [header_title] => Proceedings of the Entomological Society of Washington. v 101 1998
+            http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?wiki_title=8611595_8b988c4f572fcada9173c54d5f6a04f8&search_type=wiki2php&overwrite=1
+            */
             ?>
                 <tr>
                     <td><?php echo $r['timestamp'] ?></td>
                     <td><?php echo $r['header_title'] ?></td>
                     <td><?php echo $r['subject_type'] ?></td>
                     <td><?php echo $r['compiler'] ?></td>
+                    <td style="display:none"><?php echo $r['title'] ?></td>
                 </tr>
             <?php
         }
         ?>
     </tbody>
 </table>
-
 <form id="myform" action="index.php" method="post" enctype="multipart/form-data">
-<input type="hidden" name="search_type" value="titlesearch">
-<input id="input_id" type="hidden"   name="title_id">
+<input type="hidden" name="search_type" value="wiki2php">
+<input type="hidden" name="overwrite"   value="1">
+<input type="hidden" name="wiki_title"  value="1" id="wiki_title">
 </form>
 
 <script>
@@ -79,7 +85,9 @@ Subchapter
     } );
  
     // DataTable
-    var table = $('#example').DataTable();
+    var table = $('#example').DataTable({
+        "iDisplayLength": 50
+    });
  
     // Apply the search
     table.columns().every( function () {
@@ -113,18 +121,17 @@ Subchapter
     $('#example tbody').on('click', 'tr', function () {
             var data = table.row( this ).data();
             //alert( 'You clicked on '+data[0]+'\'s row' );
-            myFunction(data[0], data[1]);
+            myFunction(data[4], data[1]);
         } );
     
 <!--- } ); --->
 
-
-function myFunction(title_id, title) {
+function myFunction(wiki_title, title) {
     var x;
     if (confirm("Proceed to Title: "+title) == true) 
     {
         //alert('ok '+title_id);
-        document.getElementById("input_id").value = title_id;
+        document.getElementById("wiki_title").value = wiki_title;
         document.getElementById("myform").submit();
         //x = "You pressed OK!";
     } else 
