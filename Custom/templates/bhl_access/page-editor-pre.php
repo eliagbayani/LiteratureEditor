@@ -1,7 +1,6 @@
 <?php
 $pass_title = $Page->PageID;
 // if($url_params = self::check_if_this_title_has_wiki($pass_title, "v2")) //very old implementation
-
 $cont_editor = true;
 // if(!isset($params['continue']))
 if(count(array_keys($params)) == 2)
@@ -37,9 +36,7 @@ if(count(array_keys($params)) == 2)
     }
     else $submit_text = "Export this to Wiki";
 }
-
 if(!count($Page_xml->Names->Name)) self::display_message(array('type' => "highlight", 'msg' => "This excerpt does not have any taxon associated with it."));
-
 if(self::is_in_copyright_OR_all_rights_reserved($copyrightstatus))
 {
     self::display_message(array('type' => "highlight", 'msg' => "This is IN COPYRIGHT or ALL RIGHTS RESERVED. We cannot import text into the wiki."));
@@ -49,3 +46,4 @@ else
     //require_once("page-editor.php");
 }
 ?>
+

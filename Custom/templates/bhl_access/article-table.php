@@ -134,6 +134,4 @@ function myFunction(title_id, title) {
     }
     //document.getElementById("myform").innerHTML = x;
 }
-
-
 </script>

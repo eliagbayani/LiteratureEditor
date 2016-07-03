@@ -12,7 +12,6 @@
     // echo "<pre>"; print_r($params); echo "</pre>";
     $info = self::get_wiki_text($params['wiki_title']);
     $wiki_text = $info['content'];
-
     if(!$wiki_text)
     {
         if(strpos($params['wiki_title'], "ForHarvesting") !== false) $params['wiki_title'] = str_replace("ForHarvesting:", "", $params['wiki_title']); //string found
@@ -20,7 +19,6 @@
     }
     $info = self::get_wiki_text($params['wiki_title']);
     $wiki_text = $info['content'];
-    
     if($wiki_text) self::parse_wiki_text($wiki_text, $params);
     else
     {
@@ -38,3 +36,4 @@
         <?php
     }
 ?>
+
