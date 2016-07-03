@@ -86,7 +86,8 @@ Subchapter
  
     // DataTable
     var table = $('#example').DataTable({
-        "iDisplayLength": 50
+        "iDisplayLength": 50,
+        "order": [[ 0, "desc" ]]
     });
  
     // Apply the search
