@@ -17,7 +17,7 @@
         </div>
         </td>
         <td valign="top">
-            <button id="button" onClick="spinner_on()">Search Title >></button>
+            <!--- <button id="button" onClick="spinner_on()">Search Title >></button> --->
         </td>
         <td>
         </td>

@@ -10,21 +10,16 @@
         )
     */
     // echo "<pre>"; print_r($params); echo "</pre>";
-    $wiki_text = self::get_wiki_text($params['wiki_title']);
+    $info = self::get_wiki_text($params['wiki_title']);
+    $wiki_text = $info['content'];
 
-    /* working but redundant
-    if(!$wiki_text) $params['wiki_title'] = "ForHarvesting:".$params['wiki_title'];
-    $wiki_text = self::get_wiki_text($params['wiki_title']);
-    if(!$wiki_text) $params['wiki_title'] = str_replace("ForHarvesting:", "", $params['wiki_title']);
-    $wiki_text = self::get_wiki_text($params['wiki_title']);
-    */
-    
     if(!$wiki_text)
     {
         if(strpos($params['wiki_title'], "ForHarvesting") !== false) $params['wiki_title'] = str_replace("ForHarvesting:", "", $params['wiki_title']); //string found
         else                                                         $params['wiki_title'] = "ForHarvesting:".$params['wiki_title'];
     }
-    $wiki_text = self::get_wiki_text($params['wiki_title']);
+    $info = self::get_wiki_text($params['wiki_title']);
+    $wiki_text = $info['content'];
     
     if($wiki_text) self::parse_wiki_text($wiki_text, $params);
     else

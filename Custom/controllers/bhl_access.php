@@ -682,6 +682,47 @@ class bhl_access_controller //extends ControllerBase
         [children] => on
     )
     */
+    //======================================================= for Articlelist
+    function list_titles_by_type($type)
+    {
+        $titles = self::get_titles_by_type($type);
+        // echo "<pre>"; print_r($titles); echo "</pre>";
+        /*
+        The time when the article was added to the queue, with the newest articles being at the top by default.
+        The title of the book or journal, i.e., FullTitle from the BHL BookSearch API.
+        Compiler
+        Subchapter
+        */
+        $recs = array();
+        foreach($titles['query']['allpages'] as $r)
+        {
+            // echo "<pre>"; print_r($r); echo "</pre>"; exit;
+            $info = self::get_wiki_text($r['title']);
+            $params = self::get_void_part($info['content']);
+            if(!$params['header_title']) continue; //to exclude the likes of "Main Page"
+            $info['compiler']     = self::disp_compiler($params['compiler']);
+            $info['subject_type'] = self::get_subject_desc($params['subject_type']);
+            $info['title']        = $r['title'];
+            $info['header_title'] = $params['header_title'];
+            $info['content']      = ""; //erased content, just too big for memory
+            // echo "<pre>"; print_r($info); echo "</pre>";
+            $recs[] = $info;
+        }
+        return $recs;
+    }
+    
+    function get_titles_by_type($type)
+    {
+        if($type == "draft")        $ns = 0;
+        elseif($type == "approved") $ns = 5000;
+        // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=allpages&apnamespace=5000
+        $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns";
+        // echo "<br>[$url]<br>";
+        $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
+        $arr = json_decode($json, true);
+        return $arr;
+    }
+
     //=======================================================
     function get_wiki_text($wiki_title)
     {
@@ -689,14 +730,17 @@ class bhl_access_controller //extends ControllerBase
         $url = "/LiteratureEditor/api.php?action=query&meta=userinfo&uiprop=groups|realname&format=json";
         $json = self::get_api_result($url);
         */
-        $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($wiki_title) . "&format=json&prop=revisions&rvprop=content";
+        $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($wiki_title) . "&format=json&prop=revisions&rvprop=content|timestamp";
         // echo "<br>[$url]<br>";
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
         $arr = json_decode($json, true);
-        // echo "<pre>";print_r($arr);echo "</pre>";exit;
+        // echo "<pre>";print_r($arr);echo "</pre>";//exit;
         foreach(@$arr['query']['pages'] as $page) //there is really just one page here...
         {
-            if($val = @$page['revisions'][0]['*']) return $val;
+            $arr = array();
+            $arr['content']   = (string) @$page['revisions'][0]['*'];
+            $arr['timestamp'] = (string) @$page['revisions'][0]['timestamp'];
+            return $arr;
         }
         return false;
     }
