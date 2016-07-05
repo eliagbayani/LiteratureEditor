@@ -1431,12 +1431,12 @@ class bhl_access_controller //extends ControllerBase
     function get_languages()
     {
         return array(
-        array("name" => "English",           "abb" => "English"), //en
-        array("name" => "Spanish",           "abb" => "Spanish"), //es
-        array("name" => "French",            "abb" => "French"), //fr
-        array("name" => "German",            "abb" => "German"), //de
-        array("name" => "Portugus-Brasil",   "abb" => "Portugus-Brasil"), //br
-        array("name" => "Portugus-Portugal", "abb" => "Portugus-Portugal") //pt
+        array("name" => "English",           "abb" => "en"), //en
+        array("name" => "Spanish",           "abb" => "es"), //es
+        array("name" => "French",            "abb" => "fr"), //fr
+        array("name" => "German",            "abb" => "de"), //de
+        array("name" => "Portugus-Brasil",   "abb" => "br"), //br
+        array("name" => "Portugus-Portugal", "abb" => "pt") //pt
         );
     }
     
