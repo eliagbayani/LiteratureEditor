@@ -35,6 +35,8 @@ if(!isset($params['header_title']))
     $citation_and_authors = self::get_bibliographicCitation($title_id, $Page, $title);
     $bibliographicCitation = $citation_and_authors['citation'];
     $agents                = $citation_and_authors['authors']; // Authors
+    $agents2               = $citation_and_authors['authors2']; // Authors
+    
     if(!$agents) $agents = "";
     
     $ItemID = $Page->ItemID;
@@ -64,6 +66,7 @@ if(!isset($params['header_title']))
 }
 else //this means a form-submit
 {
+    $agents2 = ""; //don't want to query this at this time, maybe when requested
     $accordion_item = $params['accordion_item'];
     $overwrite      = $params['overwrite'];
     $wiki_title      = @$params['wiki_title'];
@@ -330,7 +333,6 @@ $msgs = self::page_editor_msgs();
                         </select>
                     </td>
                 </tr>
-
                 <tr>
                     <td><b>License</b>:</td>
                     <td>
@@ -345,24 +347,20 @@ $msgs = self::page_editor_msgs();
                         </select>
                     </td>
                 </tr>
-
                 <tr><td><b>Rights holder</b>:</td>
                     <td><input size="100" type="text" name="rightsholder" value="<?php echo $rightsholder; ?>"></td>
                 </tr>
-
                 <tr>
                     <td><b>Authors</b>:</td>
-                    <td><input size="100" type="text" name="agents" value="<?php echo $agents ?>"></td>
+                    <td><input size="100" type="text" name="agents" value="<?php echo $agents ?>"><small><?php echo $agents2 ?></small></td>
                 </tr>
                 <tr>
                     <td><b>Bibliographic citation</b>:</td>
                     <td><textarea id="" rows="4" cols="100" name="bibliographicCitation"><?php echo $bibliographicCitation; ?></textarea></td>
                 </tr>
-
                 <tr><td><b>Contributor</b>:</td>
                     <td><input size="100" type="text" name="contributor" value="<?php echo $contributor; ?>"></td>
                 </tr>
-
                 <tr><td><b>Audience</b>:</td>
                     <td><input type="checkbox" name="scientists" <?php echo $scientists; ?>> scientists &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="public"     <?php echo $public; ?>> public &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
