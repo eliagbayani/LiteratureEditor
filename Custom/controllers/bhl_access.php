@@ -518,7 +518,7 @@ class bhl_access_controller //extends ControllerBase
 
                 // /* working but not yet requested
                 $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $new_title . "&search_type=wiki2php&overwrite=1";
-                fwrite($file, "<span class=\"plainlinks\">[$back Go Review Excerpt - Page Editor]</span>[[Image:Back icon.png|link=$back|Go Review Excerpt - Page Editor]]\n");
+                fwrite($file, "__NOEDITSECTION__<span class=\"plainlinks\">[$back Go Review Excerpt - Page Editor]</span>[[Image:Back icon.png|link=$back|Go Review Excerpt - Page Editor]]\n");
                 // */
                 
                 // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?search_type=wiki2php&wiki_title=42010506&overwrite=1
@@ -1431,12 +1431,12 @@ class bhl_access_controller //extends ControllerBase
     function get_languages()
     {
         return array(
-        array("name" => "English",           "abb" => "en"), //en
-        array("name" => "Spanish",           "abb" => "es"), //es
-        array("name" => "French",            "abb" => "fr"), //fr
-        array("name" => "German",            "abb" => "de"), //de
-        array("name" => "Portugus-Brasil",   "abb" => "br"), //br
-        array("name" => "Portugus-Portugal", "abb" => "pt") //pt
+            array("name" => "English",           "abb" => "English"), //en
+            array("name" => "Spanish",           "abb" => "Spanish"), //es
+            array("name" => "French",            "abb" => "French"), //fr
+            array("name" => "German",            "abb" => "German"), //de
+            array("name" => "Portugus-Brasil",   "abb" => "Portugus-Brasil"), //br
+            array("name" => "Portugus-Portugal", "abb" => "Portugus-Portugal") //pt
         );
     }
     
