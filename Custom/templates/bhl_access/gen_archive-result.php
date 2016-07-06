@@ -38,13 +38,13 @@
         else
         {
             self::display_message(array('type' => "error", 'msg' => "Process un-successful."));
-            echo "<br>[$val]<br>"; //debug
+            // echo "<br>[$val]<br>"; //debug
         }
     }
     else
     {
         self::display_message(array('type' => "error", 'msg' => "Process un-successful."));
-        echo "<br>[$val]<br>"; //debug
+        // echo "<br>[$val]<br>"; //debug
     }
 
     
