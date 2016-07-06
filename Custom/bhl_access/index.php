@@ -56,6 +56,7 @@ if(isset($params['search_type']))
     elseif($params['search_type'] == "move2wiki")     print $ctrler->render_template('move2wiki-result', array('params' => @$params));
     elseif($params['search_type'] == "reviewexcerpt") print $ctrler->render_template('reviewexcerpt-result', array('params' => @$params));
     elseif($params['search_type'] == "wiki2php")      print $ctrler->render_template('wiki2php-result', array('params' => @$params));
+    elseif($params['search_type'] == "gen_archive")   print $ctrler->render_template('gen_archive-result', array('params' => @$params));
 }
 
 require_once("../config/script-below-entry.html");

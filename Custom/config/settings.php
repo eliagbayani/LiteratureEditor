@@ -15,4 +15,6 @@ define('MEDIAWIKI_MAIN_FOLDER', 'LiteratureEditor');
 define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT']);
 
 define('DEVELOPER_EMAIL', 'eagbayani@eol.org');
+define('EOL_PHP_CODE', 'http://editors.eol.org/eol_php_code/'); //applications/content_server/resources/
+
 ?>
