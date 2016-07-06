@@ -34,14 +34,19 @@
             echo "<br><br>You can also try to validate the archive file <a href='" . $url . "'>here</a>.";
             
             // http://localhost/eol_php_code/applications/dwc_validator/index.php?file_url=http://editors.eol.localhost/eol_php_code/applications/content_server/resources/ForHarvesting_16194405_ae66e9b6f430af7e694cad4cf1d6f295.tar.gz
-            
-            
         }
-        else self::display_message(array('type' => "error", 'msg' => "Process un-successful."));
+        else
+        {
+            self::display_message(array('type' => "error", 'msg' => "Process un-successful."));
+            echo "<br>[$val]<br>"; //debug
+        }
     }
-    else self::display_message(array('type' => "error", 'msg' => "Process un-successful."));
+    else
+    {
+        self::display_message(array('type' => "error", 'msg' => "Process un-successful."));
+        echo "<br>[$val]<br>"; //debug
+    }
 
-    // echo "<br>[$val]<br>"; //debug
     
     echo "<br><br><a href='#' onClick='window.history.back()'>Go Back</a>";
     ?>
