@@ -40,7 +40,6 @@ class bhl_access_controller //extends ControllerBase
         $this->parag_separator = "==================== paragraph separator ====================";
         
         $this->mediawiki_api = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php";
-        
     }
 
     function user_is_logged_in_wiki()
@@ -53,8 +52,7 @@ class bhl_access_controller //extends ControllerBase
         */
         if(stripos($json, "\"anon\"") !== false || !$json) //string is found
         {
-            echo "<h3><p>Cannot proceed.<p>";
-            echo "<a href='" . "http://" . $_SERVER['SERVER_NAME'] . "/LiteratureEditor/wiki/Special:UserLogin'>You must login from the wiki first</a></h3>";
+            self::display_message(array('type' => "error", 'msg' => "Cannot proceed. <a href='" . "http://" . $_SERVER['SERVER_NAME'] . "/LiteratureEditor/wiki/Special:UserLogin'>You must login from the wiki first</a>."));
             return false;
         }
         else
@@ -241,8 +239,6 @@ class bhl_access_controller //extends ControllerBase
             else return ""; //"is arr but empty"; //"is arr but empty";
         }
         else return $arr; //"is not arr";
-        
-        
     }
     
     function list_titles_by_letter($letter)
@@ -268,13 +264,10 @@ class bhl_access_controller //extends ControllerBase
         return $rows;
     }
     
-    
-    
     // function render_result($book_title) 
     // {
     //     return bhl_access_controller::render_template('result', array('book_title' => $book_title));
     // }
-    
 
     // function render_page_row($title)
     // {
@@ -430,21 +423,14 @@ class bhl_access_controller //extends ControllerBase
         // echo "<br>[". $p['wiki_title'] ."] == [$comparison]<br>";
         if($p['wiki_title'] != $comparison) //remarkable changes were done
         {
-            if(stripos($compiler, $this->compiler) !== false) //string is found
-            {
-                return $compiler;
-            }
+            if(stripos($compiler, $this->compiler) !== false) return $compiler; //string is found
             else
             {
                 if($compiler) return $compiler . "; " . $this->compiler; //append new compiler
                 else          return $this->compiler;                    //first compiler
             }
         }
-        else
-        {
-            // echo "<br>-no changes-<br>";
-            return $compiler;
-        }
+        else return $compiler;
     }
     
     function review_excerpt($params)
@@ -648,40 +634,7 @@ class bhl_access_controller //extends ControllerBase
         $wiki = str_replace(array("\n"), "", $wiki);
         return $wiki;
     }
-    /*
-    Array
-    (
-        [search_type] => reviewexcerpt
-        [page_id] => 16194405
-        [PageID] => 16194405
-        [recently_added] => 16194408
-        [label_added] =>  16194406 16194407
-        [label_added_ref] =>  16194410
-        [header_title] => Proceedings of the Entomological Society of Washington. v 101 1998
-        [copyrightstatus] => In copyright. Digitized with the permission of the rights holder.
-        [next_page] => 16194408
-        [ItemID] => 54810
-        [AddPage] => 
-        [accordion_item] => 1
-        [compiler] => [http://editors.eol.localhost/LiteratureEditor/wiki/User:EAgbayani Eli E. Agbayani]
-        [subject_type] => http://rs.tdwg.org/ontology/voc/SPMInfoItems#GeneralDescription
-        [title_form] => My Title
-        [ocr_text] => aaabbb ccc==================== paragraph separator ====================ddd eee ffff==================== paragraph separator ====================ggg hhh iiijjjkkk lll
-        [ref_page_id] => 
-        [ref_prioritized] => 
-        [references] => ==================== paragraph separator ====================VOLUME 101. NUMBER 1 89 stannardi differing only in the pair of short  processes extending from apex of the dor–  sum of segment IX. These processes in A.  stannardi are divergent and basally lobate  in dorsal view (Fig. 3) and in A. logani nar–  row and lacking basal lobes (Fig. 4).
-        [taxon_asso] => Asteraceae;Bebbia juncea
-        [separated_names] => Asteraceae|Bebbia juncea|Diptera|Pteromalidae|Pteromalus|Tephritidae|Tomoplagia|Trixis|Trixis californica|Trupanea|Trupanea arizonensis|Trupanea conjuncta|Acamptopappus|Aciurina thoracica Curran, 1932|Baccharis sarothroides|Cirsium californicum|Cirsium proteanum J. T. Howell|Paracantha gentilis|Porophyllum gracile|Trupanea actinobola|Trupanea bisetosa|Trupanea californica|Trupanea jonesi|Trupanea nigricornis|Trypetidae|Agarodes|Agarodes alabamensis|Agarodes crassicornis|Agarodes distincta|Agarodes grisea|Agarodes libalis|Agarodes logani|Agarodes stannardi|Agarodes tuskaloosa|Agarodes ziczac|Sericostomatidae|Trichoptera
-        [language] => English
-        [license_type] => Attribution-NonCommercial 3.0
-        [rightsholder] => Cha Badder
-        [agents] => Goeden, R D; Teerink, J A; Eli
-        [bibliographicCitation] => Goeden, R D; Teerink, J A. 1999. LIFE HISTORY AND DESCRIPTION OF IMMATURE STAGES OF TRUPANEA ARIZONENSIS MALLOCH (DIPTERA : TEPHRITIDAE) ON TRIXIS CALIFORNICA KELLOGG VAR. CALIFORNICA (ASTERACEAE) IN SOUTHERN CALIFORNIA. Proceedings of the Entomological Society of Washington 101 :75--85.
-        [contributor] => the contributor
-        [public] => on
-        [children] => on
-    )
-    */
+
     //======================================================= for Articlelist
     function list_titles_by_type($type)
     {
@@ -802,7 +755,6 @@ class bhl_access_controller //extends ControllerBase
     {
         if(strpos($title, "ForHarvesting") !== false) return "{Approved}";//string is found
         else                                          return "{Draft}";
-        
     }
     //=======================================================
     
@@ -813,10 +765,7 @@ class bhl_access_controller //extends ControllerBase
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
         $obj = json_decode($json); //have 2nd param as boolean true, to return array(); otherwise it is object
         return $obj->query->search;
-        
-        
         // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=search&srsearch=16194405&srnamespace=5000&srprop=timestamp
-        
     }
     
     function check_if_this_title_has_wiki($title, $version)
@@ -852,7 +801,6 @@ class bhl_access_controller //extends ControllerBase
                 if(preg_match("/license_type=(.*?)\&/ims", $str, $arr))         $final['license_type']  = $arr[1];
                 if(preg_match("/agents=(.*?)\&/ims", $str, $arr))               $final['agents']        = $arr[1];
                 if(preg_match("/taxon_names=(.*?)xxx/ims", $str."xxx", $arr))   $final['taxon_names']   = $arr[1];
-
                 // echo"<pre>"; print_r($final); echo "</pre>"; //debug
                 return $final;
             }
@@ -910,10 +858,8 @@ class bhl_access_controller //extends ControllerBase
         $p['search_type'] = 'pagesearch';
         $p['page_id']     = $page_id;
         $xml = self::search_bhl($p);
-        
         // print_r($xml);
         // echo "<br>" . @$xml->Result->OcrText . "<br>";
-        
         if($sought_field == "ocr_text")     {if($val = @$xml->Result->OcrText) return (string) $val;}
         if($sought_field == "taxa_names")   {if($val = @$xml->Result->Names) return $val;}
         if($sought_field == "all")          {if($val = @$xml->Result) return $val;}
@@ -1078,7 +1024,6 @@ class bhl_access_controller //extends ControllerBase
                 if($val = @$Page->Volume) $citation .= self::format_citation_part($val);
                 $citation .= ": [Please add page range].";
             }
-            
         }
         return array("citation" => $citation, "authors" => $authors, "authors2" => $authors2);
     }
@@ -1238,10 +1183,7 @@ class bhl_access_controller //extends ControllerBase
             $partial_title = trim($temp[0]);
             foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
             {
-                if(stripos($titulo, $partial_title) !== false) //string is found
-                {
-                    return $licensor;
-                }
+                if(stripos($titulo, $partial_title) !== false) return $licensor; //string is found
             }
         }
         
@@ -1252,10 +1194,7 @@ class bhl_access_controller //extends ControllerBase
             $partial_title = trim($temp[0]);
             foreach($licensors as $titulo => $licensor) //$licensor is the new copyrightstatus
             {
-                if(stripos($titulo, $partial_title) !== false) //string is found
-                {
-                    return $licensor;
-                }
+                if(stripos($titulo, $partial_title) !== false) return $licensor; //string is found
             }
         }
         
@@ -1312,7 +1251,6 @@ class bhl_access_controller //extends ControllerBase
                 }
             }
         }
-        // echo "\n" . count($recs) . "\n";
         return $recs;
     }
     
