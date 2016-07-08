@@ -272,7 +272,7 @@ $msgs = self::page_editor_msgs();
                     </td></tr>
 
                     <tr><td>
-                        <textarea id="" rows="15" cols="100" name="ocr_text"><?php echo self::format_wiki($ocr_text); ?></textarea> 
+                        <textarea id="ocr_text" rows="15" cols="100" name="ocr_text"><?php echo self::format_wiki($ocr_text); ?></textarea> 
                     </td></tr>
                     <tr><td bgcolor="AliceBlue"><?php echo $msgs["text_excerpt"] ?></td></tr>
                     <tr><td><button id="" onClick="document.getElementById('accordion_item').value=1;spinner_on();">Save</button> <i><?php echo $save_status[1] ?></i></td></tr>
@@ -301,7 +301,7 @@ $msgs = self::page_editor_msgs();
                     <table>
                     <tr><td>
                         <b>Taxon associations for this excerpt</b>:
-                        <input size="100" type="text" name="taxon_asso" value="<?php echo $taxon_asso; ?>"> <button id="" onClick="document.getElementById('accordion_item').value=3;spinner_on();">Save</button> <i><?php echo $save_status[3] ?></i>
+                        <input size="100" type="text" id="taxon_asso" name="taxon_asso" value="<?php echo $taxon_asso; ?>"> <button id="" onClick="document.getElementById('accordion_item').value=3;spinner_on();">Save</button> <i><?php echo $save_status[3] ?></i>
                     </td></tr>
                     <tr><td bgcolor="AliceBlue"><?php echo $msgs["taxon_asso"] ?></td></tr>
                     <tr><td>
@@ -337,7 +337,7 @@ $msgs = self::page_editor_msgs();
                     <td><b>License</b>:</td>
                     <td>
                         <select name="license_type" id="selectmenu_3">
-                            <option></option>
+                            <!--- <option></option> --->
                             <?php foreach($licenses as $s)
                             {
                                 $selected = "";
@@ -372,7 +372,7 @@ $msgs = self::page_editor_msgs();
                 </div>
 
             </div>
-            <button onClick="document.getElementById('search_type').value='reviewexcerpt';spinner_on();">Review Excerpt & Metadata</button>
+            <button onClick="submit_onclick()">Review Excerpt & Metadata</button>
             </form>
         <!--- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --->
         <?php
@@ -382,3 +382,26 @@ $msgs = self::page_editor_msgs();
 <?php
 if(isset($params['accordion_item'])) print '<script>$("#accordion_open2").accordion({ active: ' . $params['accordion_item'] . ', heightStyle: "content" });</script>';
 ?>
+<script>
+function submit_onclick()
+{
+    if(document.getElementById('selectmenu_4').selectedIndex == 0)
+    {
+        alert("Please choose an EOL subchapter.");
+        return;
+    }
+    if(document.getElementById('ocr_text').value == "")
+    {
+        alert("Text Excerpt for EOL - cannot be blank.");
+        return;
+    }
+    if(document.getElementById('taxon_asso').value == "")
+    {
+        alert("Taxon Associations - cannot be blank.");
+        return;
+    }
+    document.getElementById('search_type').value='reviewexcerpt';
+    spinner_on();
+}
+</script>
+
