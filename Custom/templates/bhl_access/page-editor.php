@@ -200,7 +200,7 @@ $msgs = self::page_editor_msgs();
                 </form>
             </td>
             </tr>
-            <form name="" action="index.php" method="post" enctype="multipart/form-data">
+            <form id="frm" action="index.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="search_type" id="search_type" value="pagesearch">
             <input type="hidden" name="overwrite" value="<?php echo $overwrite ?>">
             <input type="hidden" name="wiki_title" value="<?php echo $wiki_title ?>" size="200">
@@ -372,7 +372,8 @@ $msgs = self::page_editor_msgs();
                 </div>
 
             </div>
-            <button onClick="submit_onclick()">Review Excerpt & Metadata</button>
+            <!--- <button onClick="submit_onclick()">Review Excerpt & Metadata</button> --->
+            <input type="button" onClick="submit_onclick()" value="Review Excerpt & Metadata">
             </form>
         <!--- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --->
         <?php
@@ -388,20 +389,21 @@ function submit_onclick()
     if(document.getElementById('selectmenu_4').selectedIndex == 0)
     {
         alert("Please choose an EOL subchapter.");
-        return;
+        return true;
     }
     if(document.getElementById('ocr_text').value == "")
     {
         alert("Text Excerpt for EOL - cannot be blank.");
-        return;
+        return true;
     }
     if(document.getElementById('taxon_asso').value == "")
     {
         alert("Taxon Associations - cannot be blank.");
-        return;
+        return true;
     }
     document.getElementById('search_type').value='reviewexcerpt';
     spinner_on();
+    document.getElementById('frm').submit();
 }
 </script>
 
