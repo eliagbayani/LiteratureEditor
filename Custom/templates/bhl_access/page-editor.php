@@ -412,7 +412,8 @@ function submit_onclick()
 
 function disable_accordion_panels(panel)
 {
-    $("#accordion_open2").accordion({ active: false });
+    // $("#accordion_open2").accordion({active: false});
+    $("#accordion_open2").accordion({active: false , collapsible: true});
     $("#accordion_open2").accordion("refresh");
     $("#accordion_open2").accordion( "option", "active", panel ); 
 }
