@@ -374,6 +374,7 @@ $msgs = self::page_editor_msgs();
             </div>
             <!--- <button onClick="submit_onclick()">Review Excerpt & Metadata</button> --->
             <input type="button" onClick="submit_onclick()" value="Review Excerpt & Metadata">
+            <!--- <button type="button" class="close">Collapse all</button> --->
             </form>
         <!--- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --->
         <?php
@@ -389,21 +390,31 @@ function submit_onclick()
     if(document.getElementById('selectmenu_4').selectedIndex == 0)
     {
         alert("Please choose an EOL subchapter.");
+        disable_accordion_panels(0);
         return true;
     }
     if(document.getElementById('ocr_text').value == "")
     {
         alert("Text Excerpt for EOL - cannot be blank.");
+        disable_accordion_panels(1);
         return true;
     }
     if(document.getElementById('taxon_asso').value == "")
     {
         alert("Taxon Associations - cannot be blank.");
+        disable_accordion_panels(3);
         return true;
     }
     document.getElementById('search_type').value='reviewexcerpt';
     spinner_on();
     document.getElementById('frm').submit();
+}
+
+function disable_accordion_panels(panel)
+{
+    $("#accordion_open2").accordion({ active: false });
+    $("#accordion_open2").accordion("refresh");
+    $("#accordion_open2").accordion( "option", "active", panel ); 
 }
 </script>
 
