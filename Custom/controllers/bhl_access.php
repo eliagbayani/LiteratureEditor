@@ -650,7 +650,7 @@ class bhl_access_controller //extends ControllerBase
         foreach($titles['query']['allpages'] as $r)
         {
             // echo "<pre>"; print_r($r); echo "</pre>"; exit;
-            $info = self::get_wiki_text($r['title']);
+            $info = self::get_wiki_text($r['title'], array("expire_seconds" => 18000)); //5 hours cache expires
             $params = self::get_void_part($info['content']);
             if(!$params['header_title']) continue; //to exclude the likes of "Main Page"
             $info['compiler']     = self::disp_compiler($params['compiler']);
@@ -707,7 +707,7 @@ class bhl_access_controller //extends ControllerBase
     }
 
     //=======================================================
-    function get_wiki_text($wiki_title)
+    function get_wiki_text($wiki_title, $download_params = array('expire_seconds' => true))
     {
         /*
         $url = "/LiteratureEditor/api.php?action=query&meta=userinfo&uiprop=groups|realname&format=json";
@@ -715,7 +715,7 @@ class bhl_access_controller //extends ControllerBase
         */
         $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($wiki_title) . "&format=json&prop=revisions&rvprop=content|timestamp";
         // echo "<br>[$url]<br>";
-        $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
+        $json = Functions::lookup_with_cache($url, $download_params); //this expire_seconds should always be true, but for listing expires in 5 hours.
         $arr = json_decode($json, true);
         // echo "<pre>";print_r($arr);echo "</pre>";//exit;
         foreach(@$arr['query']['pages'] as $page) //there is really just one page here...
