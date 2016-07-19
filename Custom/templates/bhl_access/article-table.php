@@ -70,7 +70,7 @@ Subchapter
         ?>
     </tbody>
 </table>
-<form id="myform" action="index.php" method="post" enctype="multipart/form-data">
+<form id="myform" action="index.php" method="post" enctype="multipart/form-data" target="_blank">
 <input type="hidden" name="search_type" value="wiki2php">
 <input type="hidden" name="overwrite"   value="1">
 <input type="hidden" name="wiki_title"  value="1" id="wiki_title">
