@@ -671,10 +671,17 @@ class bhl_access_controller //extends ControllerBase
             $final['query']['allpages'] = array();
             foreach(array(0,5000) as $ns)
             {
-                $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns";
-                $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
-                $arr = json_decode($json, true);
-                $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
+                $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=";
+                $added_param = "";
+                while(true)
+                {
+                    // echo "<br>[$url" . "$added_param]<br>";
+                    $json = Functions::lookup_with_cache($url.$added_param, array('expire_seconds' => true)); //this expire_seconds should always be true
+                    $arr = json_decode($json, true);
+                    $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
+                    if($apcontinue = @$arr['continue']['apcontinue']) $added_param = "&apcontinue=".$apcontinue;
+                    else break;
+                }
             }
             return $final;
         }
@@ -683,11 +690,19 @@ class bhl_access_controller //extends ControllerBase
             if($type == "draft")        $ns = 0;
             elseif($type == "approved") $ns = 5000;
             // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=allpages&apnamespace=5000
-            $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns";
-            // echo "<br>[$url]<br>";
-            $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
-            $arr = json_decode($json, true);
-            return $arr;
+            $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=";
+            $added_param = "";
+            $final['query']['allpages'] = array();
+            while(true)
+            {
+                // echo "<br>[$url" . "$added_param]<br>";
+                $json = Functions::lookup_with_cache($url.$added_param, array('expire_seconds' => true)); //this expire_seconds should always be true
+                $arr = json_decode($json, true);
+                $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
+                if($apcontinue = @$arr['continue']['apcontinue']) $added_param = "&apcontinue=".$apcontinue;
+                else break;
+            }
+            return $final;
         }
     }
 
