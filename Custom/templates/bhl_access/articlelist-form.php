@@ -9,8 +9,8 @@
     <tr valign="top">
         <td>
         <div id="radioset">
-        <input onClick="spinner_on();submit()" type="radio" id="radio1" name="radio" value="approved" <?php if($radio == 'approved') echo " checked=\"checked\""; ?>> <label for="radio1">Approved - for EOL Harvesting</label>
-        <input onClick="spinner_on();submit()" type="radio" id="radio2" name="radio" value="draft"    <?php if($radio == 'draft') echo " checked=\"checked\""; ?>>    <label for="radio2">Draft - for Review</label>
+        <input onClick="spinner_on();submit()" type="radio" id="radio1" name="radio" value="approved" <?php if($radio == 'approved') echo " checked=\"checked\""; ?>> <label for="radio1">For EOL Harvesting (approved)</label>
+        <input onClick="spinner_on();submit()" type="radio" id="radio2" name="radio" value="draft"    <?php if($radio == 'draft') echo " checked=\"checked\""; ?>>    <label for="radio2">For Review (draft)</label>
         <input onClick="spinner_on();submit()" type="radio" id="radio3" name="radio" value="all"      <?php if($radio == 'all') echo " checked=\"checked\""; ?>>    <label for="radio3">All</label>
         </div>
         </td>
