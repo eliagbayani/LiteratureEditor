@@ -94,6 +94,20 @@ class bhl_access_controller //extends ControllerBase
         return $string;
     }
     
+    function get_api_result_via_post($url, $post)
+    {
+        $session_cookie = 'wiki_literatureeditor_session';
+        if(!isset($_COOKIE[$session_cookie])) return false;
+        $url = "http://" . $_SERVER['SERVER_NAME'] . $url;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_COOKIE, $session_cookie . '=' . $_COOKIE[$session_cookie]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        $string = curl_exec($ch);
+        curl_close($ch);
+        return $string;
+    }
+    
     /*
     public function isLoggedIn()
     {
@@ -439,10 +453,18 @@ class bhl_access_controller //extends ControllerBase
         {
             $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $params['wiki_title'];
             // http://editors.eol.xxx/LiteratureEditor/wiki/16194361_5e05173f317d6f9f35dd954c87bef5ce
-            $str = " - <i><a href='$url'>View Wiki</a></i>";
+            $str = " - <a href='$url'>View Wiki</a>";
+            
+            //start move24harvest ============
+            $wiki_status = self::page_status($params['wiki_title']);
+            $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $params['wiki_title'] . "&search_type=move24harvest&wiki_status=$wiki_status";
+
+            if($wiki_status == "{Draft}") $str .= " | <a href='$url'>Move to 'For EOL Harvesting'</a>";
+            else                          $str .= " | <a href='$url'>Move to 'For Review (drafts)'</a>";
+            //end ============================
         }
         else $str = "";
-        echo "Excerpt from " . "<b>" . $params['header_title'] . "</b>" . "$str<br><br>";
+        echo "Excerpt from " . "<b>" . $params['header_title'] . "</b>" . "<i>$str</i><br><br>";
         
         $ids = self::prep_pageids_4disp($params);
         foreach($ids as $id)
@@ -714,6 +736,34 @@ class bhl_access_controller //extends ControllerBase
         }
     }
 
+    //======================================================= moving files
+    function get_move_token($wiki_title)
+    {
+        /* deprecated combination
+        $url = "/LiteratureEditor/api.php?action=tokens&type=move&format=json";
+        return $arr['tokens']['movetoken'];
+        */
+        
+        // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&meta=tokens
+        $url = "/LiteratureEditor/api.php?action=query&meta=tokens&format=json";
+        $json = self::get_api_result($url);
+        $arr = json_decode($json, true);
+        if($val = @$arr['warnings']['info']['*']) self::display_message(array('type' => "error", 'msg' => $val));
+        // echo "<pre>"; print_r($arr); echo "</pre>"; //debug
+        return $arr['query']['tokens']['csrftoken'];
+    }
+    
+    function move_file($params)
+    {
+        $from = urlencode($params['wiki_title']);
+        if($params['wiki_status'] == "{Draft}")         $to = urlencode("ForHarvesting:".$params['wiki_title']);
+        elseif($params['wiki_status'] == "{Approved}")  $to = urlencode(str_replace("ForHarvesting:", "", $params['wiki_title']));
+        $url = "/LiteratureEditor/api.php?format=json&action=move&from=" . $from . "&to=" . $to . "&reason=&movetalk&noredirect";
+        $json = self::get_api_result_via_post($url, array("token" => $params['token']));
+        $arr = json_decode($json, true);
+        if($val = @$arr['warnings']['info']['*']) self::display_message(array('type' => "error", 'msg' => $val));
+        return $arr;
+    }
     //=======================================================
     function get_wiki_text($wiki_title, $download_params = array('expire_seconds' => true))
     {
