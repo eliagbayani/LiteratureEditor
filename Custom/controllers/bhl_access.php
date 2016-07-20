@@ -671,7 +671,7 @@ class bhl_access_controller //extends ControllerBase
             $final['query']['allpages'] = array();
             foreach(array(0,5000) as $ns)
             {
-                $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=";
+                $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=&aplimit=100";
                 $added_param = "";
                 while(true)
                 {
@@ -690,7 +690,7 @@ class bhl_access_controller //extends ControllerBase
             if($type == "draft")        $ns = 0;
             elseif($type == "approved") $ns = 5000;
             // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=allpages&apnamespace=5000
-            $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=";
+            $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=&aplimit=100";
             $added_param = "";
             $final['query']['allpages'] = array();
             while(true)
