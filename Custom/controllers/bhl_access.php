@@ -435,7 +435,15 @@ class bhl_access_controller //extends ControllerBase
     
     function review_excerpt($params)
     {
-        echo "Excerpt from " . "<b>" . $params['header_title'] . "</b>" . "<br><br>";
+        if(@$params['overwrite'])
+        {
+            $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $params['wiki_title'];
+            // http://editors.eol.xxx/LiteratureEditor/wiki/16194361_5e05173f317d6f9f35dd954c87bef5ce
+            $str = " - <i><a href='$url'>View Wiki</a></i>";
+        }
+        else $str = "";
+        echo "Excerpt from " . "<b>" . $params['header_title'] . "</b>" . "$str<br><br>";
+        
         $ids = self::prep_pageids_4disp($params);
         foreach($ids as $id)
         {

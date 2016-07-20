@@ -1,8 +1,6 @@
 <?php
 // namespace php_active_record;
-    /* 
-        Expects: $params
-    */
+    /* Expects: $params */
     // print_r($params);
     $wiki_status = self::page_status($params['wiki_title']);
 ?>
