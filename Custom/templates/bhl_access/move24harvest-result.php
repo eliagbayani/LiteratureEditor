@@ -23,8 +23,8 @@
         $arr = self::move_file($params);
         // echo "<pre>222"; print_r($arr); echo "</pre>"; //debug
 
-        if($msg = $arr['error']['code']) self::display_message(array('type' => "error", 'msg' => $msg));
-        if($msg = $arr['error']['info']) self::display_message(array('type' => "error", 'msg' => $msg));
+        if($msg = @$arr['error']['code']) self::display_message(array('type' => "error", 'msg' => $msg));
+        if($msg = @$arr['error']['info']) self::display_message(array('type' => "error", 'msg' => $msg));
         
         if($new_title = @$arr['move']['to'])
         {
