@@ -464,6 +464,17 @@ class bhl_access_controller //extends ControllerBase
             //end ============================
         }
         else $str = "";
+
+        if($params['search_type'] == "move2wiki") // from wiki OR from article list
+        {
+            if($params['wiki_status'] == "{Approved}") // you can generate archive
+            {
+                $str .= " | <a href='index.php?search_type=gen_archive&wiki_title=" . urldecode($params['wiki_title']) . "'>Generate the EOL DWC-A for this article</a>";
+            }
+        }
+        
+        
+        
         echo "Excerpt from " . "<b>" . $params['header_title'] . "</b>" . "<i>$str</i><br><br>";
         
         $ids = self::prep_pageids_4disp($params);
