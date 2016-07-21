@@ -4,12 +4,12 @@
         Expects: $params
         Array
         (
-            [search_type] => gen_archive
-            [wiki_title] => ForHarvesting:16194405 ee667ff5a5361aedaaa35b2e1e55338e
+            [search_type] => gen_archive_all
+            [archive_id] => BHL_lit_2016_07_21_01_35_41
         )
     */
     // echo "<pre>"; print_r($params); echo "</pre>";
-    $url = EOL_PHP_CODE . "update_resources/connectors/mediawiki.php?wiki_title=" . urldecode($params['wiki_title']);
+    $url = EOL_PHP_CODE . "update_resources/connectors/mediawiki.php?archive_id=" . urldecode($params['archive_id']);
 ?>
 <div id="accordion_open2">
     <h3>Generate EOL DWC-A</h3>
@@ -20,7 +20,7 @@
         if(strpos($val, "[SUCCESS]") !== false) //string is found
         {
             self::display_message(array('type' => "highlight", 'msg' => "EOL DWC-A successfully generated."));
-            $url = EOL_PHP_CODE . "applications/content_server/resources/" . str_replace(array(":"," "), "_", $params['wiki_title']) . ".tar.gz";
+            $url = EOL_PHP_CODE . "applications/content_server/resources/" . str_replace(array(":"," "), "_", $params['archive_id']) . ".tar.gz";
 
             echo "<br>You can copy the URL below and use it as a resource in an EOL Content Partner resource account (<a target='eol' href='http://eol.org'>eol.org</a>).";
             echo "<br><br><a href='" . $url . "'>$url</a>";
