@@ -691,7 +691,7 @@ class bhl_access_controller //extends ControllerBase
         foreach($titles['query']['allpages'] as $r)
         {
             // echo "<pre>"; print_r($r); echo "</pre>"; exit;
-            $info = self::get_wiki_text($r['title'], array("expire_seconds" => 18000)); //5 hours cache expires
+            $info = self::get_wiki_text($r['title'], array("expire_seconds" => 86400)); //cache expires in 24 hrs
             $params = self::get_void_part($info['content']);
             if(!$params['header_title']) continue; //to exclude the likes of "Main Page"
             $info['compiler']     = self::disp_compiler($params['compiler']);
