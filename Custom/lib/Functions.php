@@ -136,6 +136,7 @@ class Functions
         }
         else //"VALID";
         {
+            if(stripos($url, "biodiversitylibrary.org") !== false) return "<a target='bhl' href=\"$url\">$url</a>"; //string is found
             return "<a href=\"$url\">$url</a>";
         }
     }

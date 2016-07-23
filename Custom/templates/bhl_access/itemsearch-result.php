@@ -78,16 +78,6 @@
                             $pagex = json_encode($Page);
                             ?>
                                     <tr valign="top">
-                                    <!---
-                                        <td>
-                                    <ul id="icons" class="ui-widget ui-helper-clearfix">
-                                        <li class="ui-state-default ui-corner-all" title="<?php echo "More on this page..." ?>">
-                                            <span class="ui-icon ui-icon-search"></span>
-                                            <a href="index.php?page_more_info=<?php echo urlencode($pagex) ?>">Search</a>&nbsp;&nbsp;
-                                        </li>
-                                    </ul>
-                                        </td>
-                                    --->
                                         <!-- working but commented now since long URI is not allowed
                                         <td><a title="More info on this page" href="index.php?page_more_info=<?php echo urlencode($pagex)?>"><span class="ui-icon ui-icon-search"></span></a></td>
                                         -->

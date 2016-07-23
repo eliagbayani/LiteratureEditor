@@ -183,7 +183,7 @@ $msgs = self::page_editor_msgs();
         <!--- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --->
             <table><tr><td colspan="2"><big><?php echo $header_title ?></big></td></tr>
             <tr>
-            <td><b>Processing Page <?php echo "<a href='http://biodiversitylibrary.org/page/$PageID'>$PageID</a>" ?></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td><b>Processing Page <?php echo self::get_url_by_id("page", $PageID) ?></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td>
                 <form name="" action="index.php" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="search_type" value="pagesearch">
