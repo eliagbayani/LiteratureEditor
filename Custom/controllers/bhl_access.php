@@ -135,7 +135,9 @@ class bhl_access_controller //extends ControllerBase
 
     public function get_url_by_id($type, $id)
     {
-        return "<a href='" . $this->id_url[$type] . "$id'>$id</a>";
+        $url = $this->id_url[$type] . $id;
+        if(stripos($url, "biodiversitylibrary.org") !== false) return "<a target='bhl' href=\"$url\">$id</a>"; //string is found
+        return "<a href='" . $url . "'>$id</a>";
     }
     
     public static function index(){}
@@ -473,15 +475,13 @@ class bhl_access_controller //extends ControllerBase
             }
         }
         
-        
-        
         echo "Excerpt from " . "<b>" . $params['header_title'] . "</b>" . "<i>$str</i><br><br>";
         
         $ids = self::prep_pageids_4disp($params);
         foreach($ids as $id)
         {
             $info = self::get_label_added_pageInfo($id);
-            $link = "<a href='http://biodiversitylibrary.org/page/$id'>$id</a>";
+            $link = self::get_url_by_id("page", $id);
             echo trim(@$info['prefix'] . " " . @$info['number'] . " (" . @$info['type'] . ") &nbsp;&nbsp;&nbsp; PageID: $link") . "<br><br>";
         }
         
@@ -492,7 +492,7 @@ class bhl_access_controller //extends ControllerBase
         echo "<h3>Excerpt Metadata";
         ?> <button onClick="document.getElementById('accordion_item').value=4;spinner_on();">Edit</button><?php echo"</h3>";
         echo "<b>Authors</b>: " . $params['agents']  . "<br><br>";
-        $link = "<a href='" . self::get_license_url($params['license_type']) . "'>" . $params['license_type'] . "</a>";
+        $link = "<a target='cclicense' href='" . self::get_license_url($params['license_type']) . "'>" . $params['license_type'] . "</a>";
         echo "<b>License</b>: " . $link . "<br><br>";
         echo "<b>Rights Holder</b>: " . $params['rightsholder']  . "<br><br>";
         echo "<b>Compiler</b>: " . self::disp_compiler(@$params['compiler'])  . "<br><br>";
@@ -507,7 +507,7 @@ class bhl_access_controller //extends ControllerBase
         foreach($names as $name)
         {
             $link = "http://www.eol.org/pages/" . str_replace(" ", "%20", $name);
-            $link = "<a href='$link'>$name</a>";
+            $link = "<a target='eol' href='$link'>$name</a>";
             echo $link . "<br><br>";
         }
         
@@ -1409,7 +1409,7 @@ class bhl_access_controller //extends ControllerBase
     {
         return array("intro" => "Use the <b>Skip to next page</b> link to remove the current text excerpt and replace it with the content of the next page.",
         
-        "title" => "Please select an <a href='http://eol.org/info/98'>EOL subchapter</a> for the excerpt. You can also enter a title to specify the scope of the excerpt. For example if you map
+        "title" => "Please select an <a target='eol' href='http://eol.org/info/98'>EOL subchapter</a> for the excerpt. You can also enter a title to specify the scope of the excerpt. For example if you map
         an excerpt to the <b>Morphology</b> subchapter, you may want to use <b>Larvae</b> or <b>Morphology of Larvae</b> as the title if the excerpt focuses on the morphology of the larvae. Also, if the
         excerpt represents the original description, please map it to the <b>Diagnostic Description</b> subchapter and add <b>Original Description</b> as the title. Don't use the subchapter title as the title
         since this would lead to title duplication on EOL pages.",
