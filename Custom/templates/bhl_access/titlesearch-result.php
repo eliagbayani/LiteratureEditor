@@ -163,17 +163,7 @@
                             ?>
                                 <tr>
                                     <td><a onClick="spinner_on()" title="More info on this item" href="../bhl_access/index.php?item_id=<?php echo $Item->ItemID?>&search_type=itemsearch"><span class="ui-icon ui-icon-search"></span></a></td>
-                                    <td>
-                                        <a href="<?php echo $Item->ItemUrl ?>"><?php echo $Item->ItemID ?></a>
-                                        <!--
-                                        <ul id="icons" class="ui-widget ui-helper-clearfix">
-                                            <li><a href="<?php echo $Item->ItemUrl ?>"><?php echo $Item->ItemID ?></a></li>
-                                            <li class="ui-state-default ui-corner-all" title=".ui-icon-search">
-                                                <a href="../bhl_access/index.php?item_id=<?php echo $Item->ItemID?>&search_type=itemsearch"><span class="ui-icon ui-icon-search"></span></a>
-                                            </li>
-                                        </ul>
-                                        -->
-                                    </td>
+                                    <td><a href="<?php echo $Item->ItemUrl ?>"><?php echo $Item->ItemID ?></a></td>
                                     <td><a href="<?php echo $Item->TitleUrl ?>"><?php echo $Item->PrimaryTitleID ?></a></td>
                                     <td><a href="<?php echo $Item->ItemThumbUrl ?>"><?php echo $Item->ThumbnailPageID ?></a></td>
                                     <td><?php echo $Item->Source ?></td>
