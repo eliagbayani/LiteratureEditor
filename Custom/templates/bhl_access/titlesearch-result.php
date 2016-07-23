@@ -163,9 +163,16 @@
                             ?>
                                 <tr>
                                     <td><a onClick="spinner_on()" title="More info on this item" href="../bhl_access/index.php?item_id=<?php echo $Item->ItemID?>&search_type=itemsearch"><span class="ui-icon ui-icon-search"></span></a></td>
-                                    <td><a href="<?php echo $Item->ItemUrl ?>"><?php echo $Item->ItemID ?></a></td>
-                                    <td><a href="<?php echo $Item->TitleUrl ?>"><?php echo $Item->PrimaryTitleID ?></a></td>
-                                    <td><a href="<?php echo $Item->ItemThumbUrl ?>"><?php echo $Item->ThumbnailPageID ?></a></td>
+
+                                    <!--- <td><a href="<?php echo $Item->ItemUrl ?>"><?php echo $Item->ItemID ?></a></td> --->
+                                    <td><?php echo self::get_url_by_id("item", $Item->ItemID) ?></td>
+
+                                    <!--- <td><a href="<?php echo $Item->TitleUrl ?>"><?php echo $Item->PrimaryTitleID ?></a></td> --->
+                                    <td><?php echo self::get_url_by_id("title", $Item->PrimaryTitleID) ?></td>
+                                    
+                                    <!--- <td><a href="<?php echo $Item->ItemThumbUrl ?>"><?php echo $Item->ThumbnailPageID ?></a></td> --->
+                                    <td><?php echo self::get_url_by_id("pagethumb", $Item->ThumbnailPageID) ?></td>
+                                    
                                     <td><?php echo $Item->Source ?></td>
                                     <td><?php echo $Item->SourceIdentifier ?></td>
                                     <td><?php echo $Item->Volume ?></td>
