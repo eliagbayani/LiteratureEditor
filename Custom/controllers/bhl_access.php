@@ -137,6 +137,7 @@ class bhl_access_controller //extends ControllerBase
     {
         $url = $this->id_url[$type] . $id;
         if(stripos($url, "biodiversitylibrary.org") !== false) return "<a target='bhl' href=\"$url\">$id</a>"; //string is found
+        if(stripos($url, "eol.org")                 !== false) return "<a target='eol' href=\"$url\">$id</a>"; //string is found
         return "<a href='" . $url . "'>$id</a>";
     }
     
@@ -677,7 +678,7 @@ class bhl_access_controller //extends ControllerBase
     }
 
     //======================================================= for Articlelist
-    function list_titles_by_type($type)
+    function list_titles_by_type($type, $book_title)
     {
         $titles = self::get_titles_by_type($type);
         // echo "<pre>"; print_r($titles); echo "</pre>";
@@ -690,10 +691,14 @@ class bhl_access_controller //extends ControllerBase
         $recs = array();
         foreach($titles['query']['allpages'] as $r)
         {
-            // echo "<pre>"; print_r($r); echo "</pre>"; exit;
+            // echo "<pre>"; print_r($r); echo "</pre>";
             $info = self::get_wiki_text($r['title'], array("expire_seconds" => 86400)); //cache expires in 24 hrs
             $params = self::get_void_part($info['content']);
             if(!$params['header_title']) continue; //to exclude the likes of "Main Page"
+            if($book_title)
+            {
+                if($book_title != $params['header_title']) continue;
+            }
             $info['compiler']     = self::disp_compiler($params['compiler']);
             $info['subject_type'] = self::get_subject_desc($params['subject_type']);
             $info['title']        = $r['title'];
@@ -705,14 +710,14 @@ class bhl_access_controller //extends ControllerBase
         return $recs;
     }
     
-    function get_titles_by_type($type)
+    function get_titles_by_type($type) //expire_seconds should always be TRUE
     {
         if($type == "all")
         {
             $final['query']['allpages'] = array();
             foreach(array(0,5000) as $ns)
             {
-                $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=&aplimit=100";
+                $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=&aplimit=400";
                 $added_param = "";
                 while(true)
                 {
@@ -726,12 +731,12 @@ class bhl_access_controller //extends ControllerBase
             }
             return $final;
         }
-        else
+        elseif($type)
         {
             if($type == "draft")        $ns = 0;
             elseif($type == "approved") $ns = 5000;
             // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=allpages&apnamespace=5000
-            $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=&aplimit=100";
+            $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=&aplimit=400";
             $added_param = "";
             $final['query']['allpages'] = array();
             while(true)
@@ -746,7 +751,22 @@ class bhl_access_controller //extends ControllerBase
             return $final;
         }
     }
-
+    //======================================================= filter lists
+    function get_unique_book_titles($type) // either 'draft' of 'approved'
+    {
+        $titles = self::get_titles_by_type($type);
+        // echo "<pre>"; print_r($titles); echo "</pre>"; exit("\nelix\n");
+        $book_titles = array();
+        foreach($titles['query']['allpages'] as $r)
+        {
+            // echo "<pre>"; print_r($r); echo "</pre>"; //exit;
+            $info = self::get_wiki_text($r['title'], array("expire_seconds" => false)); //cache should never expire
+            $params = self::get_void_part($info['content']);
+            if(!$params['header_title']) continue; //to exclude the likes of "Main Page"
+            $book_titles[$params['header_title']] = '';
+        }
+        return array_keys($book_titles);
+    }
     //======================================================= moving files
     function get_move_token($wiki_title)
     {
@@ -784,7 +804,7 @@ class bhl_access_controller //extends ControllerBase
         */
         $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($wiki_title) . "&format=json&prop=revisions&rvprop=content|timestamp";
         // echo "<br>[$url]<br>";
-        $json = Functions::lookup_with_cache($url, $download_params); //this expire_seconds should always be true, but for listing expires in 5 hours.
+        $json = Functions::lookup_with_cache($url, $download_params); //this expire_seconds should always be true, but for listing expires in xx hours. See list_titles_by_type()
         $arr = json_decode($json, true);
         // echo "<pre>";print_r($arr);echo "</pre>";//exit;
         foreach(@$arr['query']['pages'] as $page) //there is really just one page here...

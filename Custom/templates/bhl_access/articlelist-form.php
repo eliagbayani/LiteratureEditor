@@ -2,7 +2,6 @@
 // namespace php_active_record;
     /* Expects: radio */
 ?>
-
 <form name="validator_form" action="index.php" method="post" enctype="multipart/form-data">
 <input type="hidden" name="search_type" value="articlelist">
     <table border="0">
@@ -29,6 +28,27 @@
         $archive_id = "BHL_lit_" . str_replace(array("-",":"," "), "_", date('Y-m-d H:i:s'));
         ?>
         <tr><td><a href='index.php?search_type=gen_archive_all&archive_id=<?php echo $archive_id ?>'>Generate EOL DWC-A for these articles.</a></td></tr>
+        <?php
+    }
+    elseif($radio == 'draft') {}
+    if($radio) //one of the radio is clicked
+    {
+        $book_titles = self::get_unique_book_titles($radio);
+        // echo "<pre>"; print_r($book_titles); echo "</pre>";
+        ?>
+        <tr>
+            <td>
+            <select name="book_title" id="" style="width: 1000px;" onChange="spinner_on();submit()">
+                <option>-- Pick a title --</option>
+                <?php foreach($book_titles as $book)
+                {
+                    $selected = "";
+                    if($book_title == $book) $selected = "selected";
+                    echo '<option value="' . $book . '" ' . $selected . '>' . $book . '</option>';
+                }?>
+            </select>
+            </td>
+        </tr>
         <?php
     }
     ?>

@@ -5,9 +5,7 @@
         <li><a onClick="tab3_clicked()" href="#tabs_main-3">Back to Wiki ››</a></li>
     </ul>
     <div id="tabs_main-1">
-        <?php 
-          print $ctrler->render_layout(@$params, 'articlelist-form')
-        ?>
+        <?php print $ctrler->render_layout(@$params, 'articlelist-form') ?>
     </div>
     <div id="tabs_main-2">Loading...</div>
     <div id="tabs_main-3">Loading...</div>
