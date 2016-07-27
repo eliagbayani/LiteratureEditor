@@ -1,6 +1,6 @@
 <?php
 // namespace php_active_record;
-    /* Expects: radio */
+    /* Expects: radio, book_title, etc. */
 ?>
 <form name="validator_form" action="index.php" method="post" enctype="multipart/form-data">
 <input type="hidden" name="search_type" value="articlelist">

@@ -5,7 +5,7 @@
     else $rows = array();
 ?>
 <div id="accordion_open">
-    <h3>Titles = <?php echo count($rows) ?></h3>
+    <h3>Articles = <?php echo count($rows) ?></h3>
     <div>
         <?php 
         // echo "<pre>"; print_r($rows); echo "</pre>";
