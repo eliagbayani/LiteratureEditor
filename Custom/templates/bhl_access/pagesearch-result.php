@@ -1,10 +1,8 @@
 <?php
 // namespace php_active_record;
-    /* 
-        Expects:
-    */
+    /* Expects: */
     $total = count(@$xml->Result);
-    // print_r(@$xml->Result); exit;
+    // print_r(@$xml->Result);
     // print_r($params);
 ?>
 <!--- <h3 class="demoHeaders">Page(s): <?php echo $total ?></h3> --->
@@ -18,7 +16,6 @@
         {
             $Page_xml = $Page;
             $Page = json_decode(json_encode($Page)); //converting SimpleXMLElement Object to stdClass Object
-            
             $tabs_count++;
             ?>
             <h3>PageID: <?php echo $Page->PageID ?></h3>
@@ -52,20 +49,7 @@
                                 ?>
                                     <tr>
                                         <td><?php echo $Name->NameBankID ?></td>
-                                        <td>
-                                            <?php echo self::get_url_by_id("eol", $Name->EOLID) ?>
-                                        </td>
-                                        <!---
-                                        <td>
-                                            <?php if(trim($Name->EOLID))
-                                            {
-                                                ?>
-                                                <a title="EoL.org" href="http://eol.org/pages/<?php echo $Name->EOLID?>"><span class="ui-icon ui-icon-link"></span></a>
-                                                <?php
-                                            }
-                                            ?>
-                                        </td>
-                                        --->
+                                        <td><?php echo self::get_url_by_id("eol", $Name->EOLID) ?></td>
                                         <td><?php echo $Name->NameFound ?></td>
                                         <td><?php echo $Name->NameConfirmed ?></td>
                                     </tr>
