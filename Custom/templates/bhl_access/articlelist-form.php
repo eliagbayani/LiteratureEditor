@@ -4,7 +4,7 @@
 ?>
 <form name="validator_form" action="index.php" method="post" enctype="multipart/form-data">
 <input type="hidden" name="search_type" value="articlelist">
-    <table border="0">
+    <table border="0" width="100%">
     <tr valign="top">
         <td>
         <div id="radioset">
@@ -15,11 +15,11 @@
         --->
         </div>
         </td>
+        <!---
         <td valign="top">
-            <!--- <button id="button" onClick="spinner_on()">Search Title >></button> --->
+             <button id="button" onClick="spinner_on()">Search Title >></button>
         </td>
-        <td>
-        </td>
+        --->
     </tr>
     <?php
     if($radio) //one of the radio is clicked

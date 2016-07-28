@@ -122,14 +122,14 @@ Subchapter
     $('#example tbody').on('click', 'tr', function () {
             var data = table.row( this ).data();
             //alert( 'You clicked on '+data[0]+'\'s row' );
-            myFunction(data[4], data[1]);
+            myFunction(data[4], data[1], data[2]);
         } );
     
 <!--- } ); --->
 
-function myFunction(wiki_title, title) {
+function myFunction(wiki_title, title, subject) {
     var x;
-    if (confirm("Proceed to Title: "+title) == true) 
+    if (confirm("Proceed to article: "+title+" - ("+subject+")") == true) 
     {
         //alert('ok '+title_id);
         document.getElementById("wiki_title").value = wiki_title;
