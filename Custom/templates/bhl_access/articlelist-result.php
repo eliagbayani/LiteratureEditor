@@ -1,9 +1,8 @@
 <?php
 // namespace php_active_record;
     /* Expects: $params */
-    if($val = @$params['book_title']) $rows = self::list_titles_by_type($params['radio'], $val);
-    else $rows = array();
-
+if($val = @$params['book_title']) $rows = self::list_titles_by_type($params['radio'], $val);
+else                              $rows = array();
 if($rows)
 {
     ?>
