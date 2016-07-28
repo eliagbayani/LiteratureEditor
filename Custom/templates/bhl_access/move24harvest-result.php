@@ -9,10 +9,8 @@
         )
     */
     // echo "<pre>"; print_r($params); echo "</pre>";
-    
     if($params['wiki_status'] == "{Draft}") $str = "For EOL Harvesting";
-    else                                    $str = "For Review (drafts)";
-    
+    else                                    $str = "For Review (draft)";
 ?>
 <div id="accordion_open2">
     <h3>Move to "<?php echo $str ?>"</h3>
@@ -21,11 +19,9 @@
     if($params['token'] = self::get_move_token($params['wiki_title']))
     {
         $arr = self::move_file($params);
-        // echo "<pre>222"; print_r($arr); echo "</pre>"; //debug
-
+        // echo "<pre>"; print_r($arr); echo "</pre>"; //debug
         if($msg = @$arr['error']['code']) self::display_message(array('type' => "error", 'msg' => $msg));
         if($msg = @$arr['error']['info']) self::display_message(array('type' => "error", 'msg' => $msg));
-        
         if($new_title = @$arr['move']['to'])
         {
             $wiki_page = "../../wiki/" . $new_title;
@@ -36,8 +32,7 @@
             <?php
         }
     }
-    else self::display_message(array('type' => "error", 'msg' => "Move failed."));
+    else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));
     ?>
     </div>
 </div>
-
