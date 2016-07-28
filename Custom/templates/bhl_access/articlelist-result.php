@@ -3,14 +3,20 @@
     /* Expects: $params */
     if($val = @$params['book_title']) $rows = self::list_titles_by_type($params['radio'], $val);
     else $rows = array();
-?>
-<div id="accordion_open">
-    <h3>Articles = <?php echo count($rows) ?></h3>
-    <div>
-        <?php 
-        // echo "<pre>"; print_r($rows); echo "</pre>";
-        if($rows) print self::render_template('article-table', array('rows' => @$rows));
-        ?>
+
+if($rows)
+{
+    ?>
+    <div id="accordion_open">
+        <h3>Articles = <?php echo count($rows) ?></h3>
+        <div>
+            <?php 
+            // echo "<pre>"; print_r($rows); echo "</pre>";
+            if($rows) print self::render_template('article-table', array('rows' => @$rows));
+            ?>
+        </div>
     </div>
-</div>
+    <?php
+}
+?>
 
