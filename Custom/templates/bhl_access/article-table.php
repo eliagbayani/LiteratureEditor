@@ -129,7 +129,7 @@ Subchapter
 
 function myFunction(wiki_title, title, subject) {
     var x;
-    if (confirm("Proceed to article: "+title+" - ("+subject+")") == true) 
+    if (confirm("Proceed to article:\n"+title+" - ("+subject+")") == true) 
     {
         //alert('ok '+title_id);
         document.getElementById("wiki_title").value = wiki_title;
