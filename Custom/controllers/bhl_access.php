@@ -712,7 +712,7 @@ class bhl_access_controller //extends ControllerBase
     
     function get_titles_by_type($type) //expire_seconds should always be TRUE
     {
-        if($type == "all")
+        if($type == "all") //working but no longer being used
         {
             $final['query']['allpages'] = array();
             foreach(array(0,5000) as $ns)
@@ -721,7 +721,6 @@ class bhl_access_controller //extends ControllerBase
                 $added_param = "";
                 while(true)
                 {
-                    // echo "<br>[$url" . "$added_param]<br>";
                     $json = Functions::lookup_with_cache($url.$added_param, array('expire_seconds' => true)); //this expire_seconds should always be true
                     $arr = json_decode($json, true);
                     $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
