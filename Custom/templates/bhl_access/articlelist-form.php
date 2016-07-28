@@ -57,11 +57,13 @@
 
     if($radio == 'approved')
     {
+        /* moved to its separate menu item
         date_default_timezone_set('America/New_York');
         $archive_id = "BHL_lit_" . str_replace(array("-",":"," "), "_", date('Y-m-d H:i:s'));
         ?>
         <tr><td><a href='index.php?search_type=gen_archive_all&archive_id=<?php echo $archive_id ?>'>Generate EOL DWC-A for all articles in 'For EOL Harvesting'.</a></td></tr>
         <?php
+        */
         $str = "For Review (draft)";
     }
     elseif($radio == 'draft')
@@ -79,7 +81,7 @@
             {
                 ?>
                 <tr><td>
-                <a href='index.php?search_type=movebatch&wiki_status=<?php echo urlencode($wiki_status) ?>&book_title=<?php echo urlencode($book_title) ?>'><b>Move ALL</b> articles from this title to '<?php echo $str ?>'.</a>
+                <a onClick="spinner_on();" href='index.php?search_type=movebatch&wiki_status=<?php echo urlencode($wiki_status) ?>&book_title=<?php echo urlencode($book_title) ?>'><b>Move ALL</b> articles from this title to '<?php echo $str ?>'.</a>
                 </td></tr>
                 <?php
             }

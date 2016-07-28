@@ -29,10 +29,12 @@ $ctrler = new bhl_access_controller($params);
 if(!$ctrler->user_is_logged_in_wiki()) return;
 
 if(isset($params['search2']) || @$params['search_type'] == 'booksearch'
-                             || @$params['search_type'] == 'titlelist')   require_once("../templates/bhl_access/layout2.php");
+                             || @$params['search_type'] == 'titlelist') require_once("../templates/bhl_access/layout2.php");
 elseif(isset($params['article_list']) 
-                             || @$params['search_type'] == 'articlelist') require_once("../templates/bhl_access/layout3.php");
-else                                                                      require_once("../templates/bhl_access/layout.php");
+                             || @$params['search_type'] == 'articlelist'
+                             || @$params['search_type'] == 'gen_archive_all'
+                             || @$params['search_type'] == 'movebatch') require_once("../templates/bhl_access/layout3.php");
+else require_once("../templates/bhl_access/layout.php");
 ?>
 
 <!--- for spinner effect: http://spin.js.org/ --->
@@ -76,6 +78,11 @@ if(isset($params['part_more_info'])) print '<script>$( "#tabs_main" ).tabs( "opt
 //for layout2
 if    (@$params['search_type'] == 'booksearch')      print '<script>$( "#tabs_main" ).tabs( "option", "active", 0 );</script>';
 elseif(@$params['search_type'] == 'titlelist')       print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
+
+//for layout3
+if    (@$params['search_type'] == 'gen_archive_all') print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
+elseif(@$params['search_type'] == 'movebatch')       print '<script>$( "#tabs_main" ).tabs( "option", "active", 0 );</script>';
+
 ?>
 </body>
 </html>

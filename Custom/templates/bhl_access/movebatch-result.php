@@ -63,6 +63,15 @@ foreach($recs as $rec)
     else                    $type = 'approved';
     
     echo "<br><a href=\"index.php?search_type=articlelist&radio=$type&book_title=" . urlencode($params['book_title']) . "\">See new list</a>";
+    
+    $page = "index.php?search_type=articlelist&radio=$type&book_title=" . urlencode($params['book_title']);
     ?>
+    
+    <!--- working but commented for now
+    <script type="text/javascript">
+    location.href = '<?php echo $page ?>';
+    </script>
+    --->
+    
     </div>
 </div>
