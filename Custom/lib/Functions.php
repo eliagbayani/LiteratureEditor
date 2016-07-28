@@ -128,6 +128,12 @@ class Functions
         return false;
     }
 
+    public static function get_string_between($str_left, $str_right, $string)
+    {
+        if(preg_match("/$str_left(.*?)$str_right/ims", $string, $matches)) return trim($matches[1]);
+        return;
+    }
+
     public static function format_url($url)
     {
         if(filter_var($url, FILTER_VALIDATE_URL) === FALSE) //"Not valid";

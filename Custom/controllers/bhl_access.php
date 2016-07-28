@@ -463,7 +463,7 @@ class bhl_access_controller //extends ControllerBase
             $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $params['wiki_title'] . "&search_type=move24harvest&wiki_status=$wiki_status";
 
             if($wiki_status == "{Draft}") $str .= " | <a href='$url'>Move to 'For EOL Harvesting'</a>";
-            else                          $str .= " | <a href='$url'>Move to 'For Review (drafts)'</a>";
+            else                          $str .= " | <a href='$url'>Move to 'For Review (draft)'</a>";
             //end ============================
         }
         else $str = "";

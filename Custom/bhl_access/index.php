@@ -59,6 +59,7 @@ if(isset($params['search_type']))
     elseif($params['search_type'] == "gen_archive")   print $ctrler->render_template('gen_archive-result', array('params' => @$params));
     elseif($params['search_type'] == "gen_archive_all") print $ctrler->render_template('gen_archive_all-result', array('params' => @$params));
     elseif($params['search_type'] == "move24harvest") print $ctrler->render_template('move24harvest-result', array('params' => @$params));
+    elseif($params['search_type'] == "movebatch")     print $ctrler->render_template('movebatch-result', array('params' => @$params));
 }
 
 require_once("../config/script-below-entry.html");

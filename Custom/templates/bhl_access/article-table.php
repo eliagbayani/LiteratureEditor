@@ -62,7 +62,7 @@ Subchapter
                     <td><?php echo $r['timestamp'] ?></td>
                     <td><?php echo $r['header_title'] ?></td>
                     <td><?php echo $r['subject_type'] ?></td>
-                    <td><?php echo $r['compiler'] ?></td>
+                    <td><?php echo strip_tags($r['compiler']) ?></td>
                     <td style="display:none"><?php echo $r['title'] ?></td>
                 </tr>
             <?php
