@@ -8,7 +8,7 @@ if($rows)
 {
     ?>
     <div id="accordion_open">
-        <h3>Articles = <?php echo count($rows) ?></h3>
+        <h3>Articles = <?php echo count($rows) . " : &nbsp;&nbsp; <b>\"$val\"</b>" ?></h3>
         <div>
             <?php 
             // echo "<pre>"; print_r($rows); echo "</pre>";

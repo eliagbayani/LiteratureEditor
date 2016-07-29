@@ -31,7 +31,7 @@ Subchapter
     <thead>
         <tr>
             <th>Date</th>
-            <th>Title</th>
+            <!--- <th>Title</th> --->
             <th>Subchapter</th>
             <th>Compiler</th>
             <th style="display:none">Wiki</th>
@@ -40,7 +40,7 @@ Subchapter
     <tfoot>
         <tr>
             <th>Date</th>
-            <th>Title</th>
+            <!--- <th>Title</th> --->
             <th>Subchapter</th>
             <th>Compiler</th>
             <th style="display:none">Wiki</th>
@@ -60,7 +60,7 @@ Subchapter
             ?>
                 <tr>
                     <td><?php echo $r['timestamp'] ?></td>
-                    <td><?php echo $r['header_title'] ?></td>
+                    <!--- <td><?php echo $r['header_title'] ?></td> --->
                     <td><?php echo $r['subject_type'] ?></td>
                     <td><?php echo strip_tags($r['compiler']) ?></td>
                     <td style="display:none"><?php echo $r['title'] ?></td>
@@ -122,7 +122,7 @@ Subchapter
     $('#example tbody').on('click', 'tr', function () {
             var data = table.row( this ).data();
             //alert( 'You clicked on '+data[0]+'\'s row' );
-            myFunction(data[4], data[1], data[2]);
+            myFunction(data[3], data[1], data[2]);
         } );
     
 <!--- } ); --->
