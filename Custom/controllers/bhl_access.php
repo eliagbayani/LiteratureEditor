@@ -754,11 +754,11 @@ class bhl_access_controller //extends ControllerBase
     function get_unique_book_titles($type) // either 'draft' of 'approved'
     {
         $titles = self::get_titles_by_type($type);
-        // echo "<pre>"; print_r($titles); echo "</pre>"; exit("\nelix\n");
+        // echo "<pre>"; print_r($titles); echo "</pre>";
         $book_titles = array();
         foreach($titles['query']['allpages'] as $r)
         {
-            // echo "<pre>"; print_r($r); echo "</pre>"; //exit;
+            // echo "<pre>"; print_r($r); echo "</pre>";
             $info = self::get_wiki_text($r['title'], array("expire_seconds" => false)); //cache should never expire
             $params = self::get_void_part($info['content']);
             if(!$params['header_title']) continue; //to exclude the likes of "Main Page"
