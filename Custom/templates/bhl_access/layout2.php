@@ -2,7 +2,7 @@
     <ul>
         <li><a href="#tabs_main-1">Book Search</a></li>
         <li><a href="#tabs_main-3">Pick A Title</a></li>
-        <li><a onClick="other_clicked()" href="#tabs_main-6">BHL ID Search ››</a></li>
+        <li><a onClick="other_clicked()" href="#tabs_main-6">Page Search ››</a></li>
         <li><a onClick="tab4_clicked()" href="#tabs_main-5">Back to Wiki ››</a></li>
     </ul>
     <div id="tabs_main-1">
