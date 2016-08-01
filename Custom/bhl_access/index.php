@@ -27,6 +27,15 @@ require_once("../lib/Functions.php");
 require_once("../controllers/bhl_access.php");
 
 $ctrler = new bhl_access_controller($params);
+
+?>
+<script type="text/javascript">
+$(window).load(function () {
+     $("#loadOverlay").css("display","none");
+});
+</script>
+<?php
+
 if(!$ctrler->user_is_logged_in_wiki()) return;
 
 if(isset($params['search2']) || @$params['search_type'] == 'booksearch'
