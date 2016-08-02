@@ -530,6 +530,57 @@ class bhl_access_controller //extends ControllerBase
         foreach($ocrs as $ocr) echo "<p> " . str_replace("\n", "<br>", $ocr) . "</p>";
     }
 
+    function move2wiki_project($params)
+    {
+        if($val = @$params['proj_name']) $new_title = str_replace(" ", "_", $val);
+        else                             $new_title = "eli title";
+        $params['page_id'] = $new_title;
+        
+        $filename = "../temp/wiki/" . $params['page_id'] . ".wiki";
+        if($file = Functions::file_open($filename, 'w'))
+        {
+            if(isset($params['proj_name']))
+            {
+                $p['page_id']         = $params['page_id'];
+                /* $params['pass_title'] = $params['page_id']; not sure if its needed */ 
+
+                /* working but not yet needed here
+                $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $new_title . "&search_type=wiki2php&overwrite=1";
+                fwrite($file, "__NOEDITSECTION__<span class=\"plainlinks\">[$back Go Review Excerpt - Page Editor]</span>[[Image:Back icon.png|link=$back|Go Review Excerpt - Page Editor]]\n");
+                */
+                
+                // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?search_type=wiki2php&wiki_title=42010506&overwrite=1
+                
+                $pass_params = json_encode($params);
+                $pass_params = substr($pass_params,1,strlen($pass_params)); //remove first char
+                $pass_params = substr($pass_params, 0, -1);                 //remove last char
+                fwrite($file, "{{Void|" . $pass_params . "}}\n");
+                
+                fwrite($file, "=== Project Information ===\n");
+                fwrite($file, "'''Project name''': " . @$params['proj_name']  . "\n\n");
+                fwrite($file, "'''Description''': " . @$params['proj_desc']  . "\n\n");
+
+            }
+            fclose($file);
+        }
+        
+        $temp_wiki_file = DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/Custom/temp/wiki/" . $p['page_id'] . ".wiki";
+        $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -u '" . $_COOKIE['wiki_literatureeditorUserName'] . "' -s 'BHL data to Wiki " . $p['page_id'] . "' -m " . $new_title . " < " . $temp_wiki_file;
+        $status = shell_exec($cmdline . " 2>&1");
+        $status = str_ireplace("done", "done. &nbsp;", $status);
+        $wiki_page = "../../wiki/" . $new_title;
+        
+        // /*
+        // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
+        ?>
+        <script type="text/javascript">
+        location.href = '<?php echo $wiki_page ?>';
+        </script>
+        <?php
+        // */
+        
+    }
+
     function move2wiki($params)
     {
         if($val = @$params['wiki_title']) $new_title = str_replace(" ", "_", $val);
@@ -761,7 +812,7 @@ class bhl_access_controller //extends ControllerBase
             // echo "<pre>"; print_r($r); echo "</pre>";
             $info = self::get_wiki_text($r['title'], array("expire_seconds" => false)); //cache should never expire
             $params = self::get_void_part($info['content']);
-            if(!$params['header_title']) continue; //to exclude the likes of "Main Page"
+            if(!@$params['header_title']) continue; //to exclude the likes of "Main Page"
             $book_titles[$params['header_title']] = '';
         }
         return array_keys($book_titles);
