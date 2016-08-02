@@ -16,6 +16,8 @@
     <h3>Move to "<?php echo $str ?>"</h3>
     <div>
     <?php
+    self::start_move($params);
+    /* working well, moved in bhl_access.php
     if($params['token'] = self::get_move_token($params['wiki_title']))
     {
         $arr = self::move_file($params);
@@ -33,6 +35,7 @@
         }
     }
     else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));
+    */
     ?>
     </div>
 </div>

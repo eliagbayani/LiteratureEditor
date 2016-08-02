@@ -530,12 +530,35 @@ class bhl_access_controller //extends ControllerBase
         foreach($ocrs as $ocr) echo "<p> " . str_replace("\n", "<br>", $ocr) . "</p>";
     }
 
+    function wiki_exists($title)
+    {
+        // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&format=jsonfm&titles=Main%20Page
+        $url = $this->mediawiki_api . "?action=query&format=json&titles=". urlencode($title);
+        $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
+        $arr = json_decode($json);
+        // echo "<pre>"; print_r($arr); echo "</pre>";
+        if(@$arr->query->pages->{-1}) return false;
+        else return true;
+    }
+    
     function move2wiki_project($params)
     {
-        if($val = @$params['proj_name']) $new_title = str_replace(" ", "_", $val);
-        else                             $new_title = "eli title";
+        if($val = @$params['proj_name']) $new_title = "Projects:".str_replace(" ", "_", $val);
+        else
+        {
+            echo "Project name cannot be blank.";
+            return;
+        }
+        if(self::wiki_exists($new_title))
+        {
+            $msg = "Project name already exists.";
+            self::display_message(array('type' => "error", 'msg' => $msg));
+            $wiki_page = "../../wiki/" . $new_title;
+            echo "<br><a style='font-color:blue' href='javascript:history.go(-1)'>Try again</a><br><br>OR<br><br><a href='$wiki_page'>View project</a>";
+            return;
+        }
+
         $params['page_id'] = $new_title;
-        
         $filename = "../temp/wiki/" . $params['page_id'] . ".wiki";
         if($file = Functions::file_open($filename, 'w'))
         {
@@ -544,10 +567,10 @@ class bhl_access_controller //extends ControllerBase
                 $p['page_id']         = $params['page_id'];
                 /* $params['pass_title'] = $params['page_id']; not sure if its needed */ 
 
-                /* working but not yet needed here
+                // /* working but not yet needed here
                 $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $new_title . "&search_type=wiki2php&overwrite=1";
                 fwrite($file, "__NOEDITSECTION__<span class=\"plainlinks\">[$back Go Review Excerpt - Page Editor]</span>[[Image:Back icon.png|link=$back|Go Review Excerpt - Page Editor]]\n");
-                */
+                // */
                 
                 // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?search_type=wiki2php&wiki_title=42010506&overwrite=1
                 
@@ -570,15 +593,20 @@ class bhl_access_controller //extends ControllerBase
         $status = str_ireplace("done", "done. &nbsp;", $status);
         $wiki_page = "../../wiki/" . $new_title;
         
-        // /*
-        // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
         ?>
         <script type="text/javascript">
         location.href = '<?php echo $wiki_page ?>';
         </script>
         <?php
-        // */
         
+        
+        /*
+        //start move to Projects NS
+        $p = array();
+        $p['wiki_title'] = $new_title;
+        $p['wiki_status'] = "{to Projects NS}";
+        self::start_move($p);
+        */
     }
 
     function move2wiki($params)
@@ -818,6 +846,31 @@ class bhl_access_controller //extends ControllerBase
         return array_keys($book_titles);
     }
     //======================================================= moving files
+    function start_move($params)
+    {
+        if($params['token'] = self::get_move_token($params['wiki_title']))
+        {
+            $arr = self::move_file($params);
+            // echo "<pre>"; print_r($arr); echo "</pre>"; //debug
+            if($msg = @$arr['error']['code']) self::display_message(array('type' => "error", 'msg' => $msg));
+            if($msg = @$arr['error']['info']) 
+            {
+                self::display_message(array('type' => "error", 'msg' => $msg));
+                echo "<br><a href='javascript:history.go(-1)'>Try again.</a><br>";
+            }
+            if($new_title = @$arr['move']['to'])
+            {
+                $wiki_page = "../../wiki/" . $new_title;
+                ?>
+                <script type="text/javascript">
+                location.href = '<?php echo $wiki_page ?>';
+                </script>
+                <?php
+            }
+        }
+        else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));
+    }
+    
     function get_move_token($wiki_title)
     {
         /* deprecated combination
@@ -839,6 +892,7 @@ class bhl_access_controller //extends ControllerBase
         $from = urlencode($params['wiki_title']);
         if($params['wiki_status'] == "{Draft}")         $to = urlencode("ForHarvesting:".$params['wiki_title']);
         elseif($params['wiki_status'] == "{Approved}")  $to = urlencode(str_replace("ForHarvesting:", "", $params['wiki_title']));
+        // elseif($params['wiki_status'] == "{to Projects NS}") $to = urlencode("Projects:".$params['wiki_title']); not needed
         $url = "/LiteratureEditor/api.php?format=json&action=move&from=" . $from . "&to=" . $to . "&reason=&movetalk&noredirect";
         $json = self::get_api_result_via_post($url, array("token" => $params['token']));
         $arr = json_decode($json, true);

@@ -44,6 +44,8 @@ elseif(isset($params['article_list'])
                              || @$params['search_type'] == 'articlelist'
                              || @$params['search_type'] == 'gen_archive_all'
                              || @$params['search_type'] == 'movebatch') require_once("../templates/bhl_access/layout3.php");
+elseif(isset($params['projects_menu'])
+                             || @$params['search_type'] == 'projectsmenu') require_once("../templates/bhl_access/layout4.php");
 else require_once("../templates/bhl_access/layout.php");
 ?>
 
@@ -65,6 +67,8 @@ if(isset($params['search_type']))
 {
     if    ($params['search_type'] == "titlelist")     print $ctrler->render_template('titlelist-result', array('letter' => @$params['radio']));
     elseif($params['search_type'] == "articlelist")   print $ctrler->render_template('articlelist-result', array('params' => @$params));
+    elseif($params['search_type'] == "projectsmenu")  print $ctrler->render_template('projectsmenu-result', array('params' => @$params));
+    
     elseif($params['search_type'] == "move2wiki")     print $ctrler->render_template('move2wiki-result', array('params' => @$params));
     elseif($params['search_type'] == "reviewexcerpt") print $ctrler->render_template('reviewexcerpt-result', array('params' => @$params));
     elseif($params['search_type'] == "wiki2php")      print $ctrler->render_template('wiki2php-result', array('params' => @$params));
@@ -92,6 +96,10 @@ elseif(@$params['search_type'] == 'titlelist')       print '<script>$( "#tabs_ma
 //for layout3
 if    (@$params['search_type'] == 'gen_archive_all') print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
 elseif(@$params['search_type'] == 'movebatch')       print '<script>$( "#tabs_main" ).tabs( "option", "active", 0 );</script>';
+
+//for layout4
+// if    (@$params['search_type'] == 'projectsmenu') print '<script>$( "#tabs_main" ).tabs( "option", "active", 0 );</script>';
+
 
 ?>
 </body>
