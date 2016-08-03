@@ -31,7 +31,7 @@
     <div id="tabs_main-5">Loading...</div>
     <div id="tabs_main-6">Loading...</div>
     <div id="tabs_main-7">Loading...</div>
-    <div id="tabs_main-8">Loading...</div>
+    <!--- <div id="tabs_main-8">Loading...</div> --->
     
 </div>
 <?php 
