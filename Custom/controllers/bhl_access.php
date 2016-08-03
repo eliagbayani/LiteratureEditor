@@ -60,7 +60,7 @@ class bhl_access_controller //extends ControllerBase
             $obj = json_decode($json);
             $username = $obj->query->userinfo->name;
             $realname = self::get_realname($username);
-            $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:{$username}";
+            $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:" . str_replace(" ", "_", $username) . "";
             // $this->compiler = "<span class=\'plainlinks\'>[$url {$realname}]</span>";
             $this->compiler = "[$url {$realname}]";
             return true;
@@ -496,7 +496,7 @@ class bhl_access_controller //extends ControllerBase
         $link = "<a target='cclicense' href='" . self::get_license_url($params['license_type']) . "'>" . $params['license_type'] . "</a>";
         echo "<b>License</b>: " . $link . "<br><br>";
         echo "<b>Rights Holder</b>: " . $params['rightsholder']  . "<br><br>";
-        echo "<b>Compiler</b>: " . self::disp_compiler(@$params['compiler'])  . "<br><br>";
+        echo "<b>Compiler</b>: " . self::disp_compiler(@$params['compiler']) . "<br><br>";
         echo "<b>Supplier</b>: " . "Biodiversity Heritage Library"  . "<br><br>";
         echo "<b>Language</b>: " . @$params['language']  . "<br><br>";
         $audience = self::prep_audience_4disp($params);
@@ -568,7 +568,7 @@ class bhl_access_controller //extends ControllerBase
                 /* $params['pass_title'] = $params['page_id']; not sure if its needed */ 
 
                 // /* working but not yet needed here
-                $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $new_title . "&search_type=wiki2php&overwrite=1";
+                $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $new_title . "&search_type=wiki2php_project&overwrite=1";
                 fwrite($file, "__NOEDITSECTION__<span class=\"plainlinks\">[$back Go Review Excerpt - Page Editor]</span>[[Image:Back icon.png|link=$back|Go Review Excerpt - Page Editor]]\n");
                 // */
                 
@@ -600,7 +600,7 @@ class bhl_access_controller //extends ControllerBase
         <?php
         
         
-        /*
+        /* not needed anymore
         //start move to Projects NS
         $p = array();
         $p['wiki_title'] = $new_title;
