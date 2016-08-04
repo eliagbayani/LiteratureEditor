@@ -108,7 +108,7 @@ function submit_onclick()
         return true;
     }
     document.getElementById('search_type').value='reviewproject';
-    spinner_on();
+    // spinner_on();
     document.getElementById('frm').submit();
 }
 </script>
