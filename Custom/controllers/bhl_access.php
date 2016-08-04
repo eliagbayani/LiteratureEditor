@@ -372,7 +372,10 @@ class bhl_access_controller //extends ControllerBase
         $subj_part = self::get_subject_desc($p['subject_type']);
         $subj_part = str_replace(" ", "_", trim($subj_part));
         */
-        $title = $p['page_id'] . "_" . md5($p['label_added'].$p['label_added_ref'].$p['subject_type'].$p['title_form'].$p['ocr_text'].$p['taxon_asso'].$p['references']);
+        
+        if    (isset($p['ocr_text']))  $title = $p['page_id'] . "_" . md5($p['label_added'].$p['label_added_ref'].$p['subject_type'].$p['title_form'].$p['ocr_text'].$p['taxon_asso'].$p['references']);
+        elseif(isset($p['proj_desc'])) $title = "Active_Projects:" . $p['proj_name']; // not being used right now
+        
         return $title;
     }
 
@@ -448,6 +451,38 @@ class bhl_access_controller //extends ControllerBase
             }
         }
         else return $compiler;
+    }
+    
+    function review_excerpt_project($params)
+    {
+        if(@$params['overwrite'])
+        {
+            $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $params['wiki_title'];
+            // http://editors.eol.xxx/LiteratureEditor/wiki/16194361_5e05173f317d6f9f35dd954c87bef5ce
+            $str = " - <a href='$url'>View Wiki</a>";
+            
+            //start move24harvest ============
+            $wiki_status = self::page_status($params['wiki_title'], true); //true means projects
+            $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $params['wiki_title'] . "&search_type=move24harvest&wiki_status=$wiki_status";
+
+            if($wiki_status == "{Active}") $str .= " | <a href='$url'>Move to 'Completed Projects'</a>";
+            else                           $str .= " | <a href='$url'>Move to 'Active Projects'</a>";
+            //end ============================
+        }
+        else $str = "";
+
+        if($params['search_type'] == "move2wiki") // from wiki OR from article list
+        {
+            if($params['wiki_status'] == "{Completed}") // you can generate archive
+            {
+                $str .= " | <a href='index.php?search_type=gen_archive&wiki_title=" . urldecode($params['wiki_title']) . "'>Generate the EOL DWC-A for this project</a>";
+            }
+        }
+        
+        echo "Project details: " . "<b>" . $params['proj_name'] . "</b>" . "<i>$str</i><br><br>";
+        echo "<b>Project name</b>: " . $params['proj_name']  . "<br><br>";
+        echo "<b>Description</b>: " . $params['proj_desc']  . "<br><br>";
+
     }
     
     function review_excerpt($params)
@@ -543,33 +578,36 @@ class bhl_access_controller //extends ControllerBase
     
     function move2wiki_project($params)
     {
-        if($val = @$params['proj_name']) $new_title = "Projects:".str_replace(" ", "_", $val);
-        else
-        {
-            echo "Project name cannot be blank.";
-            return;
-        }
-        if(self::wiki_exists($new_title))
-        {
-            $msg = "Project name already exists.";
-            self::display_message(array('type' => "error", 'msg' => $msg));
-            $wiki_page = "../../wiki/" . $new_title;
-            echo "<br><a style='font-color:blue' href='javascript:history.go(-1)'>Try again</a><br><br>OR<br><br><a href='$wiki_page'>View project</a>";
-            return;
-        }
-
-        $params['page_id'] = $new_title;
+        /*
+        if($val = @$params['wiki_title']) $new_title = str_replace(" ", "_", $val);
+        else                              $new_title = self::create_title($params);
+        */
+        
+        //delete existing if necessary
+        $arr = explode(":", $params['wiki_title']);
+        $old_title = $arr[1];
+        if($old_title != $params['proj_name']) self::start_delete($params);
+        
+        
+        $new_title = "Active_Projects:".str_replace(" ", "_", $params['proj_name']);
+        
+        $params['page_id'] = md5($this->compiler . date('Y-m-d-H-i-s', time())); //just a temp file, will be deleted once wiki is created.
+                             
+        
         $filename = "../temp/wiki/" . $params['page_id'] . ".wiki";
+        
         if($file = Functions::file_open($filename, 'w'))
         {
-            if(isset($params['proj_name']))
-            {
+            $go_top = "|+ style=\"caption-side:right;\"|[[Image:arrow-up icon.png|link=#top|Go top]]";
+            //if(isset($params['header_title']))
+            if(true)
+            {   //ver 2
                 $p['page_id']         = $params['page_id'];
-                /* $params['pass_title'] = $params['page_id']; not sure if its needed */ 
+                $params['pass_title'] = $params['page_id'];
 
-                // /* working but not yet needed here
+                // /* working but not yet requested
                 $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $new_title . "&search_type=wiki2php_project&overwrite=1";
-                fwrite($file, "__NOEDITSECTION__<span class=\"plainlinks\">[$back Go Review Excerpt - Page Editor]</span>[[Image:Back icon.png|link=$back|Go Review Excerpt - Page Editor]]\n");
+                fwrite($file, "__NOEDITSECTION__<span class=\"plainlinks\">[$back Go Review Project - Page Editor]</span>[[Image:Back icon.png|link=$back|Go Review Project - Page Editor]]\n");
                 // */
                 
                 // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?search_type=wiki2php&wiki_title=42010506&overwrite=1
@@ -579,9 +617,10 @@ class bhl_access_controller //extends ControllerBase
                 $pass_params = substr($pass_params, 0, -1);                 //remove last char
                 fwrite($file, "{{Void|" . $pass_params . "}}\n");
                 
-                fwrite($file, "=== Project Information ===\n");
-                fwrite($file, "'''Project name''': " . @$params['proj_name']  . "\n\n");
-                fwrite($file, "'''Description''': " . @$params['proj_desc']  . "\n\n");
+                fwrite($file, "== Project Detail ==\n");
+                fwrite($file, "'''Project name''': " . $params['proj_name']  . "\n\n");
+                fwrite($file, "'''Description''': " . $params['proj_desc']  . "\n\n");
+                fwrite($file, "'''Compiler''': " . @$params['compiler']  . "\n\n");
 
             }
             fclose($file);
@@ -590,9 +629,14 @@ class bhl_access_controller //extends ControllerBase
         $temp_wiki_file = DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/Custom/temp/wiki/" . $p['page_id'] . ".wiki";
         $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -u '" . $_COOKIE['wiki_literatureeditorUserName'] . "' -s 'BHL data to Wiki " . $p['page_id'] . "' -m " . $new_title . " < " . $temp_wiki_file;
         $status = shell_exec($cmdline . " 2>&1");
+        echo "<br>[$status]<br>";
         $status = str_ireplace("done", "done. &nbsp;", $status);
         $wiki_page = "../../wiki/" . $new_title;
         
+        //now delete the temp wiki file
+        unlink($temp_wiki_file);
+        
+        // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
         ?>
         <script type="text/javascript">
         location.href = '<?php echo $wiki_page ?>';
@@ -600,13 +644,6 @@ class bhl_access_controller //extends ControllerBase
         <?php
         
         
-        /* not needed anymore
-        //start move to Projects NS
-        $p = array();
-        $p['wiki_title'] = $new_title;
-        $p['wiki_status'] = "{to Projects NS}";
-        self::start_move($p);
-        */
     }
 
     function move2wiki($params)
@@ -721,6 +758,9 @@ class bhl_access_controller //extends ControllerBase
         $status = shell_exec($cmdline . " 2>&1");
         $status = str_ireplace("done", "done. &nbsp;", $status);
         $wiki_page = "../../wiki/" . $new_title;
+        
+        //now delete the temp wiki file
+        unlink($temp_wiki_file);
         
         // /*
         // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
@@ -899,6 +939,44 @@ class bhl_access_controller //extends ControllerBase
         if($val = @$arr['warnings']['info']['*']) self::display_message(array('type' => "error", 'msg' => $val));
         return $arr;
     }
+
+    function start_delete($params)
+    {
+        if($params['token'] = self::get_move_token($params['wiki_title']))
+        {
+            $arr = self::delete_file($params);
+            // echo "<pre>"; print_r($arr); echo "</pre>"; //debug
+            if($msg = @$arr['error']['code']) self::display_message(array('type' => "error", 'msg' => $msg));
+            if($msg = @$arr['error']['info']) 
+            {
+                self::display_message(array('type' => "error", 'msg' => $msg));
+                echo "<br><a href='javascript:history.go(-1)'>Try again.</a><br>";
+            }
+            /*
+            if($new_title = @$arr['move']['to'])
+            {
+                $wiki_page = "../../wiki/" . $new_title;
+                ?>
+                <script type="text/javascript">
+                location.href = '<?php echo $wiki_page ?>';
+                </script>
+                <?php
+            }
+            */
+        }
+        else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));
+    }
+
+    function delete_file($params)
+    {
+        $title2delete = urlencode($params['wiki_title']);
+        $url = "/LiteratureEditor/api.php?action=delete&title=$title2delete"; //"&token=58b54e0bab4a1d3fd3f7653af38e75cb%2B";
+        $json = self::get_api_result_via_post($url, array("token" => $params['token']));
+        $arr = json_decode($json, true);
+        if($val = @$arr['warnings']['info']['*']) self::display_message(array('type' => "error", 'msg' => $val));
+        return $arr;
+    }
+    
     //=======================================================
     function get_wiki_text($wiki_title, $download_params = array('expire_seconds' => true))
     {
@@ -932,7 +1010,7 @@ class bhl_access_controller //extends ControllerBase
         return false;
     }
     
-    function parse_wiki_text($str, $p)
+    function parse_wiki_text($str, $p, $projects = false)
     {
         if($params = self::get_void_part($str))
         {
@@ -941,8 +1019,9 @@ class bhl_access_controller //extends ControllerBase
                 $params['overwrite']  = $p['overwrite'];
                 $params['wiki_title'] = $p['wiki_title'];
             }
-            // echo "<pre>";print_r($params);echo"</pre>";
-            print self::render_template('reviewexcerpt-result', array('params' => $params));
+            echo "<pre>";print_r($params);echo"</pre>";
+            if($projects) print self::render_template('reviewproject-result', array('params' => $params));
+            else          print self::render_template('reviewexcerpt-result', array('params' => $params));
         }
         /* not needed, since there is a short-cut, the one above this :-)
         $d = array();
@@ -959,10 +1038,19 @@ class bhl_access_controller //extends ControllerBase
         */
     }
     
-    function page_status($title)
+    function page_status($title, $project = false)
     {
-        if(strpos($title, "ForHarvesting") !== false) return "{Approved}";//string is found
-        else                                          return "{Draft}";
+        if($project)
+        {
+            if(strpos($title, "Completed") !== false) return "{Completed}";//string is found
+            else                                      return "{Active}";
+        }
+        else
+        {
+            if(strpos($title, "ForHarvesting") !== false) return "{Approved}";//string is found
+            else                                          return "{Draft}";
+            
+        }
     }
     //=======================================================
     
