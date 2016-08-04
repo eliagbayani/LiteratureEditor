@@ -1019,7 +1019,7 @@ class bhl_access_controller //extends ControllerBase
                 $params['overwrite']  = $p['overwrite'];
                 $params['wiki_title'] = $p['wiki_title'];
             }
-            echo "<pre>";print_r($params);echo"</pre>";
+            // echo "<pre>";print_r($params);echo"</pre>";
             if($projects) print self::render_template('reviewproject-result', array('params' => $params));
             else          print self::render_template('reviewexcerpt-result', array('params' => $params));
         }
@@ -1042,8 +1042,8 @@ class bhl_access_controller //extends ControllerBase
     {
         if($project)
         {
-            if(strpos($title, "Completed") !== false) return "{Completed}";//string is found
-            else                                      return "{Active}";
+            if(strpos($title, "Completed_Projects")  !== false) return "{Completed}";//string is found
+            elseif(strpos($title, "Active_Projects") !== false) return "{Active}";
         }
         else
         {

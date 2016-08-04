@@ -3,7 +3,7 @@ $pass_title = ucfirst(str_replace(" ", "_", $params['proj_name']));
 $pass_title = $params['proj_name'];
 
 $cont_review = true;
-echo "<pre>"; print_r($params); echo "</pre>"; //exit("xxx");
+// echo "<pre>"; print_r($params); echo "</pre>";
 
 if($params['overwrite'] != 1)
 {
