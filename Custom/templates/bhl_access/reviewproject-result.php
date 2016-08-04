@@ -10,7 +10,11 @@
     <h3>Review Project <?php echo " - <i>" . $params['wiki_status'] . "</i>" ?></h3>
     <div>
 
-    <?php ?>
+    <?php
+    require_once("reviewproject-result-pre.php");
+    if($cont_review)
+    {
+    ?>
 
     <form name="" action="index.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="fromReview">
@@ -44,5 +48,11 @@
     <button onClick="spinner_on();">Edit</button>
     <button onClick="document.getElementById('search_type').value='move2wiki_project';spinner_on();"><?php echo $submit_txt ?></button>
     </form>
+    
+    
+    <?php
+    }
+    ?>
+    
     </div>
 </div>

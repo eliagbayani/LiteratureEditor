@@ -5,7 +5,7 @@ $cont_editor = true;
 // if(!isset($params['continue']))
 if(count(array_keys($params)) == 2)
 {
-    if($titles = self::check_if_this_title_has_wiki_v2($pass_title))
+    if($titles = self::check_if_this_title_has_wiki_v2($pass_title, "5000|0")) //2nd param are pipe-delimited namespaces
     {
         $mwiki = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/";
         $wiki = $mwiki . $Page->PageID;

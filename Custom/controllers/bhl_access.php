@@ -482,6 +482,9 @@ class bhl_access_controller //extends ControllerBase
         echo "Project details: " . "<b>" . $params['proj_name'] . "</b>" . "<i>$str</i><br><br>";
         echo "<b>Project name</b>: " . $params['proj_name']  . "<br><br>";
         echo "<b>Description</b>: " . $params['proj_desc']  . "<br><br>";
+        echo "<b>Compiler</b>: " . self::disp_compiler(@$params['compiler']) . "<br><br>";
+        
+        
 
     }
     
@@ -565,17 +568,6 @@ class bhl_access_controller //extends ControllerBase
         foreach($ocrs as $ocr) echo "<p> " . str_replace("\n", "<br>", $ocr) . "</p>";
     }
 
-    function wiki_exists($title)
-    {
-        // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&format=jsonfm&titles=Main%20Page
-        $url = $this->mediawiki_api . "?action=query&format=json&titles=". urlencode($title);
-        $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
-        $arr = json_decode($json);
-        // echo "<pre>"; print_r($arr); echo "</pre>";
-        if(@$arr->query->pages->{-1}) return false;
-        else return true;
-    }
-    
     function move2wiki_project($params)
     {
         /*
@@ -1062,10 +1054,10 @@ class bhl_access_controller //extends ControllerBase
     }
     //=======================================================
     
-    function check_if_this_title_has_wiki_v2($page_id) //https://www.mediawiki.org/wiki/API:Search
+    function check_if_this_title_has_wiki_v2($page_id, $namespaces) //https://www.mediawiki.org/wiki/API:Search
     {
-        $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&list=search&srsearch=" . $page_id . "&srprop=timestamp" . "&srnamespace=5000|0&format=json";
-        // echo "<br>$url<br>";
+        $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&list=search&srsearch=" . $page_id . "&srprop=timestamp" . "&srnamespace=" . urlencode($namespaces) . "&format=json";
+        // echo "<br>[$url]<br>";
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
         $obj = json_decode($json); //have 2nd param as boolean true, to return array(); otherwise it is object
         return $obj->query->search;
@@ -1089,6 +1081,29 @@ class bhl_access_controller //extends ControllerBase
             if($version == "v2") return true;
         }
     }
+
+    //=======================================================
+    function project_exists($title)
+    {
+        $namespaces = array("Active_Projects", "Completed_Projects");
+        foreach($namespaces as $ns)
+        {
+            if(self::wiki_exists("$ns:$title")) return "$ns:$title";
+        }
+        return false;
+    }
+    
+    function wiki_exists($title)
+    {
+        // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&format=jsonfm&titles=Main%20Page
+        $url = $this->mediawiki_api . "?action=query&format=json&titles=". urlencode($title);
+        $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
+        $arr = json_decode($json);
+        // echo "<pre>"; print_r($arr); echo "</pre>";
+        if(@$arr->query->pages->{-1}) return false;
+        else return true;
+    }
+    //=======================================================
     
     private function get_url_params_from_wiki($arr)
     {
