@@ -588,8 +588,8 @@ class bhl_access_controller //extends ControllerBase
         $old_title = $arr[1];
         if($old_title != $params['proj_name']) self::start_delete($params);
         
-        
-        $new_title = $arr[0].":".str_replace(" ", "_", $params['proj_name']);
+        if(!($ns = $arr[0])) $ns = "Active_Projects";
+        $new_title = $ns.":".str_replace(" ", "_", $params['proj_name']);
         
         $params['page_id'] = md5($this->compiler . date('Y-m-d-H-i-s', time())); //just a temp file, will be deleted once wiki is created.
                              
@@ -642,8 +642,6 @@ class bhl_access_controller //extends ControllerBase
         location.href = '<?php echo $wiki_page ?>';
         </script>
         <?php
-        
-        
     }
 
     function move2wiki($params)
