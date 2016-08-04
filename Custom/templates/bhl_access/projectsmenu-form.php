@@ -16,6 +16,7 @@
         </td>
     </tr>
     <?php
+    echo "<br>radio:[$radio]<br>";
     if($radio) //one of the radio is clicked
     {}
     if($radio == 'approved') {}

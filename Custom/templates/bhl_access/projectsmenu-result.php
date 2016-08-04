@@ -10,16 +10,17 @@
     <div>
         <?php
         
-        echo "<pre>"; print_r($params); echo "</pre>";
+        echo "<pre>xxx"; print_r($params); echo "yyy</pre>";
         
         if($params['radio'] == "proj_start")
         {
-            if(isset($params['proj_name']))
+            if(isset($params['proj_name']) && !isset($params['overwrite']))
             {
                 self::move2wiki_project($params);
             }
             else
             {
+                echo "<br>goes to form<br>";
                 require_once("../templates/bhl_access/proj-start-form.php"); //print self::render_layout(@$params, 'proj-start-form')
             }
         }

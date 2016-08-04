@@ -1,46 +1,114 @@
 <?php
 // namespace php_active_record;
-    /* Expects: $params */
-
-echo "<pre>"; print_r($params); echo "</pre>";
-
+/* Expects: $params */
 /*
-if(!isset($params['search_type']))
-{
-    exit("elix");
-    $proj_name = "";
-}
-else //this means a form-submit OR initial page load
-{
-}
-*/
-
+echo "<pre>"; print_r($params); echo "</pre>";
 $radio     = $params['radio'];
 $proj_name = @$params['proj_name'];
 $proj_desc = @$params['proj_desc'];
-
-
+*/
 ?>
-<form name="validator_form" action="index.php" method="post" enctype="multipart/form-data">
-<input type="hidden" name="search_type" value="projectsmenu">
+<!---
+<form id="frm" name="validator_form" action="index.php" method="post" enctype="multipart/form-data">
+<input type="hidden" id="search_type" name="search_type" value="projectsmenu">
 <input type="hidden" name="radio" value="<?php echo $radio ?>">
-
-<table border="1" width="100%">
-
+<table border="0" width="100%">
     <tr><td><b>Project name</b>:</td>
-        <td><input size="100" type="text" name="proj_name" value="<?php echo $proj_name; ?>"></td>
+        <td><input size="100" type="text" id="proj_name" name="proj_name" value="<?php echo $proj_name; ?>"></td>
     </tr>
     <tr><td><b>Description</b>:</td>
         <td><input size="100" type="text" name="proj_desc" value="<?php echo $proj_desc; ?>"></td>
     </tr>
-
-
-
-
 <tr valign="top">
     <td colspan="2">
-    <input type="submit">
+    <input type="button" onClick="submit_onclick()" value="Review Project">
     </td>
 </tr>
 </table>
 </form>
+--->
+
+<?php
+$radio     = $params['radio'];
+
+if(!isset($params['proj_name']))
+{
+    $search_type = "projectsmenu";
+    $overwrite = 0;
+    $wiki_title = "";
+    $compiler = "";
+
+    // $title_form = "";
+    // $taxon_asso = "";
+    
+    $proj_name = '';
+    $proj_desc = '';
+}
+else //this means a form-submit
+{
+    $overwrite      = $params['overwrite'];
+    $wiki_title      = @$params['wiki_title'];
+    $compiler      = $params['compiler'];
+    $search_type    = $params['search_type'];
+
+    // $title_form     = $params['title_form'];
+    // $taxon_asso     = $params['taxon_asso'];
+
+    $proj_name     = $params['proj_name'];
+    $proj_desc     = $params['proj_desc'];
+}
+
+?>
+<div id="tabs-0">
+    <?php 
+    /*
+    require_once("page-editor-pre.php");
+    if($cont_editor)
+    */
+    if(true)
+    {
+        ?>
+        <!--- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --->
+            <form id="frm" action="index.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="search_type" id="search_type" value="projectsmenu">
+            <input type="hidden" name="radio" value="<?php echo $radio ?>">
+            <input type="hidden" name="overwrite" value="<?php echo $overwrite ?>">
+            <input type="hidden" name="wiki_title" value="<?php echo $wiki_title ?>" size="200">
+            <input type="hidden" name="compiler" value="<?php echo $compiler ?>">
+
+            <table border="0" width="100%">
+                <tr><td><b>Project name</b>:</td>
+                    <td><input size="100" type="text" id="proj_name" name="proj_name" value="<?php echo $proj_name; ?>"></td>
+                </tr>
+                <tr><td><b>Description</b>:</td>
+                    <td><input size="100" type="text" name="proj_desc" value="<?php echo $proj_desc; ?>"></td>
+                </tr>
+            <tr valign="top">
+                <td colspan="2">
+                <input type="button" onClick="submit_onclick()" value="Review Project">
+                </td>
+            </tr>
+            </table>
+
+            </form>
+        <!--- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --->
+        <?php
+    }
+    ?>
+</div>
+
+
+
+<script>
+function submit_onclick()
+{
+    if(document.getElementById('proj_name').value == "")
+    {
+        alert("Project name - cannot be blank.");
+        return true;
+    }
+    document.getElementById('search_type').value='reviewproject';
+    spinner_on();
+    document.getElementById('frm').submit();
+}
+</script>

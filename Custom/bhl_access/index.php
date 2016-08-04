@@ -44,9 +44,9 @@ elseif(isset($params['article_list'])
                              || @$params['search_type'] == 'articlelist'
                              || @$params['search_type'] == 'gen_archive_all'
                              || @$params['search_type'] == 'movebatch') require_once("../templates/bhl_access/layout3.php");
-elseif(isset($params['projects_menu'])
-                             || @$params['search_type'] == 'projectsmenu') require_once("../templates/bhl_access/layout4.php");
-else require_once("../templates/bhl_access/layout.php");
+elseif(isset($params['projects_menu']) || in_array(@$params['search_type'], array("projectsmenu", "wiki2php_project", "reviewproject"))) require_once("../templates/bhl_access/layout4.php");
+
+else require_once("../templates/bhl_access/layout.php"); //this includes pagesearch, reviewexcerpt, etc.
 ?>
 
 <!--- for spinner effect: http://spin.js.org/ --->
@@ -71,6 +71,11 @@ if(isset($params['search_type']))
     
     elseif($params['search_type'] == "move2wiki")     print $ctrler->render_template('move2wiki-result', array('params' => @$params));
     elseif($params['search_type'] == "reviewexcerpt") print $ctrler->render_template('reviewexcerpt-result', array('params' => @$params));
+
+    elseif($params['search_type'] == "move2wiki_project") print $ctrler->render_template('move2wiki_project-result', array('params' => @$params));
+    elseif($params['search_type'] == "reviewproject")     print $ctrler->render_template('reviewproject-result', array('params' => @$params));
+    
+
     elseif($params['search_type'] == "wiki2php")      print $ctrler->render_template('wiki2php-result', array('params' => @$params));
     elseif($params['search_type'] == "wiki2php_project")      print $ctrler->render_template('wiki2php_project-result', array('params' => @$params));
     
@@ -99,8 +104,8 @@ elseif(@$params['search_type'] == 'titlelist')       print '<script>$( "#tabs_ma
 if    (@$params['search_type'] == 'gen_archive_all') print '<script>$( "#tabs_main" ).tabs( "option", "active", 1 );</script>';
 elseif(@$params['search_type'] == 'movebatch')       print '<script>$( "#tabs_main" ).tabs( "option", "active", 0 );</script>';
 
-//for layout4
-// if    (@$params['search_type'] == 'projectsmenu') print '<script>$( "#tabs_main" ).tabs( "option", "active", 0 );</script>';
+// for layout4
+if    (@$params['search_type'] == 'projectsmenu') print '<script>$( "#tabs_main" ).tabs( "option", "active", 0 );</script>';
 
 
 ?>

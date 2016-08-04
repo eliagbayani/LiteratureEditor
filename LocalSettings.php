@@ -23,6 +23,8 @@ define("NS_ForHarvesting", 5000); // This MUST be even.
 define("NS_ForHarvesting_TALK", 5001); // This MUST be the following odd integer.
 define("NS_Projects", 5002); // This MUST be even.
 define("NS_Projects_TALK", 5003); // This MUST be the following odd integer.
+define("NS_Projects_Comp", 5004); // This MUST be even.
+define("NS_Projects_Comp_TALK", 5005); // This MUST be the following odd integer.
 // end by eli =====================
 
 
@@ -297,8 +299,10 @@ $wgGroupPermissions['EoL_Administrator']['talk'] = true;
 // Add namespaces.
 $wgExtraNamespaces[NS_ForHarvesting]      = "ForHarvesting";
 $wgExtraNamespaces[NS_ForHarvesting_TALK] = "ForHarvesting_talk"; // Note underscores in the namespace name.
-$wgExtraNamespaces[NS_Projects]      = "Projects";
-$wgExtraNamespaces[NS_Projects_TALK] = "Projects_talk"; // Note underscores in the namespace name.
+$wgExtraNamespaces[NS_Projects]      = "Active_Projects";
+$wgExtraNamespaces[NS_Projects_TALK] = "Active_Projects_talk"; // Note underscores in the namespace name.
+$wgExtraNamespaces[NS_Projects_Comp]      = "Completed_Projects";
+$wgExtraNamespaces[NS_Projects_Comp_TALK] = "Completed_Projects_talk"; // Note underscores in the namespace name.
 
 //=================================================from Lockdown
 
@@ -330,6 +334,12 @@ $wgNamespacePermissionLockdown[NS_Projects]['delete']    = array('EoL_Administra
 $wgNamespacePermissionLockdown[NS_Projects]['protect']   = array('');
 $wgNamespacePermissionLockdown[NS_Projects_TALK]['*'] = array('EoL_Contributor', 'EoL_Administrator');
 
+$wgNamespacePermissionLockdown[NS_Projects_Comp]['read']      = array('*'); //this is needed so that API can read wiki
+$wgNamespacePermissionLockdown[NS_Projects_Comp]['edit']      = array('EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_Projects_Comp]['move']      = array('EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_Projects_Comp]['delete']    = array('EoL_Administrator');
+$wgNamespacePermissionLockdown[NS_Projects_Comp]['protect']   = array('');
+$wgNamespacePermissionLockdown[NS_Projects_Comp_TALK]['*'] = array('EoL_Contributor', 'EoL_Administrator');
 
 $wgNamespacePermissionLockdown[NS_MAIN]['*']             = array('EoL_Contributor', 'EoL_Administrator'); //new - comment since no one should edit NS_MAIN
 $wgNamespacePermissionLockdown[NS_TALK]['*']             = array('EoL_Contributor', 'EoL_Administrator');
