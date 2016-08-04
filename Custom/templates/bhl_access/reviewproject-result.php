@@ -7,11 +7,10 @@
     $params['wiki_status'] = self::page_status($params['wiki_title'], true); //true means project
 ?>
 <div id="accordion_open2">
-    <h3>Review Excerpt <?php echo " - <i>" . $params['wiki_status'] . "</i>" ?></h3>
+    <h3>Review Project <?php echo " - <i>" . $params['wiki_status'] . "</i>" ?></h3>
     <div>
 
-    <?php
-    ?>
+    <?php ?>
 
     <form name="" action="index.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="fromReview">

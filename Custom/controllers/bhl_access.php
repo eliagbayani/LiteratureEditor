@@ -589,7 +589,7 @@ class bhl_access_controller //extends ControllerBase
         if($old_title != $params['proj_name']) self::start_delete($params);
         
         
-        $new_title = "Active_Projects:".str_replace(" ", "_", $params['proj_name']);
+        $new_title = $arr[0].":".str_replace(" ", "_", $params['proj_name']);
         
         $params['page_id'] = md5($this->compiler . date('Y-m-d-H-i-s', time())); //just a temp file, will be deleted once wiki is created.
                              
@@ -932,7 +932,17 @@ class bhl_access_controller //extends ControllerBase
         $from = urlencode($params['wiki_title']);
         if($params['wiki_status'] == "{Draft}")         $to = urlencode("ForHarvesting:".$params['wiki_title']);
         elseif($params['wiki_status'] == "{Approved}")  $to = urlencode(str_replace("ForHarvesting:", "", $params['wiki_title']));
-        // elseif($params['wiki_status'] == "{to Projects NS}") $to = urlencode("Projects:".$params['wiki_title']); not needed
+        elseif($params['wiki_status'] == "{Active}")
+        {
+            $to = urlencode(str_replace("Active_Projects:", "", $params['wiki_title']));
+            $to = "Completed_Projects:" . $to;
+        }
+        elseif($params['wiki_status'] == "{Completed}")
+        {
+            $to = urlencode(str_replace("Completed_Projects:", "", $params['wiki_title']));
+            $to = "Active_Projects:" . $to;
+        }
+        
         $url = "/LiteratureEditor/api.php?format=json&action=move&from=" . $from . "&to=" . $to . "&reason=&movetalk&noredirect";
         $json = self::get_api_result_via_post($url, array("token" => $params['token']));
         $arr = json_decode($json, true);

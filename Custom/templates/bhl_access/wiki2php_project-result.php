@@ -9,18 +9,28 @@
             [overwrite] => 1
         )
     */
-    echo "<pre>"; print_r($params); echo "</pre>";
+    echo "<pre>"; print_r($params); echo "</pre>"; //exit;
     $info = self::get_wiki_text($params['wiki_title']);
     $wiki_text = $info['content'];
     if(!$wiki_text)
     {
-        if(strpos($params['wiki_title'], "ForHarvesting") !== false) $params['wiki_title'] = str_replace("ForHarvesting:", "", $params['wiki_title']); //string found
-        else                                                         $params['wiki_title'] = "ForHarvesting:".$params['wiki_title'];
+
+        if(strpos($params['wiki_title'], "Active_Projects:") !== false) 
+        {
+            $temp = str_replace("Active_Projects:", "", $params['wiki_title']);
+            $params['wiki_title'] = "Completed_Projects:" . $temp;
+        }
+        elseif(strpos($params['wiki_title'], "Completed_Projects:") !== false) 
+        {
+            $temp = str_replace("Completed_Projects:", "", $params['wiki_title']);
+            $params['wiki_title'] = "Active_Projects:" . $temp;
+        }
+
+        elseif(strpos($params['wiki_title'], "ForHarvesting") !== false) $params['wiki_title'] = str_replace("ForHarvesting:", "", $params['wiki_title']); //string found
+        else                                                             $params['wiki_title'] = "ForHarvesting:".$params['wiki_title'];
 
         $info = self::get_wiki_text($params['wiki_title']);
         $wiki_text = $info['content'];
-
-
     }
     
     if($wiki_text) self::parse_wiki_text($wiki_text, $params, true); //true means projects
