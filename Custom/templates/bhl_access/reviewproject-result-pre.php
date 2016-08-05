@@ -3,7 +3,7 @@ $pass_title = ucfirst(str_replace(" ", "_", $params['proj_name']));
 $pass_title = $params['proj_name'];
 
 $cont_review = true;
-// echo "<pre>"; print_r($params); echo "</pre>";
+echo "<pre>"; print_r($params); echo "</pre>";
 
 if($params['overwrite'] != 1)
 {
@@ -12,7 +12,7 @@ if($params['overwrite'] != 1)
         if($title = self::project_exists($pass_title))
         {
             $cont_review = false;
-            self::display_message(array('type' => "error", 'msg' => "Project name already exists."));
+            self::display_message(array('type' => "error", 'msg' => "[$pass_title] - Project name already exists."));
             $post = self::page_status($title, true); //true means projects
             echo "<br>" . "<a href='index.php?search_type=wiki2php_project&wiki_title=$title&overwrite=1'>View existing project</a> &nbsp; <i>$post</i><br>";
             echo "<br>OR<br><br><a href='javascript:history.go(-1)'>Go back and edit</a>";
@@ -43,5 +43,20 @@ if($params['overwrite'] != 1)
         
     }
 }
+else
+{
+    $arr = explode(":", $params['wiki_title']);
+    $old_title = str_replace("_", " ", $arr[1]);
+    if($pass_title != $old_title)
+    {
+        if($title = self::project_exists($pass_title))
+        {
+            $cont_review = false;
+            self::display_message(array('type' => "error", 'msg' => "[$pass_title] - Project name already exists 2."));
+            $post = self::page_status($title, true); //true means projects
+            echo "<br>" . "<a href='index.php?search_type=wiki2php_project&wiki_title=$title&overwrite=1'>View existing project</a> &nbsp; <i>$post</i><br>";
+            echo "<br>OR<br><br><a href='javascript:history.go(-1)'>Go back and edit</a>";
+        }
+    }
+}
 ?>
-
