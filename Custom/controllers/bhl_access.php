@@ -459,7 +459,7 @@ class bhl_access_controller //extends ControllerBase
         {
             $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $params['wiki_title'];
             // http://editors.eol.xxx/LiteratureEditor/wiki/16194361_5e05173f317d6f9f35dd954c87bef5ce
-            $str = " - <a href='$url'>View Wiki</a>";
+            $str = " &nbsp;&nbsp;&nbsp; <a href='$url'>View Wiki</a>";
             
             //start move24harvest ============
             $wiki_status = self::page_status($params['wiki_title'], true); //true means projects
@@ -479,7 +479,7 @@ class bhl_access_controller //extends ControllerBase
             }
         }
         
-        echo "Project details: " . "<b>" . $params['proj_name'] . "</b>" . "<i>$str</i><br><br>";
+        echo "<u>Project Information</u>" . " <i>$str</i><br><br>";
         echo "<b>Project name</b>: " . $params['proj_name']  . "<br><br>";
         echo "<b>Description</b>: " . $params['proj_desc']  . "<br><br>";
         echo "<b>Compiler</b>: " . self::disp_compiler(@$params['compiler']) . "<br><br>";
@@ -609,7 +609,7 @@ class bhl_access_controller //extends ControllerBase
                 $pass_params = substr($pass_params, 0, -1);                 //remove last char
                 fwrite($file, "{{Void|" . $pass_params . "}}\n");
                 
-                fwrite($file, "== Project Detail ==\n");
+                fwrite($file, "== Project Information ==\n");
                 fwrite($file, "'''Project name''': " . $params['proj_name']  . "\n\n");
                 fwrite($file, "'''Description''': " . $params['proj_desc']  . "\n\n");
                 fwrite($file, "'''Compiler''': " . @$params['compiler']  . "\n\n");
