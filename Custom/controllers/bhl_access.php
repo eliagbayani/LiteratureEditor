@@ -784,6 +784,13 @@ class bhl_access_controller //extends ControllerBase
         $wiki = str_replace(array("\n"), "", $wiki);
         return $wiki;
     }
+    
+    function project_is_completed($wiki_title)
+    {
+        if(strpos($wiki_title, "Completed_Projects")  !== false) return true; //string is found
+        if(strpos($wiki_title, "Completed Projects")  !== false) return true; //string is found
+        return false;
+    }
 
     //======================================================= for Articlelist
     function list_titles_by_type($type, $book_title = false, $projects = false)
@@ -804,6 +811,12 @@ class bhl_access_controller //extends ControllerBase
             $params = self::get_void_part($info['content']);
             if(!$projects)
             {
+                /* when debugging
+                if(!isset($params['header_title']))
+                {
+                    echo "<pre>"; print_r($params); echo "</pre>";
+                }
+                */
                 if(!$params['header_title']) continue; //to exclude the likes of "Main Page"
             }
             if($book_title)

@@ -2,7 +2,6 @@
 // namespace php_active_record;
 /* Expects: $params */
 /*
-echo "<pre>"; print_r($params); echo "</pre>";
 $radio     = $params['radio'];
 $proj_name = @$params['proj_name'];
 $proj_desc = @$params['proj_desc'];
@@ -29,6 +28,8 @@ $proj_desc = @$params['proj_desc'];
 --->
 
 <?php
+echo "<pre>"; print_r($params); echo "</pre>";
+
 $radio     = $params['radio'];
 
 if(!isset($params['proj_name']))
@@ -78,7 +79,24 @@ else //this means a form-submit
 
             <table border="0" width="100%">
                 <tr><td><b>Project name</b>:</td>
+                    <?php
+                    /* working well if we don't want Completed Projects name be editable
+                    if(self::project_is_completed(@$params['wiki_title']))
+                    {
+                        ?>
+                        <td><?php echo $proj_name; ?><input size="100" type="hidden" id="proj_name" name="proj_name" value="<?php echo $proj_name; ?>"></td>
+                        <?php
+                    }
+                    else
+                    {
+                        ?>
+                        <td><input size="100" type="text" id="proj_name" name="proj_name" value="<?php echo $proj_name; ?>"></td>
+                        <?php
+                    }
+                    */
+                    ?>
                     <td><input size="100" type="text" id="proj_name" name="proj_name" value="<?php echo $proj_name; ?>"></td>
+                    
                 </tr>
                 <tr><td><b>Description</b>:</td>
                     <td><input size="100" type="text" name="proj_desc" value="<?php echo $proj_desc; ?>"></td>

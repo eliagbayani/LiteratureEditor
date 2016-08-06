@@ -79,6 +79,11 @@ Subchapter
                     ?>
                     <!--- <td><?php echo $r['header_title'] ?></td> --->
                     <td><?php echo strip_tags($r['compiler']) ?></td>
+                    
+                    <?php
+                    if($group == "projects") $r['title'] = str_replace(" ", "_", $r['title']);
+                    ?>
+                    
                     <td style="display:none"><?php echo $r['title'] ?></td>
                 </tr>
             <?php
@@ -86,7 +91,7 @@ Subchapter
         ?>
     </tbody>
 </table>
-<form id="myform" action="index.php" method="post" enctype="multipart/form-data" target="_blank"><!---  --->
+<form id="myform" action="index.php" method="post" enctype="multipart/form-data" <?php if($group == "articles") echo "target=\"_blank\"" ?>><!---  --->
 <input type="hidden" name="search_type" value="<?php echo $search_type ?>">
 <input type="hidden" name="overwrite"   value="1">
 <input type="hidden" name="wiki_title"  value="1" id="wiki_title">
