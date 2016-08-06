@@ -584,7 +584,6 @@ class bhl_access_controller //extends ControllerBase
         $new_title = $ns.":".str_replace(" ", "_", $params['proj_name']);
         
         $params['page_id'] = md5($this->compiler . date('Y-m-d-H-i-s', time())); //just a temp file, will be deleted once wiki is created.
-                             
         
         $filename = "../temp/wiki/" . $params['page_id'] . ".wiki";
         
