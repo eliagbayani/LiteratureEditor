@@ -26,13 +26,23 @@ The title of the book or journal, i.e., FullTitle from the BHL BookSearch API.
 Compiler
 Subchapter
 */
+    $rows = $data['records'];
+    $group = $data['group'];
+    if($group == "articles") $search_type = "wiki2php";
+    else                     $search_type = "wiki2php_project";
+    
+    
+    
 ?>
 <table id="example" class="display" cellspacing="0" width="100%">
     <thead>
         <tr>
             <th>Date</th>
+            <?php
+            if($group == "articles") echo "<th>Subchapter</th>";
+            else                     echo "<th>Project</th>"
+            ?>
             <!--- <th>Title</th> --->
-            <th>Subchapter</th>
             <th>Compiler</th>
             <th style="display:none">Wiki</th>
         </tr>
@@ -40,8 +50,11 @@ Subchapter
     <tfoot>
         <tr>
             <th>Date</th>
+            <?php
+            if($group == "articles") echo "<th>Subchapter</th>";
+            else                     echo "<th>Project</th>"
+            ?>
             <!--- <th>Title</th> --->
-            <th>Subchapter</th>
             <th>Compiler</th>
             <th style="display:none">Wiki</th>
         </tr>
@@ -60,8 +73,11 @@ Subchapter
             ?>
                 <tr>
                     <td><?php echo $r['timestamp'] ?></td>
+                    <?php
+                    if($group == "articles") echo '<td>'.$r['subject_type'].'</td>';
+                    else                     echo '<td>'.$r['title'].'</td>'
+                    ?>
                     <!--- <td><?php echo $r['header_title'] ?></td> --->
-                    <td><?php echo $r['subject_type'] ?></td>
                     <td><?php echo strip_tags($r['compiler']) ?></td>
                     <td style="display:none"><?php echo $r['title'] ?></td>
                 </tr>
@@ -71,7 +87,7 @@ Subchapter
     </tbody>
 </table>
 <form id="myform" action="index.php" method="post" enctype="multipart/form-data" target="_blank"><!---  --->
-<input type="hidden" name="search_type" value="wiki2php">
+<input type="hidden" name="search_type" value="<?php echo $search_type ?>">
 <input type="hidden" name="overwrite"   value="1">
 <input type="hidden" name="wiki_title"  value="1" id="wiki_title">
 </form>

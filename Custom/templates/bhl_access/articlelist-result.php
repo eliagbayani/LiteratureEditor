@@ -12,7 +12,11 @@ if($rows)
         <div>
             <?php 
             // echo "<pre>"; print_r($rows); echo "</pre>";
-            if($rows) print self::render_template('article-table', array('rows' => @$rows));
+            if($rows) 
+            {
+                $data = array('group' => 'articles', 'records' => $rows);
+                print self::render_template('article-table', array('data' => $data));
+            }
             ?>
         </div>
     </div>

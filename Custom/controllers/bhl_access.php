@@ -787,7 +787,7 @@ class bhl_access_controller //extends ControllerBase
     }
 
     //======================================================= for Articlelist
-    function list_titles_by_type($type, $book_title)
+    function list_titles_by_type($type, $book_title = false, $projects = false)
     {
         $titles = self::get_titles_by_type($type);
         // echo "<pre>"; print_r($titles); echo "</pre>";
@@ -803,15 +803,23 @@ class bhl_access_controller //extends ControllerBase
             // echo "<pre>"; print_r($r); echo "</pre>";
             $info = self::get_wiki_text($r['title'], array("expire_seconds" => 86400)); //cache expires in 24 hrs
             $params = self::get_void_part($info['content']);
-            if(!$params['header_title']) continue; //to exclude the likes of "Main Page"
+            if(!$projects)
+            {
+                if(!$params['header_title']) continue; //to exclude the likes of "Main Page"
+            }
             if($book_title)
             {
                 if($book_title != $params['header_title']) continue;
             }
-            $info['compiler']     = self::disp_compiler($params['compiler']);
-            $info['subject_type'] = self::get_subject_desc($params['subject_type']);
+            
             $info['title']        = $r['title'];
-            $info['header_title'] = $params['header_title'];
+            $info['compiler']     = self::disp_compiler($params['compiler']);
+
+            if(!$projects)
+            {
+                $info['subject_type'] = self::get_subject_desc($params['subject_type']);
+                $info['header_title'] = $params['header_title'];
+            }
             $info['content']      = ""; //erased content, just too big for memory
             // echo "<pre>"; print_r($info); echo "</pre>";
             $recs[] = $info;
@@ -843,6 +851,9 @@ class bhl_access_controller //extends ControllerBase
         {
             if($type == "draft")        $ns = 0;
             elseif($type == "approved") $ns = 5000;
+            elseif($type == "active") $ns = 5002;
+            elseif($type == "completed") $ns = 5004;
+            
             // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=allpages&apnamespace=5000
             $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=&aplimit=400";
             $added_param = "";
@@ -1043,7 +1054,9 @@ class bhl_access_controller //extends ControllerBase
         if($project)
         {
             if(strpos($title, "Completed_Projects")  !== false) return "{Completed}";//string is found
+            elseif(strpos($title, "Completed Projects")  !== false) return "{Completed}";//string is found
             elseif(strpos($title, "Active_Projects") !== false) return "{Active}";
+            elseif(strpos($title, "Active Projects") !== false) return "{Active}";
         }
         else
         {
