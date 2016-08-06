@@ -465,8 +465,8 @@ class bhl_access_controller //extends ControllerBase
             $wiki_status = self::page_status($params['wiki_title'], true); //true means projects
             $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $params['wiki_title'] . "&search_type=move24harvest&wiki_status=$wiki_status";
 
-            if($wiki_status == "{Active}") $str .= " | <a href='$url'>Move to 'Completed Projects'</a>";
-            else                           $str .= " | <a href='$url'>Move to 'Active Projects'</a>";
+            if($wiki_status == "{Active}") $str .= " | <a href='$url'>Move to '<b>Completed Projects</b>'</a>";
+            else                           $str .= " | <a href='$url'>Move to '<b>Active Projects</b>'</a>";
             //end ============================
         }
         else $str = "";
@@ -500,8 +500,8 @@ class bhl_access_controller //extends ControllerBase
             $wiki_status = self::page_status($params['wiki_title']);
             $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $params['wiki_title'] . "&search_type=move24harvest&wiki_status=$wiki_status";
 
-            if($wiki_status == "{Draft}") $str .= " | <a href='$url'>Move to 'For EOL Harvesting'</a>";
-            else                          $str .= " | <a href='$url'>Move to 'For Review (draft)'</a>";
+            if($wiki_status == "{Draft}") $str .= " | <a href='$url'>Move to '<b>For EOL Harvesting</b>'</a>";
+            else                          $str .= " | <a href='$url'>Move to '<b>For Review (draft)</b>'</a>";
             //end ============================
         }
         else $str = "";
@@ -934,11 +934,13 @@ class bhl_access_controller //extends ControllerBase
         elseif($params['wiki_status'] == "{Approved}")  $to = urlencode(str_replace("ForHarvesting:", "", $params['wiki_title']));
         elseif($params['wiki_status'] == "{Active}")
         {
+            $params['wiki_title'] = str_replace("Active Projects", "Active_Projects", $params['wiki_title']); // needed if coming from DataTable
             $to = urlencode(str_replace("Active_Projects:", "", $params['wiki_title']));
             $to = "Completed_Projects:" . $to;
         }
         elseif($params['wiki_status'] == "{Completed}")
         {
+            $params['wiki_title'] = str_replace("Completed Projects", "Completed_Projects", $params['wiki_title']); // needed if coming from DataTable
             $to = urlencode(str_replace("Completed_Projects:", "", $params['wiki_title']));
             $to = "Active_Projects:" . $to;
         }
