@@ -28,8 +28,8 @@ Subchapter
 */
     $rows = $data['records'];
     $group = $data['group'];
-    if($group == "articles") $search_type = "wiki2php";
-    else                     $search_type = "wiki2php_project";
+    if($group == "articles") $vars = array('search_type' => "wiki2php",         'js_string' => "Review Excerpt & Metadata");
+    else                     $vars = array('search_type' => "wiki2php_project", 'js_string' => "Review Project");
     
     
     
@@ -92,7 +92,7 @@ Subchapter
     </tbody>
 </table>
 <form id="myform" action="index.php" method="post" enctype="multipart/form-data" <?php if($group == "articles") echo "target=\"_blank\"" ?>><!---  --->
-<input type="hidden" name="search_type" value="<?php echo $search_type ?>">
+<input type="hidden" name="search_type" value="<?php echo $vars['search_type'] ?>">
 <input type="hidden" name="overwrite"   value="1">
 <input type="hidden" name="wiki_title"  value="1" id="wiki_title">
 </form>
@@ -150,7 +150,7 @@ Subchapter
 
 function myFunction(wiki_title, title, subject) {
     var x;
-    if (confirm("Review Excerpt & Metadata:\n"+title+" - ("+subject+")") == true) 
+    if (confirm("<?php echo $vars['js_string']?>:\n\n"+title+" - ("+subject+")") == true) 
     {
         //alert('ok '+title_id);
         document.getElementById("wiki_title").value = wiki_title;
