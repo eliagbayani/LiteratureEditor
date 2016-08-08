@@ -81,7 +81,7 @@
             {
                 ?>
                 <tr><td>
-                <a onClick="spinner_on();" href='index.php?search_type=movebatch&wiki_status=<?php echo urlencode($wiki_status) ?>&book_title=<?php echo urlencode($book_title) ?>'><b>Move ALL</b> articles from this title to '<?php echo $str ?>'.</a>
+                <a onClick="spinner_on();" href='index.php?search_type=movebatch&wiki_status=<?php echo urlencode($wiki_status) ?>&book_title=<?php echo urlencode($book_title) ?>'><b>Move ALL</b> articles from this title to <b>'<?php echo $str ?>'</b>.</a>
                 </td></tr>
                 <?php
             }
