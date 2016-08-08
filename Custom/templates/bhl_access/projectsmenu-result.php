@@ -29,7 +29,7 @@ elseif($params['radio'] == "proj_my")
     if(preg_match("/User:(.*?) /ims", $this->compiler, $arr))
     {
         $username = $arr[1];
-        echo "<br>username is: [$username]<br>";
+        // echo "<br>username is: [$username]<br>";
         $rows = self::list_titles_by_type('all_projects', false, true, $username); //2nd param is book_title, 3rd param is boolean $projects, 4th param is logged-in username
         $str .= " = " . count($rows);
     }
