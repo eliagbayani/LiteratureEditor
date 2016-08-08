@@ -436,7 +436,7 @@ class bhl_access_controller //extends ControllerBase
         return $out;
     }
     
-    function get_username()
+    function get_username() //this is the one placed in the header with blue bground
     {
         // [http://editors.eol.localhost/LiteratureEditor/wiki/User:EAgbayani Eli E. Agbayani]
         $compiler = str_replace(array('[', ']'), '', $this->compiler);
@@ -450,6 +450,16 @@ class bhl_access_controller //extends ControllerBase
             if($val = $realname) $username .= " - ($val)";
         }
         return $username;
+    }
+    
+    function usernames_from_compiler($compiler)
+    {
+        // [http://editors.eol.localhost/LiteratureEditor/wiki/User:EAgbayani Eli E. Agbayani]; [http://editors.eol.localhost/LiteratureEditor/wiki/User:Sysadmin Sysadmin]; [http://editors.eol.localhost/LiteratureEditor/wiki/User:Dp_1 Robert Smith]
+        if(preg_match_all("/User:(.*?) /ims", $compiler, $arr))
+        {
+            // print_r($arr[1]);
+            return $arr[1];
+        }
     }
     
     function cumulatime_compiler($p)
@@ -593,7 +603,7 @@ class bhl_access_controller //extends ControllerBase
         
         //delete existing if necessary
         $arr = explode(":", $params['wiki_title']);
-        $old_title = $arr[1];
+        $old_title = @$arr[1];
         if($old_title != $params['proj_name']) self::start_delete($params);
         
         if(!($ns = $arr[0])) $ns = "Active_Projects";
@@ -642,6 +652,10 @@ class bhl_access_controller //extends ControllerBase
         
         //now delete the temp wiki file
         unlink($temp_wiki_file);
+        
+        //make a fresh cache for the newly saved wiki
+        $new = trim(str_replace("_", " ", $params['wiki_title']));
+        $no_use = self::get_wiki_text($new, array("expire_seconds" => true)); //force cache expires
         
         // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
         ?>
@@ -767,6 +781,10 @@ class bhl_access_controller //extends ControllerBase
         //now delete the temp wiki file
         unlink($temp_wiki_file);
         
+        //make a fresh cache for the newly saved wiki
+        $new = trim(str_replace("_", " ", $params['wiki_title']));
+        $no_use = self::get_wiki_text($new, array("expire_seconds" => true)); //force cache expires
+        
         // /*
         // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
         ?>
@@ -809,7 +827,7 @@ class bhl_access_controller //extends ControllerBase
     }
 
     //======================================================= for Articlelist
-    function list_titles_by_type($type, $book_title = false, $projects = false)
+    function list_titles_by_type($type, $book_title = false, $projects = false, $username = false)
     {
         $titles = self::get_titles_by_type($type);
         // echo "<pre>"; print_r($titles); echo "</pre>";
@@ -823,7 +841,7 @@ class bhl_access_controller //extends ControllerBase
         foreach($titles['query']['allpages'] as $r)
         {
             // echo "<pre>"; print_r($r); echo "</pre>";
-            $info = self::get_wiki_text($r['title'], array("expire_seconds" => 86400)); //cache expires in 24 hrs
+            $info = self::get_wiki_text($r['title'], array("expire_seconds" => false)); //before cache expires in 24 hrs (86400 seconds)
             $params = self::get_void_part($info['content']);
             if(!$projects)
             {
@@ -838,6 +856,10 @@ class bhl_access_controller //extends ControllerBase
             if($book_title)
             {
                 if($book_title != $params['header_title']) continue;
+            }
+            if($username)
+            {
+                if(!in_array($username, self::usernames_from_compiler($params['compiler']))) continue;
             }
             
             $info['title']        = $r['title'];
@@ -857,29 +879,11 @@ class bhl_access_controller //extends ControllerBase
     
     function get_titles_by_type($type) //expire_seconds should always be TRUE
     {
-        if($type == "all") //working but no longer being used
+        if(in_array($type, array("draft", "approved", "active", "completed")))
         {
-            $final['query']['allpages'] = array();
-            foreach(array(0,5000) as $ns)
-            {
-                $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=&aplimit=400";
-                $added_param = "";
-                while(true)
-                {
-                    $json = Functions::lookup_with_cache($url.$added_param, array('expire_seconds' => true)); //this expire_seconds should always be true
-                    $arr = json_decode($json, true);
-                    $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
-                    if($apcontinue = @$arr['continue']['apcontinue']) $added_param = "&apcontinue=".$apcontinue;
-                    else break;
-                }
-            }
-            return $final;
-        }
-        elseif($type)
-        {
-            if($type == "draft")        $ns = 0;
-            elseif($type == "approved") $ns = 5000;
-            elseif($type == "active") $ns = 5002;
+            if($type == "draft")         $ns = 0;
+            elseif($type == "approved")  $ns = 5000;
+            elseif($type == "active")    $ns = 5002;
             elseif($type == "completed") $ns = 5004;
             
             // http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=allpages&apnamespace=5000
@@ -894,6 +898,26 @@ class bhl_access_controller //extends ControllerBase
                 $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
                 if($apcontinue = @$arr['continue']['apcontinue']) $added_param = "&apcontinue=".$apcontinue;
                 else break;
+            }
+            return $final;
+        }
+        elseif(in_array($type, array("all", "all_projects")))
+        {
+            if    ($type == "all")          $namespaces = array(0,5000); //working but no longer being used
+            elseif($type == "all_projects") $namespaces = array(5002,5004);
+            $final['query']['allpages'] = array();
+            foreach($namespaces as $ns)
+            {
+                $url = $this->mediawiki_api . "?action=query&list=allpages&format=json&apnamespace=$ns" . "&continue=&aplimit=400";
+                $added_param = "";
+                while(true)
+                {
+                    $json = Functions::lookup_with_cache($url.$added_param, array('expire_seconds' => true)); //this expire_seconds should always be true
+                    $arr = json_decode($json, true);
+                    $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
+                    if($apcontinue = @$arr['continue']['apcontinue']) $added_param = "&apcontinue=".$apcontinue;
+                    else break;
+                }
             }
             return $final;
         }
@@ -1026,7 +1050,6 @@ class bhl_access_controller //extends ControllerBase
         $json = self::get_api_result($url);
         */
         $url = $this->mediawiki_api . "?action=query&titles=" . urlencode($wiki_title) . "&format=json&prop=revisions&rvprop=content|timestamp";
-        // echo "<br>[$url]<br>";
         $json = Functions::lookup_with_cache($url, $download_params); //this expire_seconds should always be true, but for listing expires in xx hours. See list_titles_by_type()
         $arr = json_decode($json, true);
         // echo "<pre>";print_r($arr);echo "</pre>";//exit;
