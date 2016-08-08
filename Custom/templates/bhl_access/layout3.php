@@ -4,6 +4,7 @@
         <li><a href="#tabs_main-4">Generate EOL DWC-A</a></li>
         <li><a onClick="tab2_clicked()" href="#tabs_main-2">Page Search ››</a></li>
         <li><a onClick="tab3_clicked()" href="#tabs_main-3">Back to Wiki ››</a></li>
+        <li style="text-align: right;"><?php require_once("html_user.php"); ?></li>
     </ul>
     <div id="tabs_main-1">
         <?php print $ctrler->render_layout(@$params, 'articlelist-form') ?>
