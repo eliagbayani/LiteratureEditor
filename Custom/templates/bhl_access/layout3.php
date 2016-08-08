@@ -12,7 +12,6 @@
     <div id="tabs_main-3">Loading...</div>
     <div id="tabs_main-4">
         <?php
-        date_default_timezone_set('America/New_York');
         $archive_id = "BHL_lit_" . str_replace(array("-",":"," "), "_", date('Y-m-d H:i:s'));
         ?>
         <tr><td><a href='index.php?search_type=gen_archive_all&archive_id=<?php echo $archive_id ?>'>Generate EOL DWC-A for all articles in 'For EOL Harvesting'.</a></td></tr>
