@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/New_York');
 
 if(!defined('DOWNLOAD_WAIT_TIME')) define('DOWNLOAD_WAIT_TIME', '300000'); //.3 seconds
 define('DOWNLOAD_ATTEMPTS', '2');
