@@ -436,6 +436,22 @@ class bhl_access_controller //extends ControllerBase
         return $out;
     }
     
+    function get_username()
+    {
+        // [http://editors.eol.localhost/LiteratureEditor/wiki/User:EAgbayani Eli E. Agbayani]
+        $compiler = str_replace(array('[', ']'), '', $this->compiler);
+        $arr = explode("User:", $compiler);
+        $arr2 = explode(" ", $arr[1]);
+        $username = str_replace("_", " ", $arr2[0]);
+        array_shift($arr2);
+        $realname = implode(" ", $arr2);
+        if($username != $realname)
+        {
+            if($val = $realname) $username .= " - ($val)";
+        }
+        return $username;
+    }
+    
     function cumulatime_compiler($p)
     {
         $compiler = $p['compiler'];
