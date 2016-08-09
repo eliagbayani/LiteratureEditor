@@ -225,9 +225,9 @@ class bhl_access_controller //extends ControllerBase
         if($qry_type == 'booksearch') echo self::render_template('booksearch', array('arr' => $arr));
         */
 
-        $xml = Functions::lookup_with_cache($url, array('expire_seconds' => false, 'download_timeout_seconds' => 300)); //timesout in 5 mins. = 300 secs.
+        $xml =           Functions::lookup_with_cache($url, array('expire_seconds' => false, 'download_timeout_seconds' => 300)); //timesout in 5 mins. = 300 secs.
         $xml = simplexml_load_string($xml);
-        if(!$xml) $xml = Functions::lookup_with_cache($url, array('expire_seconds' => 1, 'download_timeout_seconds' => 300)); //try again
+        if(!$xml) $xml = Functions::lookup_with_cache($url, array('expire_seconds' => true, 'download_timeout_seconds' => 300)); //try again
         return $xml;
 
         /* moved this in render_layout()
