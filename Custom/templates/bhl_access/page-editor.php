@@ -136,7 +136,7 @@ else //this means a form-submit
         $separated_names = explode("|", $old_list);
     }
     
-    if(!isset($params['fromReview'])) $save_status[$params['accordion_item']] = 'Saved OK';
+    if(!isset($params['fromReview'])) $save_status[$params['accordion_item']] = '<span id="memo">Saved OK</span>';
     
     //for references
     $label_added_ref = $params['label_added_ref'];
