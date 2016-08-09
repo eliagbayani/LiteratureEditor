@@ -841,7 +841,7 @@ class bhl_access_controller //extends ControllerBase
         foreach($titles['query']['allpages'] as $r)
         {
             // echo "<pre>"; print_r($r); echo "</pre>";
-            $info = self::get_wiki_text($r['title'], array("expire_seconds" => false)); //before cache expires in 24 hrs (86400 seconds)
+            $info = self::get_wiki_text($r['title'], array("expire_seconds" => true)); //before cache expires in 24 hrs (86400 seconds)
             $params = self::get_void_part($info['content']);
             if(!$projects)
             {
