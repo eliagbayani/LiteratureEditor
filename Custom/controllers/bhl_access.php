@@ -63,6 +63,16 @@ class bhl_access_controller //extends ControllerBase
             $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:" . str_replace(" ", "_", $username) . "";
             // $this->compiler = "<span class=\'plainlinks\'>[$url {$realname}]</span>";
             $this->compiler = "[$url {$realname}]";
+            if(!isset($_SESSION["title_list_cache_YN_draft"]))
+            {
+                $_SESSION["title_list_cache_YN_draft"] = true;
+                $_SESSION["title_list_cache_YN_approved"] = true;
+                $_SESSION["title_list_cache_YN_active"] = true;
+                $_SESSION["title_list_cache_YN_completed"] = true;
+                $_SESSION["title_list_cache_YN_all_projects"] = true;
+                // echo "<br>title_list_cache_YN is set to TRUE<br>"; debug
+            }
+            else // echo "<br>title_list_cache_YN is ALREADY set<br>"; debug
             return true;
         }
         /*
@@ -460,6 +470,7 @@ class bhl_access_controller //extends ControllerBase
             // print_r($arr[1]);
             return $arr[1];
         }
+        return array();
     }
     
     function cumulatime_compiler($p)
@@ -657,6 +668,11 @@ class bhl_access_controller //extends ControllerBase
         $new = trim(str_replace("_", " ", $params['wiki_title']));
         $no_use = self::get_wiki_text($new, array("expire_seconds" => true)); //force cache expires
         
+        //make a fresh cache when calling the list:
+        $_SESSION["title_list_cache_YN_active"] = true; //meaning cache expires
+        $_SESSION["title_list_cache_YN_completed"] = true; //meaning cache expires
+        $_SESSION["title_list_cache_YN_all_projects"] = true; //meaning cache expires
+        
         // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
         ?>
         <script type="text/javascript">
@@ -784,6 +800,11 @@ class bhl_access_controller //extends ControllerBase
         //make a fresh cache for the newly saved wiki
         $new = trim(str_replace("_", " ", $params['wiki_title']));
         $no_use = self::get_wiki_text($new, array("expire_seconds" => true)); //force cache expires
+
+        //make a fresh cache when calling the list:
+        $_SESSION["title_list_cache_YN_draft"] = true; //meaning cache expires
+        $_SESSION["title_list_cache_YN_approved"] = true; //meaning cache expires
+        
         
         // /*
         // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
@@ -877,8 +898,12 @@ class bhl_access_controller //extends ControllerBase
         return $recs;
     }
     
-    function get_titles_by_type($type) //expire_seconds should always be TRUE
+    function get_titles_by_type($type) //expire_seconds should always be TRUE, but not anymore since using: $_SESSION["title_list_cache_YN"]
     {
+        /* debug
+        if($_SESSION["title_list_cache_YN_".$type]) echo "<br>cache expires<br>";
+        else                                        echo "<br>cache does not expire<br>";
+        */
         if(in_array($type, array("draft", "approved", "active", "completed")))
         {
             if($type == "draft")         $ns = 0;
@@ -893,7 +918,9 @@ class bhl_access_controller //extends ControllerBase
             while(true)
             {
                 // echo "<br>[$url" . "$added_param]<br>";
-                $json = Functions::lookup_with_cache($url.$added_param, array('expire_seconds' => true)); //this expire_seconds should always be true
+                $json = Functions::lookup_with_cache($url.$added_param, array('expire_seconds' => $_SESSION["title_list_cache_YN_".$type])); //always true before, not anymore
+                $_SESSION["title_list_cache_YN_".$type] = false;
+                
                 $arr = json_decode($json, true);
                 $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
                 if($apcontinue = @$arr['continue']['apcontinue']) $added_param = "&apcontinue=".$apcontinue;
@@ -912,7 +939,9 @@ class bhl_access_controller //extends ControllerBase
                 $added_param = "";
                 while(true)
                 {
-                    $json = Functions::lookup_with_cache($url.$added_param, array('expire_seconds' => true)); //this expire_seconds should always be true
+                    $json = Functions::lookup_with_cache($url.$added_param, array('expire_seconds' => $_SESSION["title_list_cache_YN_".$type])); //always true before, not anymore
+                    $_SESSION["title_list_cache_YN_".$type] = false;
+                    
                     $arr = json_decode($json, true);
                     $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
                     if($apcontinue = @$arr['continue']['apcontinue']) $added_param = "&apcontinue=".$apcontinue;
@@ -954,6 +983,19 @@ class bhl_access_controller //extends ControllerBase
             if($new_title = @$arr['move']['to'])
             {
                 $wiki_page = "../../wiki/" . $new_title;
+                
+                if(in_array($params['wiki_status'], array("{Draft}", "{Approved}")))
+                {
+                    $_SESSION["title_list_cache_YN_draft"] = true;
+                    $_SESSION["title_list_cache_YN_approved"] = true;
+                }
+                elseif(in_array($params['wiki_status'], array("{Active}", "{Completed}")))
+                {
+                    $_SESSION["title_list_cache_YN_active"] = true;
+                    $_SESSION["title_list_cache_YN_completed"] = true;
+                    $_SESSION["title_list_cache_YN_all_projects"] = true;
+                }
+                
                 ?>
                 <script type="text/javascript">
                 location.href = '<?php echo $wiki_page ?>';

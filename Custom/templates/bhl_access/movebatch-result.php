@@ -65,6 +65,9 @@ foreach($recs as $rec)
     echo "<br><a href=\"index.php?search_type=articlelist&radio=$type&book_title=" . urlencode($params['book_title']) . "\">See new list</a>";
     
     $page = "index.php?search_type=articlelist&radio=$type&book_title=" . urlencode($params['book_title']);
+    
+    $_SESSION["title_list_cache_YN_draft"] = true;
+    $_SESSION["title_list_cache_YN_approved"] = true;
     ?>
     
     <!--- working but commented for now
