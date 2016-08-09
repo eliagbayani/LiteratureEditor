@@ -70,9 +70,9 @@ class bhl_access_controller //extends ControllerBase
                 $_SESSION["title_list_cache_YN_active"] = true;
                 $_SESSION["title_list_cache_YN_completed"] = true;
                 $_SESSION["title_list_cache_YN_all_projects"] = true;
-                // echo "<br>title_list_cache_YN is set to TRUE<br>"; debug
+                echo "<br>title_list_cache_YN is set to TRUE<br>"; //debug
             }
-            else // echo "<br>title_list_cache_YN is ALREADY set<br>"; debug
+            else echo "<br>title_list_cache_YN is ALREADY set<br>"; //debug
             return true;
         }
         /*
@@ -520,9 +520,6 @@ class bhl_access_controller //extends ControllerBase
         echo "<b>Project name</b>: " . $params['proj_name']  . "<br><br>";
         echo "<b>Description</b>: " . $params['proj_desc']  . "<br><br>";
         echo "<b>Compiler</b>: " . self::disp_compiler(@$params['compiler']) . "<br><br>";
-        
-        
-
     }
     
     function review_excerpt($params)
@@ -900,10 +897,10 @@ class bhl_access_controller //extends ControllerBase
     
     function get_titles_by_type($type) //expire_seconds should always be TRUE, but not anymore since using: $_SESSION["title_list_cache_YN"]
     {
-        /* debug
+        // /* debug
         if($_SESSION["title_list_cache_YN_".$type]) echo "<br>cache expires<br>";
         else                                        echo "<br>cache does not expire<br>";
-        */
+        // */
         if(in_array($type, array("draft", "approved", "active", "completed")))
         {
             if($type == "draft")         $ns = 0;
@@ -1071,7 +1068,10 @@ class bhl_access_controller //extends ControllerBase
             }
             */
         }
-        else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));
+        else 
+        {
+            self::display_message(array('type' => "error", 'msg' => "Delete failed. Token creation failed."));
+        }
     }
 
     function delete_file($params)
