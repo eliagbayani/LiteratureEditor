@@ -1,3 +1,4 @@
+<?php require_once("../config/settings.php"); ?>
 <!doctype html>
 <html lang="us">
 <head>
@@ -8,10 +9,6 @@
 <body>
 
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 $params =& $_GET;
 if(!$params) $params =& $_POST;
 
@@ -22,7 +19,6 @@ if(isset($params['title_id']))    { if(substr($params['title_id'],0,4) == "http"
 
 // print_r($params);// exit;
 
-require_once("../config/settings.php");
 require_once("../lib/Functions.php");
 require_once("../controllers/bhl_access.php");
 
