@@ -3,4 +3,11 @@
 <td><span class="ui-icon ui-icon-person"></span></td>
 <!--- <td><?php echo $ctrler->compiler ?></td> --->
 <td><?php echo $ctrler->get_username() ?></td>
+
+<!---
+<td>
+<?php echo "<a href='" . "http://" . $_SERVER['SERVER_NAME'] . "/LiteratureEditor/wiki/Special:UserLogout&returnto=Main+Page'>Logout</a>"; ?>
+</td>
+--->
+
 </tr></table>
