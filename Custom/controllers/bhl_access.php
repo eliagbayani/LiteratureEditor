@@ -70,9 +70,9 @@ class bhl_access_controller //extends ControllerBase
                 $_SESSION["title_list_cache_YN_active"] = true;
                 $_SESSION["title_list_cache_YN_completed"] = true;
                 $_SESSION["title_list_cache_YN_all_projects"] = true;
-                echo "<br>title_list_cache_YN is set to TRUE<br>"; //debug
+                echo "<br>SESSION is set<br>"; //debug
             }
-            else echo "<br>title_list_cache_YN is ALREADY set<br>"; //debug
+            else echo "<br>SESSION is ALREADY set<br>"; //debug
             return true;
         }
         /*
@@ -924,11 +924,18 @@ class bhl_access_controller //extends ControllerBase
         return false;
     }
 
+    function is_eli()
+    {
+        if($_COOKIE['wiki_literatureeditorUserName'] == "EAgbayani") return true;
+        else return false;
+    }
+    
     //======================================================= for Articlelist
     function list_titles_by_type($type, $book_title = false, $projects = false, $username = false)
     {
         $titles = self::get_titles_by_type($type);
-        // echo "<pre>"; print_r($titles); echo "</pre>";
+        if(self::is_eli()) echo "-- " . count($titles['query']['allpages']) . " --";
+        // echo "<pre>"; print_r($titles['query']['allpages']); echo "</pre>";
         /*
         The time when the article was added to the queue, with the newest articles being at the top by default.
         The title of the book or journal, i.e., FullTitle from the BHL BookSearch API.
@@ -972,15 +979,15 @@ class bhl_access_controller //extends ControllerBase
             // echo "<pre>"; print_r($info); echo "</pre>";
             $recs[] = $info;
         }
-        return $recs;
+        return array("total" => count($titles['query']['allpages']), "recs" => $recs);
     }
     
     function get_titles_by_type($type) //expire_seconds should always be TRUE, but not anymore since using: $_SESSION["title_list_cache_YN"]
     {
-        // /* debug
+        /* debug
         if($_SESSION["title_list_cache_YN_".$type]) echo "<br>cache expires<br>";
         else                                        echo "<br>cache does not expire<br>";
-        // */
+        */
         if(in_array($type, array("draft", "approved", "active", "completed")))
         {
             if($type == "draft")         $ns = 0;
