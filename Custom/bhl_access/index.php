@@ -2,7 +2,7 @@
 <!doctype html>
 <html lang="us">
 <head>
-    <div id="loadOverlay" style="background-color:#333; position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:2000; color:white; font-size:120%;">Loading, please wait...</div>
+    <div id="loadOverlay" style="background-color:#333; position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:2000; color:white; font-size:120%;">Loading, please wait ...</div>
     <title>BHL API Search Interface</title>
     <?php require_once("../config/head-entry.html") ?>
 </head>
@@ -39,8 +39,10 @@ if(isset($params['search2']) || @$params['search_type'] == 'booksearch'
 elseif(isset($params['article_list']) 
                              || @$params['search_type'] == 'articlelist'
                              || @$params['search_type'] == 'gen_archive_all'
+                             || @$params['search_type'] == 'deletewiki'
                              || @$params['search_type'] == 'movebatch') require_once("../templates/bhl_access/layout3.php");
-elseif(isset($params['projects_menu']) || in_array(@$params['search_type'], array("projectsmenu", "wiki2php_project", "reviewproject"))) require_once("../templates/bhl_access/layout4.php");
+                             
+elseif(isset($params['projects_menu']) || in_array(@$params['search_type'], array("projectsmenu", "wiki2php_project", "reviewproject", "deletewiki_project"))) require_once("../templates/bhl_access/layout4.php");
 
 else require_once("../templates/bhl_access/layout.php"); //this includes pagesearch, reviewexcerpt, etc.
 ?>
@@ -67,6 +69,10 @@ if(isset($params['search_type']))
     
     elseif($params['search_type'] == "move2wiki")     print $ctrler->render_template('move2wiki-result', array('params' => @$params));
     elseif($params['search_type'] == "reviewexcerpt") print $ctrler->render_template('reviewexcerpt-result', array('params' => @$params));
+
+    elseif($params['search_type'] == "deletewiki")         print $ctrler->render_template('deletewiki-result', array('params' => @$params));
+    elseif($params['search_type'] == "deletewiki_project") print $ctrler->render_template('deletewiki-result', array('params' => @$params));
+    
 
     elseif($params['search_type'] == "move2wiki_project") print $ctrler->render_template('move2wiki_project-result', array('params' => @$params));
     elseif($params['search_type'] == "reviewproject")     print $ctrler->render_template('reviewproject-result', array('params' => @$params));
