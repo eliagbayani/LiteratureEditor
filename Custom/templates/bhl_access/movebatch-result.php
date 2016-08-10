@@ -14,7 +14,8 @@ else                                    $str = "For Review (draft)";
 
 $type = Functions::get_string_between("{", "}", strtolower($params['wiki_status']));
 
-$recs = self::list_titles_by_type($type, $params['book_title']);
+$rek = self::list_titles_by_type($type, $params['book_title']);
+$recs = $rek['recs'];
 // echo "<pre>"; print_r($recs); echo "</pre>";
 
 foreach($recs as $rec)

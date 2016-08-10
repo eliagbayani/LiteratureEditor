@@ -2,8 +2,12 @@
 // namespace php_active_record;
 /* Expects: $params */
 $type = $params['radio']; //either 'draft' or 'approved'
-if($val = @$params['book_title']) $rows = self::list_titles_by_type($type, $val);
-else                              $rows = array();
+if($val = @$params['book_title'])
+{
+    $rek = self::list_titles_by_type($type, $val);
+    $rows = $rek['recs'];
+}
+else $rows = array();
 if($rows)
 {
     ?>

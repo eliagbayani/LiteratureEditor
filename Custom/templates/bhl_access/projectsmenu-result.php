@@ -19,13 +19,15 @@ switch ($params['radio']) {
 if($params['radio'] == "proj_active")
 {
     // $wiki_status = "{Active}"; not needed
-    $rows = self::list_titles_by_type('active', false, true); //2nd param is book_title, 3rd param is boolean $projects
+    $rek = self::list_titles_by_type('active', false, true); //2nd param is book_title, 3rd param is boolean $projects
+    $rows = $rek['recs'];
     $str .= " = " . count($rows);
 }
 elseif($params['radio'] == "proj_comp")
 {
     // $wiki_status = "{Completed}"; not needed
-    $rows = self::list_titles_by_type('completed', false, true); //2nd param is book_title, 3rd param is boolean $projects
+    $rek = self::list_titles_by_type('completed', false, true); //2nd param is book_title, 3rd param is boolean $projects
+    $rows = $rek['recs'];
     $str .= " = " . count($rows);
 }
 elseif($params['radio'] == "proj_my")
@@ -42,7 +44,9 @@ elseif($params['radio'] == "proj_my")
     */
     
     $username = $_COOKIE['wiki_literatureeditorUserName'];
-    $rows = self::list_titles_by_type('all_projects', false, true, $username); //2nd param is book_title, 3rd param is boolean $projects, 4th param is logged-in username
+    $rek = self::list_titles_by_type('all_projects', false, true, $username); //2nd param is book_title, 3rd param is boolean $projects, 4th param is logged-in username
+    $rows = $rek['recs'];
+    
     $str .= " = " . count($rows);
 }
 ?>
