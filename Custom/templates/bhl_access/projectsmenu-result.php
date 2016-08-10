@@ -6,7 +6,12 @@ switch ($params['radio']) {
     case "proj_my":     $str = "My projects"; break;
     case "proj_active": $str = "Active projects"; break;
     case "proj_comp":   $str = "Completed projects"; break;
-    case "proj_start":  $str = "Start a new project"; break;
+    case "proj_start":
+        {
+            if(isset($params['fromReview'])) $str = "Edit an existing project";
+            else                             $str = "Start a new project";
+            break;
+        }
     // default:
     // code to be executed if n is different from all labels;
 }
@@ -25,14 +30,20 @@ elseif($params['radio'] == "proj_comp")
 }
 elseif($params['radio'] == "proj_my")
 {
+    /* working but using cookie is shorter
     // [http://editors.eol.localhost/LiteratureEditor/wiki/User:EAgbayani Eli E. Agbayani]
     if(preg_match("/User:(.*?) /ims", $this->compiler, $arr))
     {
         $username = $arr[1];
-        // echo "<br>username is: [$username]<br>";
+        echo "<br>username is: [$username] " . $_COOKIE['wiki_literatureeditorUserName'] . "<br>";
         $rows = self::list_titles_by_type('all_projects', false, true, $username); //2nd param is book_title, 3rd param is boolean $projects, 4th param is logged-in username
         $str .= " = " . count($rows);
     }
+    */
+    
+    $username = $_COOKIE['wiki_literatureeditorUserName'];
+    $rows = self::list_titles_by_type('all_projects', false, true, $username); //2nd param is book_title, 3rd param is boolean $projects, 4th param is logged-in username
+    $str .= " = " . count($rows);
 }
 ?>
 <div id="accordion_open">
