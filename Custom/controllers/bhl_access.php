@@ -505,6 +505,17 @@ class bhl_access_controller //extends ControllerBase
             if($wiki_status == "{Active}") $str .= " | <a href='$url'>Move to '<b>Completed Projects</b>'</a>";
             else                           $str .= " | <a href='$url'>Move to '<b>Active Projects</b>'</a>";
             //end ============================
+            
+            //start delete if possible
+            if(self::you_created_this_wiki($params['compiler']))
+            {
+                if($params['wiki_status'] == "{Active}") $radio = "proj_active";
+                elseif($params['wiki_status'] == "{Completed}") $radio = "proj_comp";
+                $str .= " | <a href='index.php?search_type=deletewiki_project&wiki_title=" . $params['wiki_title'] . "&wiki_status=" . $params['wiki_status'] . "&radio=$radio'>Delete this wiki</a>";
+            }
+            //end delete
+            
+            
         }
         else $str = "";
 
@@ -522,6 +533,35 @@ class bhl_access_controller //extends ControllerBase
         echo "<b>Compiler</b>: " . self::disp_compiler(@$params['compiler']) . "<br><br>";
     }
     
+    function you_created_this_wiki($compiler)
+    {
+        $current_user = str_replace(" ", "_", $_COOKIE['wiki_literatureeditorUserName']);
+        // echo "<pre>"; print_r($params); echo "</pre>";
+        if($usernames = self::usernames_from_compiler($compiler))
+        {
+            if($current_user == $usernames[0] || self::is_administrator($current_user)) return true;
+            // else echo "<br>[$current_user] [$usernames[0]]<br>";
+        }
+        return false;
+    }
+    
+    function is_administrator($username)
+    {
+        $user_groups = self::get_user_groups($username);
+        // echo "<pre>"; print_r($user_groups); echo "</pre>";
+        if(in_array("EoL_Administrator", $user_groups)) return true;
+        return false;
+    }
+    
+    function get_user_groups($username)
+    {
+        //http://editors.eol.localhost/LiteratureEditor/api.php?action=query&list=users&ususers=EAgbayani&usprop=blockinfo|groups|editcount|registration|emailable|gender
+        $url = $this->mediawiki_api . "?action=query&list=users&ususers=" . $username . "&usprop=blockinfo|groups|editcount|registration|emailable|gender&format=json";
+        $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //maybe save this info in $this->is_administrator
+        $arr = json_decode($json, true);
+        return @$arr['query']['users'][0]['groups'];
+    }
+    
     function review_excerpt($params)
     {
         if(@$params['overwrite'])
@@ -537,8 +577,19 @@ class bhl_access_controller //extends ControllerBase
             if($wiki_status == "{Draft}") $str .= " | <a href='$url'>Move to '<b>For EOL Harvesting</b>'</a>";
             else                          $str .= " | <a href='$url'>Move to '<b>For Review (draft)</b>'</a>";
             //end ============================
+            
+            //start delete if possible
+            if(self::you_created_this_wiki($params['compiler']))
+            {
+                if($params['wiki_status'] == "{Approved}") $radio = "approved";
+                elseif($params['wiki_status'] == "{Draft}") $radio = "draft";
+                $str .= " | <a href='index.php?search_type=deletewiki&wiki_title=" . $params['wiki_title'] . "&wiki_status=" . $params['wiki_status'] . "&radio=$radio'>Delete this wiki</a>";
+            }
+            //end delete
+            
         }
         else $str = "";
+        
 
         if($params['search_type'] == "move2wiki") // from wiki OR from article list
         {
@@ -602,6 +653,11 @@ class bhl_access_controller //extends ControllerBase
         foreach($ocrs as $ocr) echo "<p> " . str_replace("\n", "<br>", $ocr) . "</p>";
     }
 
+    function format_raw_wiki_title($str)
+    {
+        return ucfirst(str_replace(" ", "_", $str));
+    }
+    
     function move2wiki_project($params)
     {
         /*
@@ -611,8 +667,17 @@ class bhl_access_controller //extends ControllerBase
         
         //delete existing if necessary
         $arr = explode(":", $params['wiki_title']);
-        $old_title = @$arr[1];
-        if($old_title != $params['proj_name']) self::start_delete($params);
+        $old_title = self::format_raw_wiki_title(@$arr[1]);
+        if($old_title != self::format_raw_wiki_title($params['proj_name']) && $old_title)
+        {
+            echo "<br>$old_title != " . self::format_raw_wiki_title($params['proj_name']) . "<br>";
+            $success_delete = self::start_delete($params);
+            if(!$success_delete) 
+            {
+                self::display_message(array('type' => "error", 'msg' => "You are not allowed to overwrite existing project."));
+                return;
+            }
+        }
         
         if(!($ns = $arr[0])) $ns = "Active_Projects";
         $new_title = $ns.":".str_replace(" ", "_", $params['proj_name']);
@@ -660,10 +725,22 @@ class bhl_access_controller //extends ControllerBase
         
         //now delete the temp wiki file
         unlink($temp_wiki_file);
+
+        print_r($params);
+        /* when proj name changes: "project 33"
+         [wiki_title] => Active_Projects:Project_3
+         [proj_name] => project 33
+         --------------------------------
+          [proj_name] => new 1 
+          [wiki_status] => {Completed}
+        */
         
         //make a fresh cache for the newly saved wiki
-        $new = trim(str_replace("_", " ", $params['wiki_title']));
-        $no_use = self::get_wiki_text($new, array("expire_seconds" => true)); //force cache expires
+        if($params['wiki_status'] == "{Active}")    $title2refresh = "Active_Projects:";
+        if($params['wiki_status'] == "{Completed}") $title2refresh = "Completed_Projects:";
+        $title2refresh .= ucfirst(str_replace(" ", "_", $params['proj_name']));
+        $title2refresh = trim(str_replace("_", " ", $title2refresh));
+        $no_use = self::get_wiki_text($title2refresh, array("expire_seconds" => true)); //force cache expires
         
         //make a fresh cache when calling the list:
         $_SESSION["title_list_cache_YN_active"] = true; //meaning cache expires
@@ -671,11 +748,14 @@ class bhl_access_controller //extends ControllerBase
         $_SESSION["title_list_cache_YN_all_projects"] = true; //meaning cache expires
         
         // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
+        
+        // /* working ...temporarily commented
         ?>
         <script type="text/javascript">
         location.href = '<?php echo $wiki_page ?>';
         </script>
         <?php
+        // */
     }
 
     function move2wiki($params)
@@ -916,13 +996,12 @@ class bhl_access_controller //extends ControllerBase
             {
                 // echo "<br>[$url" . "$added_param]<br>";
                 $json = Functions::lookup_with_cache($url.$added_param, array('expire_seconds' => $_SESSION["title_list_cache_YN_".$type])); //always true before, not anymore
-                $_SESSION["title_list_cache_YN_".$type] = false;
-                
                 $arr = json_decode($json, true);
                 $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
                 if($apcontinue = @$arr['continue']['apcontinue']) $added_param = "&apcontinue=".$apcontinue;
                 else break;
             }
+            $_SESSION["title_list_cache_YN_".$type] = false;
             return $final;
         }
         elseif(in_array($type, array("all", "all_projects")))
@@ -937,14 +1016,13 @@ class bhl_access_controller //extends ControllerBase
                 while(true)
                 {
                     $json = Functions::lookup_with_cache($url.$added_param, array('expire_seconds' => $_SESSION["title_list_cache_YN_".$type])); //always true before, not anymore
-                    $_SESSION["title_list_cache_YN_".$type] = false;
-                    
                     $arr = json_decode($json, true);
                     $final['query']['allpages'] = array_merge($final['query']['allpages'], $arr['query']['allpages']);
                     if($apcontinue = @$arr['continue']['apcontinue']) $added_param = "&apcontinue=".$apcontinue;
                     else break;
                 }
             }
+            $_SESSION["title_list_cache_YN_".$type] = false;
             return $final;
         }
     }
@@ -980,18 +1058,8 @@ class bhl_access_controller //extends ControllerBase
             if($new_title = @$arr['move']['to'])
             {
                 $wiki_page = "../../wiki/" . $new_title;
-                
-                if(in_array($params['wiki_status'], array("{Draft}", "{Approved}")))
-                {
-                    $_SESSION["title_list_cache_YN_draft"] = true;
-                    $_SESSION["title_list_cache_YN_approved"] = true;
-                }
-                elseif(in_array($params['wiki_status'], array("{Active}", "{Completed}")))
-                {
-                    $_SESSION["title_list_cache_YN_active"] = true;
-                    $_SESSION["title_list_cache_YN_completed"] = true;
-                    $_SESSION["title_list_cache_YN_all_projects"] = true;
-                }
+             
+                self::set_cache_2true_accordingly($params['wiki_status']);
                 
                 ?>
                 <script type="text/javascript">
@@ -1001,6 +1069,35 @@ class bhl_access_controller //extends ControllerBase
             }
         }
         else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));
+    }
+    
+    function set_cache_2true_accordingly($wiki_status, $specific = false)
+    {
+        if($specific)
+        {
+            if    ($wiki_status == "{Draft}")    $_SESSION["title_list_cache_YN_draft"] = true;
+            elseif($wiki_status == "{Approved}") $_SESSION["title_list_cache_YN_approved"] = true;
+            elseif(in_array($wiki_status, array("{Active}", "{Completed}")))
+            {
+                $_SESSION["title_list_cache_YN_active"] = true;
+                $_SESSION["title_list_cache_YN_completed"] = true;
+                $_SESSION["title_list_cache_YN_all_projects"] = true;
+            }
+        }
+        else
+        {
+            if(in_array($wiki_status, array("{Draft}", "{Approved}")))
+            {
+                $_SESSION["title_list_cache_YN_draft"] = true;
+                $_SESSION["title_list_cache_YN_approved"] = true;
+            }
+            elseif(in_array($wiki_status, array("{Active}", "{Completed}")))
+            {
+                $_SESSION["title_list_cache_YN_active"] = true;
+                $_SESSION["title_list_cache_YN_completed"] = true;
+                $_SESSION["title_list_cache_YN_all_projects"] = true;
+            }
+        }
     }
     
     function get_move_token($wiki_title)
@@ -1056,6 +1153,13 @@ class bhl_access_controller //extends ControllerBase
                 self::display_message(array('type' => "error", 'msg' => $msg));
                 echo "<br><a href='javascript:history.go(-1)'>Try again.</a><br>";
             }
+            else 
+            {
+                self::display_message(array('type' => "highlight", 'msg' => "Wiki deleted successfully."));
+                self::set_cache_2true_accordingly($params['wiki_status'], true);
+                return true;
+            }
+            
             /*
             if($new_title = @$arr['move']['to'])
             {
@@ -1068,18 +1172,17 @@ class bhl_access_controller //extends ControllerBase
             }
             */
         }
-        else 
-        {
-            self::display_message(array('type' => "error", 'msg' => "Delete failed. Token creation failed."));
-        }
+        else self::display_message(array('type' => "error", 'msg' => "Delete failed. Token creation failed."));
+        return false;
     }
 
     function delete_file($params)
     {
         $title2delete = urlencode($params['wiki_title']);
         $url = "/LiteratureEditor/api.php?action=delete&title=$title2delete"; //"&token=58b54e0bab4a1d3fd3f7653af38e75cb%2B";
-        $json = self::get_api_result_via_post($url, array("token" => $params['token']));
+        $json = self::get_api_result_via_post($url."&format=json", array("token" => $params['token']));
         $arr = json_decode($json, true);
+        // echo "<pre>"; print_r($arr); echo "</pre>";
         if($val = @$arr['warnings']['info']['*']) self::display_message(array('type' => "error", 'msg' => $val));
         return $arr;
     }
