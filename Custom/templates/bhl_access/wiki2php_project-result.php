@@ -41,8 +41,7 @@
             <h3>Review Excerpt</h3>
             <div>
             <?php
-            self::display_message(array('type' => "error", 'msg' => "You cannot review nor edit wiki that are already for harvesting."));
-            self::display_message(array('type' => "error", 'msg' => "An admin must move this to drafts (Main namespace) before you can review/edit it."));
+            self::display_message(array('type' => "error", 'msg' => "Error occurred. Record may not exist anymore."));
             echo "<br><a href='#' onClick='window.history.back()'>Go Back</a>";
             ?>
             </div>
