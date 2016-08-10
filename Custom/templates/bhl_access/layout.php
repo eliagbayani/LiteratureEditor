@@ -42,8 +42,20 @@
 ?>
 <script>
 function other_clicked() { location.href = '<?php echo $other ?>'; }
-function tab4_clicked() { location.href = '<?php echo $back ?>'; }
 function tab7_clicked() { location.href = '<?php echo $article_list ?>'; }
 function tab8_clicked() { location.href = '<?php echo $projects ?>'; }
+
+function tab4_clicked() 
+{ 
+    //alert("session reset");
+    <?php
+    /* doesn't seem to work as expected... */
+    // session_unset(); // remove all session variables
+    // session_destroy(); // destroy the session
+    ?>
+    location.href = '<?php echo $back ?>'; 
+}
+
+
 </script>
 
