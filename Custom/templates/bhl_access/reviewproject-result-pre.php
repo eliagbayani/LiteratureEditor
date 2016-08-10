@@ -60,6 +60,8 @@ else
             $post = self::page_status($title, true); //true means projects
             echo "<br>" . "<a href='index.php?search_type=wiki2php_project&wiki_title=$title&overwrite=1'>View existing project</a> &nbsp; <i>$post</i><br>";
             echo "<br>OR<br><br><a href='javascript:history.go(-1)'>Go back and edit</a>";
+            
+            
         }
     }
 }
