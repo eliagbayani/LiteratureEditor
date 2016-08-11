@@ -564,11 +564,12 @@ class bhl_access_controller //extends ControllerBase
     
     function review_excerpt($params)
     {
+        $header = $params['header_title'];
         if(@$params['overwrite'])
         {
             $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $params['wiki_title'];
             // http://editors.eol.xxx/LiteratureEditor/wiki/16194361_5e05173f317d6f9f35dd954c87bef5ce
-            $str = " - <a href='$url'>View Wiki</a>";
+            $str = " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <a href='$url'>View Wiki</a>";
             
             //start move24harvest ============
             $wiki_status = self::page_status($params['wiki_title']);
@@ -587,6 +588,9 @@ class bhl_access_controller //extends ControllerBase
             }
             //end delete
             
+            //start anchor for header_title
+            $radio = strtolower(str_replace(array("{", "}"), "", $params['wiki_status']));
+            $header = "<a href='index.php?search_type=articlelist&radio=$radio&book_title=" . urlencode($header) . "'>$header</a>";
         }
         else $str = "";
         
@@ -598,8 +602,8 @@ class bhl_access_controller //extends ControllerBase
                 $str .= " | <a href='index.php?search_type=gen_archive&wiki_title=" . urldecode($params['wiki_title']) . "'>Generate the EOL DWC-A for this article</a>";
             }
         }
-        
-        echo "Excerpt from " . "<b>" . $params['header_title'] . "</b>" . "<i>$str</i><br><br>";
+        $str .= " |";
+        echo "Excerpt from " . "<b><u>" . $header . "</u></b>" . "<i>$str</i><br><br>";
         
         $ids = self::prep_pageids_4disp($params);
         foreach($ids as $id)
