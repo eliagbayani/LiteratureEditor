@@ -518,7 +518,7 @@ class bhl_access_controller //extends ControllerBase
                 elseif($params['wiki_status'] == "{Completed}") $radio = "proj_comp";
                 */
                 /* works well, commented as it needs js confirmation
-                $str .= " | <a href='index.php?search_type=deletewiki_project&wiki_title=" . $params['wiki_title'] . "&wiki_status=" . $params['wiki_status'] . "&radio=" . $params['radio'] . "'>Delete this wiki</a>";
+                $str .= " | <a href='index.php?search_type=deletewiki_project&wiki_title=" . $params['wiki_title'] . "&wiki_status=" . $params['wiki_status'] . "&radio=" . $radio . "'>Delete this wiki</a>";
                 */
                 $str .= " | <a href='#' onClick='confirm_project_delete()'>Delete this wiki</a>";
             }
@@ -589,9 +589,12 @@ class bhl_access_controller //extends ControllerBase
             //start delete if possible
             if(self::you_created_this_wiki($params['compiler']))
             {
+                /* working but commented since deletion needs js confirmation
                 if($params['wiki_status'] == "{Approved}") $radio = "approved";
                 elseif($params['wiki_status'] == "{Draft}") $radio = "draft";
                 $str .= " | <a href='index.php?search_type=deletewiki&wiki_title=" . $params['wiki_title'] . "&wiki_status=" . $params['wiki_status'] . "&radio=$radio'>Delete this wiki</a>";
+                */
+                $str .= " | <a href='#' onClick='confirm_article_delete()'>Delete this wiki</a>";
             }
             //end delete
             
@@ -737,7 +740,7 @@ class bhl_access_controller //extends ControllerBase
         //now delete the temp wiki file
         unlink($temp_wiki_file);
 
-        print_r($params);
+        // print_r($params);
         /* when proj name changes: "project 33"
          [wiki_title] => Active_Projects:Project_3
          [proj_name] => project 33

@@ -9,7 +9,17 @@
     <div>
 
     <?php
+    //for article deletion
+    if($params['wiki_status'] == "{Approved}") $radio = "approved";
+    elseif($params['wiki_status'] == "{Draft}") $radio = "draft";
     ?>
+    <form id="frm_del_article" action="index.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="search_type" value="deletewiki">
+    <input type="hidden" name="wiki_title" value="<?php echo $params['wiki_title'] ?>">
+    <input type="hidden" name="wiki_status" value="<?php echo $params['wiki_status'] ?>">
+    <input type="hidden" name="radio" value="<?php echo $radio ?>">
+    </form>
+
 
     <form name="" action="index.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="fromReview">
@@ -43,3 +53,12 @@
     </form>
     </div>
 </div>
+<script>
+function confirm_article_delete()
+{
+    if (confirm("Are you sure to DELETE?") == true)
+    {
+        document.getElementById("frm_del_article").submit();
+    }
+}
+</script>

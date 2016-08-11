@@ -1,7 +1,7 @@
 <?php
 // namespace php_active_record;
     /* Expects: $params */
-    echo "<pre>"; print_r($params); echo "</pre>";
+    // echo "<pre>"; print_r($params); echo "</pre>";
     // [wiki_status] => {Approved}
 ?>
 <div id="accordion_open">

@@ -12,15 +12,15 @@
     if($cont_review)
     {
         //for project deletion
-        if    ($params['wiki_status'] == "{Active}")    $params['radio'] = "proj_active";
-        elseif($params['wiki_status'] == "{Completed}") $params['radio'] = "proj_comp";
+        if    ($params['wiki_status'] == "{Active}")    $radio = "proj_active";
+        elseif($params['wiki_status'] == "{Completed}") $radio = "proj_comp";
     ?>
 
     <form id="frm_del_proj" action="index.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="search_type" value="deletewiki_project">
     <input type="hidden" name="wiki_title" value="<?php echo $params['wiki_title'] ?>">
     <input type="hidden" name="wiki_status" value="<?php echo $params['wiki_status'] ?>">
-    <input type="hidden" name="radio" value="<?php echo $params['radio'] ?>">
+    <input type="hidden" name="radio" value="<?php echo $radio ?>">
     </form>
 
     <form name="" action="index.php" method="post" enctype="multipart/form-data">
