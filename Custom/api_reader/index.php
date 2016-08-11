@@ -14,7 +14,7 @@
 
 $params = & $_GET;
 
-print_r($params); 
+// print_r($params); 
 // exit;
 
 require_once("../config/settings.php");
