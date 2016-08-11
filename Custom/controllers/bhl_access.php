@@ -70,9 +70,13 @@ class bhl_access_controller //extends ControllerBase
                 $_SESSION["title_list_cache_YN_active"] = true;
                 $_SESSION["title_list_cache_YN_completed"] = true;
                 $_SESSION["title_list_cache_YN_all_projects"] = true;
-                echo "<br>SESSION is set<br>"; //debug
             }
-            else echo "<br>SESSION is ALREADY set<br>"; //debug
+            
+            if(self::is_eli())
+            {
+                if(!isset($_SESSION["title_list_cache_YN_draft"])) echo "<br>SESSION is set<br>"; //debug
+                else                                               echo "<br>SESSION is ALREADY set<br>"; //debug
+            }
             return true;
         }
         /*
@@ -988,10 +992,13 @@ class bhl_access_controller //extends ControllerBase
     
     function get_titles_by_type($type) //expire_seconds should always be TRUE, but not anymore since using: $_SESSION["title_list_cache_YN"]
     {
-        /* debug
-        if($_SESSION["title_list_cache_YN_".$type]) echo "<br>cache expires<br>";
-        else                                        echo "<br>cache does not expire<br>";
-        */
+        // /* debug
+        if(self::is_eli())
+        {
+            if($_SESSION["title_list_cache_YN_".$type]) echo "cache expires ";
+            else                                        echo "cache does not expire ";
+        }
+        // */
         if(in_array($type, array("draft", "approved", "active", "completed")))
         {
             if($type == "draft")         $ns = 0;
