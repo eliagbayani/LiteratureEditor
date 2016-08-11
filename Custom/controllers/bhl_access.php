@@ -513,13 +513,16 @@ class bhl_access_controller //extends ControllerBase
             //start delete if possible
             if(self::you_created_this_wiki($params['compiler']))
             {
+                /* moved to reviewproject-result.php, as deletion needs js confirmation
                 if($params['wiki_status'] == "{Active}") $radio = "proj_active";
                 elseif($params['wiki_status'] == "{Completed}") $radio = "proj_comp";
-                $str .= " | <a href='index.php?search_type=deletewiki_project&wiki_title=" . $params['wiki_title'] . "&wiki_status=" . $params['wiki_status'] . "&radio=$radio'>Delete this wiki</a>";
+                */
+                /* works well, commented as it needs js confirmation
+                $str .= " | <a href='index.php?search_type=deletewiki_project&wiki_title=" . $params['wiki_title'] . "&wiki_status=" . $params['wiki_status'] . "&radio=" . $params['radio'] . "'>Delete this wiki</a>";
+                */
+                $str .= " | <a href='#' onClick='confirm_project_delete()'>Delete this wiki</a>";
             }
             //end delete
-            
-            
         }
         else $str = "";
 
