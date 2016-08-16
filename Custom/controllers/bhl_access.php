@@ -71,6 +71,10 @@ class bhl_access_controller //extends ControllerBase
                 $_SESSION["title_list_cache_YN_completed"] = true;
                 $_SESSION["title_list_cache_YN_all_projects"] = true;
             }
+            if(!isset($_SESSION["working_proj"]))
+            {
+                $_SESSION["working_proj"] = false;
+            }
             
             if(self::is_eli())
             {
@@ -520,9 +524,24 @@ class bhl_access_controller //extends ControllerBase
                 /* works well, commented as it needs js confirmation
                 $str .= " | <a href='index.php?search_type=deletewiki_project&wiki_title=" . $params['wiki_title'] . "&wiki_status=" . $params['wiki_status'] . "&radio=" . $radio . "'>Delete this wiki</a>";
                 */
-                $str .= " | <a href='#' onClick='confirm_project_delete()'>Delete this wiki</a>";
+                
+                if(@$params['articles']) $str .= " | <a href='#' onClick='alert(\"Cannot delete since articles are already attached.\\n\\nRemove articles first.\")'>Delete this project</a>";
+                else                     $str .= " | <a href='#' onClick='confirm_project_delete()'>Delete this project</a>";
             }
             //end delete
+            
+            //start assignment
+            // index.php?wiki_title=Active_Projects:project_2&search_type=wiki2php_project&overwrite=1
+            if($_SESSION["working_proj"] == $params['wiki_title'])
+            {
+                http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?search_type=articlelist&radio=approved
+                $str .= " | You can now assign articles to this project. Go to <a href='index.php?search_type=articlelist&radio=approved'>Articles</a>";
+            }
+            else
+            {
+                $str .= " | <a href='index.php?assign=1&search_type=wiki2php_project&wiki_title=" . urldecode($params['wiki_title']) . "&overwrite=" . $params['overwrite'] . "'>START assigning articles to this project</a>";
+            }
+            
         }
         else $str = "";
 
@@ -530,18 +549,28 @@ class bhl_access_controller //extends ControllerBase
         {
             if($params['wiki_status'] == "{Completed}") // you can generate archive
             {
-                $str .= " | <a href='index.php?search_type=gen_archive&wiki_title=" . urldecode($params['wiki_title']) . "'>Generate the EOL DWC-A for this project</a>";
+                $str .= " | <a href='index.php?search_type=gen_archive&wiki_title=" . urldecode($params['wiki_title']) . "'>Generate EOL DWC-A for this project</a>";
             }
         }
-        
-        
-        
         
         $str .= " |";
         echo "<u>Project Information</u>" . " <i>$str</i><br><br>";
         echo "<b>Project name</b>: " . $params['proj_name']  . "<br><br>";
         echo "<b>Description</b>: " . $params['proj_desc']  . "<br><br>";
         echo "<b>Compiler</b>: " . self::disp_compiler(@$params['compiler']) . "<br><br>";
+        echo "<b>Articles</b>: [" . @$params['articles']  . "]<br><br>";
+        
+        // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?wiki_title=ForHarvesting:16194405_ae66e9b6f430af7e694cad4cf1d6f295&search_type=wiki2php&overwrite=1
+        if($articles = @$params['articles'])
+        {
+            $articles = explode(";", $articles);
+            $articles = array_map("trim", $articles);
+            foreach($articles as $article)
+            {
+                echo "<br><a href='index.php?wiki_title=" . $article . "&search_type=wiki2php&overwrite=1'>$article</a>";
+            }
+        }
+        
     }
     
     function you_created_this_wiki($compiler)
@@ -573,6 +602,122 @@ class bhl_access_controller //extends ControllerBase
         return @$arr['query']['users'][0]['groups'];
     }
     
+    function make_working_proj($title)
+    {
+        $_SESSION["working_proj"] = $title;
+    }
+    
+    function adjust_projects($params)
+    {
+        $new_project = $params['new_project'];
+        if($projects = @$params['projects'])
+        {
+            $arr = explode(";", $projects);
+            $arr[] = $new_project; //just append new_project, since we will do array_unique() later
+            $arr = array_map("trim", $arr);
+            $arr = array_unique($arr);
+            $arr = array_filter($arr);
+            $params['projects'] = implode("; ", $arr);
+        }
+        else $params['projects'] = $new_project;
+        return $params['projects'];
+    }
+    
+    function add_article_2proj($params)
+    {   /*
+        [new_project] => 
+        [projects] => Active_Projects:project_01
+        [wiki_title] => ForHarvesting:16194361_dbd860482d762327211c39ba89f3e58a
+        */
+        echo "<pre>"; print_r($params); echo "</pre>";
+        $info = self::get_wiki_text($params['new_project']);
+        if($wiki_text = $info['content'])
+        {
+            if($p = self::get_void_part($wiki_text))
+            {
+                $p['new_article'] = $params['wiki_title'];
+                echo "<pre>"; print_r($p); echo "</pre>";
+                $p['articles'] = self::adjust_articles($p, "add");
+                self::move2wiki_project($p, false);
+                // exit("<br>-elix-");
+            }
+        }
+        else
+        {
+            // exit("<br>-no wiki text-");
+            self::display_message(array('type' => "error", 'msg' => "Project doesn't exist anymore."));
+            return false;
+        }
+    }
+
+    function remove_article_2proj($params)
+    {   /*
+        [new_project] => 
+        [remove_project] => 1
+        [projects] => Completed_Projects:Project_03; 
+        [search_type] => move2wiki
+        [overwrite] => 1
+        [wiki_title] => 16194406_f4dc920dad6514b1bb210e8e73c71183            
+        */
+        echo "<pre>"; print_r($params); echo "</pre>";
+        $info = self::get_wiki_text($params['projects']);
+        if($wiki_text = $info['content'])
+        {
+            if($p = self::get_void_part($wiki_text))
+            {
+                /*
+                [fromReview] => 
+                [articles] => 16194406_f4dc920dad6514b1bb210e8e73c71183
+                [search_type] => move2wiki_project
+                [radio] => proj_start
+                [overwrite] => 1
+                [wiki_title] => Completed_Projects:Project_03                
+                */
+                
+                $p['remove_article'] = $params['wiki_title'];
+                // echo "<pre>"; print_r($p); echo "</pre>"; exit("<br>ditox<br>");
+                $p['articles'] = self::adjust_articles($p, "remove");
+                self::move2wiki_project($p, false);
+                // exit("<br>-elix-");
+            }
+        }
+        else
+        {
+            exit("<br>-no wiki text 02-");
+            self::display_message(array('type' => "error", 'msg' => "Project doesn't exist anymore."));
+            return false;
+        }
+    }
+
+    function adjust_articles($params, $type)
+    {
+        $new_article = @$params['new_article']; //used only when $type == "add"
+        if($articles = @$params['articles'])
+        {
+            if($type == "remove") $articles = str_ireplace($params['remove_article'], "", $articles);
+            $arr = explode(";", $articles);
+            if($type == "add") $arr[] = $new_article; //just append new_article, since we will do array_unique() later
+            $arr = array_map("trim", $arr);
+            $arr = array_unique($arr);
+            $params['articles'] = implode("; ", $arr);
+        }
+        else $params['articles'] = $new_article;
+        return $params['articles'];
+    }
+    
+    function proj_list_format($projects)
+    {
+        $final = array();
+        $projects = explode(";", $projects);
+        $projects = array_map("trim", $projects);
+        foreach($projects as $p)
+        {
+            // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?wiki_title=Active_Projects:Project_03&search_type=wiki2php_project&overwrite=1
+            $final[] = "<a href='index.php?wiki_title=" . $p . "&search_type=wiki2php_project&overwrite=1'>$p</a>";
+        }
+        return trim(implode("; ", $final));
+    }
+    
     function review_excerpt($params)
     {
         $header = $params['header_title'];
@@ -598,26 +743,41 @@ class bhl_access_controller //extends ControllerBase
                 elseif($params['wiki_status'] == "{Draft}") $radio = "draft";
                 $str .= " | <a href='index.php?search_type=deletewiki&wiki_title=" . $params['wiki_title'] . "&wiki_status=" . $params['wiki_status'] . "&radio=$radio'>Delete this wiki</a>";
                 */
-                $str .= " | <a href='#' onClick='confirm_article_delete()'>Delete this wiki</a>";
+                $str .= " | <a href='#' onClick='confirm_article_delete()'>Delete this article</a>";
             }
             //end delete
+            
+            //start assign
+            if($_SESSION['working_proj'])
+            {
+                if(stripos(@$params['projects'], $_SESSION['working_proj'])  !== false) {} //string is found
+                else
+                {
+                    $str .= " | <a href='#' onClick='assign_project(\"" . $_SESSION['working_proj'] . "\")'>ASSIGN this article to <b>'" . $_SESSION['working_proj'] . "'</b></a>";
+                }
+            }
+            //end
             
             //start anchor for header_title
             $radio = strtolower(str_replace(array("{", "}"), "", $params['wiki_status']));
             $header = "<a href='index.php?search_type=articlelist&radio=$radio&book_title=" . urlencode($header) . "'>$header</a>";
         }
         else $str = "";
-        
 
         if($params['search_type'] == "move2wiki") // from wiki OR from article list
         {
             if($params['wiki_status'] == "{Approved}") // you can generate archive
             {
-                $str .= " | <a href='index.php?search_type=gen_archive&wiki_title=" . urldecode($params['wiki_title']) . "'>Generate the EOL DWC-A for this article</a>";
+                $str .= " | <a href='index.php?search_type=gen_archive&wiki_title=" . urldecode($params['wiki_title']) . "'>Generate EOL DWC-A for this article</a>";
             }
         }
         $str .= " |";
         echo "Excerpt from " . "<b><u>" . $header . "</u></b>" . "<i>$str</i><br><br>";
+
+        if($val = self::proj_list_format(@$params['projects']))
+        {
+            if($val != "") echo "<b>Project this article was assigned to</b>: [" . $val . "] <a href='#' onClick='remove_project()'><i>Remove project</i></a><br><br>";
+        }
         
         $ids = self::prep_pageids_4disp($params);
         foreach($ids as $id)
@@ -676,12 +836,13 @@ class bhl_access_controller //extends ControllerBase
         return ucfirst(str_replace(" ", "_", $str));
     }
     
-    function move2wiki_project($params)
+    function move2wiki_project($params, $cont_redirect = true)
     {
         /*
         if($val = @$params['wiki_title']) $new_title = str_replace(" ", "_", $val);
         else                              $new_title = self::create_title($params);
         */
+        
         
         //delete existing if necessary
         $arr = explode(":", $params['wiki_title']);
@@ -754,6 +915,7 @@ class bhl_access_controller //extends ControllerBase
         */
         
         //make a fresh cache for the newly saved wiki
+        $title2refresh = "";
         if($params['wiki_status'] == "{Active}")    $title2refresh = "Active_Projects:";
         if($params['wiki_status'] == "{Completed}") $title2refresh = "Completed_Projects:";
         $title2refresh .= ucfirst(str_replace(" ", "_", $params['proj_name']));
@@ -768,11 +930,15 @@ class bhl_access_controller //extends ControllerBase
         // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
         
         // /* working ...temporarily commented
-        ?>
-        <script type="text/javascript">
-        location.href = '<?php echo $wiki_page ?>';
-        </script>
-        <?php
+        if($cont_redirect)
+        {
+            $_SESSION['working_proj'] = false;
+            ?>
+            <script type="text/javascript">
+            location.href = '<?php echo $wiki_page ?>';
+            </script>
+            <?php
+        }
         // */
     }
 
@@ -804,6 +970,9 @@ class bhl_access_controller //extends ControllerBase
                 
                 fwrite($file, "=== For EOL Ingestion ===\n");
                 fwrite($file, "Excerpt from " . "'''" . $params['header_title'] . "'''" . "\n\n");
+
+                fwrite($file, "'''Projects''': " . @$params['projects']  . "\n\n");
+
                 $ids = self::prep_pageids_4disp($params);
                 foreach($ids as $id)
                 {
@@ -1140,7 +1309,6 @@ class bhl_access_controller //extends ControllerBase
         $json = self::get_api_result($url);
         $arr = json_decode($json, true);
         if($val = @$arr['warnings']['info']['*']) self::display_message(array('type' => "error", 'msg' => $val));
-        // echo "<pre>"; print_r($arr); echo "</pre>"; //debug
         return $arr['query']['tokens']['csrftoken'];
     }
     
@@ -1312,7 +1480,6 @@ class bhl_access_controller //extends ControllerBase
         // $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/api.php?action=query&titles=" . urlencode($title) . "&format=json";
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => true)); //this expire_seconds should always be true
         $arr = json_decode($json, true);
-        // echo "<pre>";print_r(@$arr); print_r($json); print"</pre>";
         if(@$arr['query']['pages']['-1']) return false;
         else
         {
