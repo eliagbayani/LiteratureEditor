@@ -82,6 +82,7 @@ Subchapter
                     
                     <?php
                     if($group == "projects") $r['title'] = str_replace(" ", "_", $r['title']);
+                    if($group == "articles") $r['title'] = str_replace(" ", "_", $r['title']);
                     ?>
                     
                     <td style="display:none"><?php echo $r['title'] ?></td>
