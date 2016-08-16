@@ -710,6 +710,7 @@ class bhl_access_controller //extends ControllerBase
         $final = array();
         $projects = explode(";", $projects);
         $projects = array_map("trim", $projects);
+        $projects = array_filter($projects);
         foreach($projects as $p)
         {
             // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?wiki_title=Active_Projects:Project_03&search_type=wiki2php_project&overwrite=1
