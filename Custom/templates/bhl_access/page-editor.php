@@ -216,6 +216,9 @@ $msgs = self::page_editor_msgs();
             <input type="hidden" name="AddPage" id="AddPage">
             <input type="hidden" name="accordion_item" id="accordion_item" value="<?php echo $accordion_item ?>">
             <input type="hidden" name="compiler" value="<?php echo $compiler ?>">
+
+            <input type="text" name="projects" value="<?php echo $params['projects'] ?>">
+            
             <tr>
             <td colspan="2">
                 <!--- working ok but commented by Katja

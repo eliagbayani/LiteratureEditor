@@ -77,6 +77,8 @@ else //this means a form-submit
             <input type="hidden" name="wiki_title" value="<?php echo $wiki_title ?>" size="200">
             <input type="hidden" name="compiler" value="<?php echo $compiler ?>">
 
+            <input type="text" name="articles" value="<?php echo @$params['articles'] ?>">
+
             <table border="0" width="100%">
                 <tr><td><b>Project name</b>:</td>
                     <?php

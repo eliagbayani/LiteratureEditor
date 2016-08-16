@@ -8,6 +8,15 @@
             [wiki_title] => 16194405 ee667ff5a5361aedaaa35b2e1e55338e
             [overwrite] => 1
         )
+        OR
+        Array
+        (
+            [assign] => 1
+            [search_type] => wiki2php_project
+            [wiki_title] => Active_Projects:first_01
+            [overwrite] => 1
+        )
+        
     */
     echo "<pre>"; print_r($params); echo "</pre>"; //exit;
     $info = self::get_wiki_text($params['wiki_title']);

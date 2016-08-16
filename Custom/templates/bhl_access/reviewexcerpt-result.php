@@ -20,9 +20,12 @@
     <input type="hidden" name="radio" value="<?php echo $radio ?>">
     </form>
 
-
-    <form name="" action="index.php" method="post" enctype="multipart/form-data">
+    <form id="submit_article" name="" action="index.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="fromReview">
+    
+    <input id="new_project" type="hidden" name="new_project">
+    <input id="remove_project" type="hidden" name="remove_project">
+    
     <?php
         // echo"<pre>";print_r($params);echo"</pre>";
         $params['compiler'] = self::cumulatime_compiler($params);
@@ -35,6 +38,8 @@
             {
                 echo "<textarea name='" . $field . "' style='display:none;'>" . $params[$field] . "</textarea>";
             }
+            elseif($field == "new_project") {} //just ignore
+            elseif($field == "remove_project") {} //just ignore
             else
             {
                 echo '<input type="hidden" name="' . $field . '" value="' . $params[$field] . '"';
@@ -61,4 +66,19 @@ function confirm_article_delete()
         document.getElementById("frm_del_article").submit();
     }
 }
+function assign_project(project)
+{
+    document.getElementById("new_project").value = project;
+    document.getElementById('search_type').value = 'move2wiki';
+    spinner_on();
+    document.getElementById("submit_article").submit();
+}
+function remove_project()
+{
+    document.getElementById("remove_project").value = 1;
+    document.getElementById('search_type').value = 'move2wiki';
+    spinner_on();
+    document.getElementById("submit_article").submit();
+}
+
 </script>

@@ -25,6 +25,7 @@
 
     <form name="" action="index.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="fromReview">
+    <input type="text" name="articles" value="<?php echo @$params['articles'] ?>">
     <?php
         // echo"<pre>";print_r($params);echo"</pre>";
         $params['compiler'] = self::cumulatime_compiler($params);
