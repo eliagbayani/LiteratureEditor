@@ -34,6 +34,10 @@ $(window).load(function () {
 
 if(!$ctrler->user_is_logged_in_wiki()) return;
 
+//start assignment
+if(isset($params['assign'])) $ctrler->make_working_proj($params['wiki_title']);
+//end
+
 if(isset($params['search2']) || @$params['search_type'] == 'booksearch'
                              || @$params['search_type'] == 'titlelist') require_once("../templates/bhl_access/layout2.php");
 elseif(isset($params['article_list']) 
