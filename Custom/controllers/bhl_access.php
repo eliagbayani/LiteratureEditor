@@ -733,7 +733,7 @@ class bhl_access_controller //extends ControllerBase
     
     function review_excerpt($params)
     {
-        echo "<pre>"; print_r($params); echo "</pre>";
+        // echo "<pre>"; print_r($params); echo "</pre>";
         
         $header = $params['header_title'];
         if(@$params['overwrite'])
