@@ -46,8 +46,11 @@ elseif(isset($params['article_list'])
                              || @$params['search_type'] == 'deletewiki'
                              || @$params['search_type'] == 'movebatch') require_once("../templates/bhl_access/layout3.php");
                              
-elseif(isset($params['projects_menu']) || in_array(@$params['search_type'], array("projectsmenu", "wiki2php_project", "reviewproject", "deletewiki_project"))) require_once("../templates/bhl_access/layout4.php");
-
+elseif(isset($params['projects_menu']) || in_array(@$params['search_type'], array("projectsmenu", "wiki2php_project", "reviewproject", "deletewiki_project"))) 
+{
+    if(@$params['projects_menu'] == "deactivate_proj") $_SESSION['working_proj'] = false;
+    require_once("../templates/bhl_access/layout4.php");    
+}
 else require_once("../templates/bhl_access/layout.php"); //this includes pagesearch, reviewexcerpt, etc.
 ?>
 

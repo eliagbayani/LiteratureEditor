@@ -12,7 +12,7 @@ switch ($params['radio']) {
             else                             $str = "Start a new project";
             break;
         }
-    // default:
+    default: $str = ""; break;
     // code to be executed if n is different from all labels;
 }
 
