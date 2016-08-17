@@ -534,7 +534,7 @@ class bhl_access_controller //extends ControllerBase
             // index.php?wiki_title=Active_Projects:project_2&search_type=wiki2php_project&overwrite=1
             if($_SESSION["working_proj"] == $params['wiki_title'])
             {
-                http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?search_type=articlelist&radio=approved
+                // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?search_type=articlelist&radio=approved
                 $str .= " | You can now assign articles to this project. Go to <a href='index.php?search_type=articlelist&radio=approved'>Articles</a>";
             }
             else
@@ -552,6 +552,12 @@ class bhl_access_controller //extends ControllerBase
                 $str .= " | <a href='index.php?search_type=gen_archive&wiki_title=" . urldecode($params['wiki_title']) . "'>Generate EOL DWC-A for this project</a>";
             }
         }
+        
+        
+        //http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?wiki_title=Active_Projects:My_Project&search_type=wiki2php_project&overwrite=1
+        $str .= " | <a href='index.php?wiki_title=" . $params['wiki_title'] . "&search_type=wiki2php_project&overwrite=1'>Refresh</a>";
+        
+        
         
         $str .= " |";
         echo "<u>Project Information</u>" . " <i>$str</i><br><br>";
@@ -671,7 +677,7 @@ class bhl_access_controller //extends ControllerBase
                 [search_type] => move2wiki_project
                 [radio] => proj_start
                 [overwrite] => 1
-                [wiki_title] => Completed_Projects:Project_03                
+                [wiki_title] => Completed_Projects:Project_03
                 */
                 
                 $p['remove_article'] = $params['wiki_title'];
@@ -694,15 +700,21 @@ class bhl_access_controller //extends ControllerBase
         $new_article = @$params['new_article']; //used only when $type == "add"
         if($articles = @$params['articles'])
         {
-            if($type == "remove") $articles = str_ireplace($params['remove_article'], "", $articles);
+            if($type == "remove")
+            {
+                $articles = str_ireplace($params['remove_article'], "", $articles);
+            }
+            
+            
             $arr = explode(";", $articles);
             if($type == "add") $arr[] = $new_article; //just append new_article, since we will do array_unique() later
             $arr = array_map("trim", $arr);
             $arr = array_unique($arr);
-            $params['articles'] = implode("; ", $arr);
+            $arr = array_filter($arr);
+            $final = implode("; ", $arr);
         }
-        else $params['articles'] = $new_article;
-        return $params['articles'];
+        else $final = $new_article;
+        return trim($final);
     }
     
     function proj_list_format($projects)
@@ -721,6 +733,8 @@ class bhl_access_controller //extends ControllerBase
     
     function review_excerpt($params)
     {
+        echo "<pre>"; print_r($params); echo "</pre>";
+        
         $header = $params['header_title'];
         if(@$params['overwrite'])
         {
@@ -751,11 +765,14 @@ class bhl_access_controller //extends ControllerBase
             //start assign
             if($_SESSION['working_proj'])
             {
-                if(stripos(@$params['projects'], $_SESSION['working_proj'])  !== false) {} //string is found
-                else
+                if(!@$params['projects'])
                 {
-                    $str .= " | <a href='#' onClick='assign_project(\"" . $_SESSION['working_proj'] . "\")'>ASSIGN this article to <b>'" . $_SESSION['working_proj'] . "'</b></a>";
+                    $str .= " | <a href='#' onClick='assign_project(\"" . $_SESSION['working_proj'] . "\")'>ADD this article to <b>'" . $_SESSION['working_proj'] . "'</b></a>";
                 }
+            }
+            if($val = @$params['projects'])
+            {
+                $str .= " | <a href='#' onClick='remove_project()'>REMOVE </a> this article from <b>" . self::proj_list_format($val) . "</b>";
             }
             //end
             
@@ -775,10 +792,12 @@ class bhl_access_controller //extends ControllerBase
         $str .= " |";
         echo "Excerpt from " . "<b><u>" . $header . "</u></b>" . "<i>$str</i><br><br>";
 
+        /* working but moved up
         if($val = self::proj_list_format(@$params['projects']))
         {
             if($val != "") echo "<b>Project this article was assigned to</b>: [" . $val . "] <a href='#' onClick='remove_project()'><i>Remove project</i></a><br><br>";
         }
+        */
         
         $ids = self::prep_pageids_4disp($params);
         foreach($ids as $id)
