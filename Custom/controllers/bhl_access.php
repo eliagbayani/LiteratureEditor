@@ -865,7 +865,6 @@ class bhl_access_controller //extends ControllerBase
         else                              $new_title = self::create_title($params);
         */
         
-        
         //delete existing if necessary
         $arr = explode(":", $params['wiki_title']);
         $old_title = self::format_raw_wiki_title(@$arr[1]);
@@ -912,7 +911,6 @@ class bhl_access_controller //extends ControllerBase
                 fwrite($file, "'''Project name''': " . $params['proj_name']  . "\n\n");
                 fwrite($file, "'''Description''': " . $params['proj_desc']  . "\n\n");
                 fwrite($file, "'''Compiler''': " . @$params['compiler']  . "\n\n");
-
             }
             fclose($file);
         }
@@ -1312,7 +1310,7 @@ class bhl_access_controller //extends ControllerBase
                 $wiki_page = "../../wiki/" . $new_title;
                 self::set_cache_2true_accordingly($params['wiki_status']);
 
-                //start update project when article is moved while the article is assigned to a projectg ------------
+                //start update project when article is moved while the article is assigned to a project ------------
                 if(in_array($params['wiki_status'], array("{Draft}", "{Approved}"))) //meaning an article is being moved, not a project
                 {
                     // exit("<br>111<br>");
