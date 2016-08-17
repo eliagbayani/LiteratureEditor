@@ -733,7 +733,7 @@ class bhl_access_controller //extends ControllerBase
     
     function review_excerpt($params)
     {
-        // echo "<pre>"; print_r($params); echo "</pre>";
+        echo "<pre>"; print_r($params); echo "</pre>";
         
         $header = $params['header_title'];
         if(@$params['overwrite'])
@@ -744,7 +744,7 @@ class bhl_access_controller //extends ControllerBase
             
             //start move24harvest ============
             $wiki_status = self::page_status($params['wiki_title']);
-            $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $params['wiki_title'] . "&search_type=move24harvest&wiki_status=$wiki_status";
+            $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $params['wiki_title'] . "&search_type=move24harvest&wiki_status=$wiki_status&projects=" . @$params['projects'];
 
             if($wiki_status == "{Draft}") $str .= " | <a href='$url'>Move to '<b>For EOL Harvesting</b>'</a>";
             else                          $str .= " | <a href='$url'>Move to '<b>For Review (draft)</b>'</a>";
@@ -1260,6 +1260,39 @@ class bhl_access_controller //extends ControllerBase
         return array_keys($book_titles);
     }
     //======================================================= moving files
+    
+    function update_proj_when_article_moves($params)
+    {   /*
+        [project] => Active_Projects:project_01
+        [wiki_title] => 46306603_f5d670746cdd936d6bc1af1f3cd959a2
+        [wiki_status] => {Draft}
+        */
+        // echo "<pre>"; print_r($params); echo "</pre>";
+        $info = self::get_wiki_text($params['project']);
+        if($wiki_text = $info['content'])
+        {
+            if($p = self::get_void_part($wiki_text))
+            {
+                // echo "<pre>"; print_r($p); echo "</pre>";
+                if($articles = $p['articles'])
+                {
+                    //start replacing the article saved in project with the new moved article name
+                    if($params['wiki_status'] == "{Draft}")        $replace = "ForHarvesting:".$params['wiki_title'];
+                    elseif($params['wiki_status'] == "{Approved}") $replace = str_replace("ForHarvesting:", "", $params['wiki_title']);
+                    $p['articles'] = str_replace($params['wiki_title'], $replace, $p['articles']);
+                    self::move2wiki_project($p, false);
+                    // exit("<br>-elix-");
+                }
+            }
+        }
+        else
+        {
+            // exit("<br>-no wiki text-");
+            self::display_message(array('type' => "error", 'msg' => "Project doesn't exist anymore."));
+            return false;
+        }
+    }
+    
     function start_move($params)
     {
         if($params['token'] = self::get_move_token($params['wiki_title']))
@@ -1275,8 +1308,23 @@ class bhl_access_controller //extends ControllerBase
             if($new_title = @$arr['move']['to'])
             {
                 $wiki_page = "../../wiki/" . $new_title;
-             
                 self::set_cache_2true_accordingly($params['wiki_status']);
+
+                //start update project when article is moved while the article is assigned to a projectg ------------
+                if(in_array($params['wiki_status'], array("{Draft}", "{Approved}"))) //meaning an article is being moved, not a project
+                {
+                    // exit("<br>111<br>");
+                    if($project = @$params['projects']) //meaning the article is assigned to a project
+                    {
+                        // exit("<br>222<br>");
+                        $p['project'] = $project;
+                        $p['wiki_title'] = $params['wiki_title'];
+                        $p['wiki_status'] = $params['wiki_status'];
+                        self::update_proj_when_article_moves($p); //since this article has projects, really it is only project (1)
+                    }
+                }
+                else {exit("<br>333<br>");} //project is being moved
+                //end ------------
                 
                 ?>
                 <script type="text/javascript">
