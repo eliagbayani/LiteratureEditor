@@ -733,7 +733,7 @@ class bhl_access_controller //extends ControllerBase
     
     function review_excerpt($params)
     {
-        echo "<pre>"; print_r($params); echo "</pre>";
+        // echo "<pre>"; print_r($params); echo "</pre>";
         
         $header = $params['header_title'];
         if(@$params['overwrite'])
@@ -767,7 +767,7 @@ class bhl_access_controller //extends ControllerBase
             {
                 if(!@$params['projects'])
                 {
-                    $str .= " | <a href='#' onClick='assign_project(\"" . $_SESSION['working_proj'] . "\")'>ADD this article to <b>'" . $_SESSION['working_proj'] . "'</b></a>";
+                    $str .= " | <a href='#' onClick='assign_project(\"" . $_SESSION['working_proj'] . "\")'>ADD</a> this article to <b>" . self::proj_list_format($_SESSION['working_proj']) . "</b>";
                 }
             }
             if($val = @$params['projects'])
