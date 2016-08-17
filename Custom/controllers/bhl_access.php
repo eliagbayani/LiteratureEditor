@@ -758,7 +758,9 @@ class bhl_access_controller //extends ControllerBase
                 elseif($params['wiki_status'] == "{Draft}") $radio = "draft";
                 $str .= " | <a href='index.php?search_type=deletewiki&wiki_title=" . $params['wiki_title'] . "&wiki_status=" . $params['wiki_status'] . "&radio=$radio'>Delete this wiki</a>";
                 */
-                $str .= " | <a href='#' onClick='confirm_article_delete()'>Delete this article</a>";
+                
+                if($val = @$params['projects'])  $str .= " | <a href='#' onClick='alert(\"Cannot delete.\\n\\nYou must first remove it from [$val]\")'>Delete this article</a>";
+                else                             $str .= " | <a href='#' onClick='confirm_article_delete()'>Delete this article</a>";
             }
             //end delete
             
@@ -1323,7 +1325,7 @@ class bhl_access_controller //extends ControllerBase
                         self::update_proj_when_article_moves($p); //since this article has projects, really it is only project (1)
                     }
                 }
-                else {exit("<br>333<br>");} //project is being moved
+                else {} //project is being moved
                 //end ------------
                 
                 ?>
