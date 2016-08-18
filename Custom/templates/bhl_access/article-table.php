@@ -149,19 +149,25 @@ Subchapter
     
 <!--- } ); --->
 
-function myFunction(wiki_title, title, subject) {
+function myFunction(wiki_title, title, subject) 
+{
+    /* working but dialog box to continue may not be needed anymore...
     var x;
     if (confirm("<?php echo $vars['js_string']?>:\n\n"+title+" - ("+subject+")") == true) 
     {
-        //alert('ok '+title_id);
         document.getElementById("wiki_title").value = wiki_title;
         document.getElementById("myform").submit();
-        //x = "You pressed OK!";
     } else 
     {
         //alert('cancel');
         //x = "You pressed Cancel!";
     }
     //document.getElementById("myform").innerHTML = x;
+    */
+
+    // spinner_on();
+    document.getElementById("wiki_title").value = wiki_title;
+    document.getElementById("myform").submit();
+    
 }
 </script>
