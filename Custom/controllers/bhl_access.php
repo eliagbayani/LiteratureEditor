@@ -508,7 +508,7 @@ class bhl_access_controller //extends ControllerBase
             
             //start move24harvest ============
             $wiki_status = self::page_status($params['wiki_title'], true); //true means projects
-            $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $params['wiki_title'] . "&search_type=move24harvest&wiki_status=$wiki_status";
+            $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/Custom/bhl_access/index.php?wiki_title=" . $params['wiki_title'] . "&search_type=move24harvest&wiki_status=$wiki_status&articles=" . @$params['articles'];
 
             if($wiki_status == "{Active}") $str .= " | <a href='$url'>Move to '<b>Completed Projects</b>'</a>";
             else                           $str .= " | <a href='$url'>Move to '<b>Active Projects</b>'</a>";
@@ -663,7 +663,7 @@ class bhl_access_controller //extends ControllerBase
         [projects] => Completed_Projects:Project_03; 
         [search_type] => move2wiki
         [overwrite] => 1
-        [wiki_title] => 16194406_f4dc920dad6514b1bb210e8e73c71183            
+        [wiki_title] => 16194406_f4dc920dad6514b1bb210e8e73c71183
         */
         echo "<pre>"; print_r($params); echo "</pre>";
         $info = self::get_wiki_text($params['projects']);
@@ -962,7 +962,7 @@ class bhl_access_controller //extends ControllerBase
         // */
     }
 
-    function move2wiki($params)
+    function move2wiki($params, $cont_redirect = true)
     {
         if($val = @$params['wiki_title']) $new_title = str_replace(" ", "_", $val);
         else                              $new_title = self::create_title($params);
@@ -1052,7 +1052,7 @@ class bhl_access_controller //extends ControllerBase
                     fwrite($file, "|}\n");
                 }
             }
-            else
+            /* else -- not being used anymore...
             {   //ver 1
                 $p['search_type'] = 'pagesearch';
                 $p['page_id']     = $params['page_id'];
@@ -1068,7 +1068,7 @@ class bhl_access_controller //extends ControllerBase
                 $p['title_id']     = $params['title_id'];
                 $xml = self::search_bhl($p);
                 self::write_title_info($xml, $file, $go_top);
-            }
+            } */
             fclose($file);
         }
         
@@ -1092,14 +1092,19 @@ class bhl_access_controller //extends ControllerBase
         
         // /*
         // header('Location: ' . "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id']); //this caused header error
-        ?>
-        <script type="text/javascript">
-        location.href = '<?php echo $wiki_page ?>';
-        </script>
-        <?php
+        
+        if($cont_redirect)
+        {
+            ?>
+            <script type="text/javascript">
+            location.href = '<?php echo $wiki_page ?>';
+            </script>
+            <?php
+        }
+        
         // */
 
-        // /* working but not needed anymore since location.href above
+        /* working but not needed anymore since location.href above
         if(stripos($status, "Your edit was ignored because no change was made to the text") !== false) 
         {
             $status = "Your edit was ignored because no change was made to the text."; //string is found
@@ -1111,7 +1116,7 @@ class bhl_access_controller //extends ControllerBase
         // $wiki_page = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $p['page_id'];
         // echo "<br><a href=\"$wiki_page\">Wiki for Page ID: " . $p['page_id'] . " </a><br>";
         self::display_message(array('type' => "highlight", 'msg' => "$status2 <a href=\"$wiki_page\">" . $new_title . " </a>"));
-        // */
+        */
     }
     
     function format_wiki($wiki)
@@ -1267,7 +1272,6 @@ class bhl_access_controller //extends ControllerBase
         [wiki_title] => 46306603_f5d670746cdd936d6bc1af1f3cd959a2
         [wiki_status] => {Draft}
         */
-        // echo "<pre>"; print_r($params); echo "</pre>";
         $info = self::get_wiki_text($params['project']);
         if($wiki_text = $info['content'])
         {
@@ -1276,11 +1280,13 @@ class bhl_access_controller //extends ControllerBase
                 // echo "<pre>"; print_r($p); echo "</pre>";
                 if($articles = $p['articles'])
                 {
-                    //start replacing the article saved in project with the new moved article name
+                    //start replacing the article's name saved in project with the new moved article name
                     if($params['wiki_status'] == "{Draft}")        $replace = "ForHarvesting:".$params['wiki_title'];
                     elseif($params['wiki_status'] == "{Approved}") $replace = str_replace("ForHarvesting:", "", $params['wiki_title']);
                     $p['articles'] = str_replace($params['wiki_title'], $replace, $p['articles']);
-                    self::move2wiki_project($p, false);
+                    $p['new_article'] = "";
+                    
+                    self::move2wiki_project($p, false); //saving project
                     // exit("<br>-elix-");
                 }
             }
@@ -1290,6 +1296,50 @@ class bhl_access_controller //extends ControllerBase
             // exit("<br>-no wiki text-");
             self::display_message(array('type' => "error", 'msg' => "Project doesn't exist anymore."));
             return false;
+        }
+    }
+    
+    function update_articles_when_project_moves($params)
+    {   /*
+        [project] => Active_Projects:Planet_of_the_Apes
+        [wiki_status] => {Active}
+        [articles] => ForHarvesting:16194361_dbd860482d762327211c39ba89f3e58a; other1; other2
+        */
+        $articles = explode(";", $params['articles']);
+        $articles = array_map("trim", $articles);
+        $articles = array_filter($articles);
+        echo "<pre>"; print_r($articles); echo "</pre>";
+        foreach($articles as $article)
+        {
+            $info = self::get_wiki_text($article);
+            if($wiki_text = $info['content'])
+            {
+                if($p = self::get_void_part($wiki_text)) //$p is contents of the article
+                {
+                    // echo "<pre>"; print_r($p); echo "</pre>";
+                    if($projects = $p['projects'])
+                    {
+                        //start replacing the project's name saved in article with the new moved project name
+                        if($params['wiki_status'] == "{Active}")        $replace = str_replace("Active_Projects:", "Completed_Projects:", $params['project']);
+                        elseif($params['wiki_status'] == "{Completed}") $replace = str_replace("Completed_Projects:", "Active_Projects:", $params['project']);
+
+                        $p['projects'] = $replace;
+                        $p['new_project'] = "";
+                        $p['remove_project'] = "";
+
+                        // echo "<pre>"; print_r($p); echo "</pre>"; exit("<br>ditox<br>");
+                        
+                        self::move2wiki($p, false); //saving article
+                        // exit("<br>-elix-");
+                    }
+                }
+            }
+            else
+            {
+                self::display_message(array('type' => "error", 'msg' => "Article doesn't exist anymore."));
+                exit("<br>-no wiki text 222-");
+                return false;
+            }
         }
     }
     
@@ -1313,24 +1363,46 @@ class bhl_access_controller //extends ControllerBase
                 //start update project when article is moved while the article is assigned to a project ------------
                 if(in_array($params['wiki_status'], array("{Draft}", "{Approved}"))) //meaning an article is being moved, not a project
                 {
-                    // exit("<br>111<br>");
+                    echo "<br>goes to aritcle<br>";
                     if($project = @$params['projects']) //meaning the article is assigned to a project
                     {
-                        // exit("<br>222<br>");
+                        $p = array();
                         $p['project'] = $project;
                         $p['wiki_title'] = $params['wiki_title'];
                         $p['wiki_status'] = $params['wiki_status'];
                         self::update_proj_when_article_moves($p); //since this article has projects, really it is only project (1)
                     }
+                }//end ------------
+                else //project is being moved
+                {   //start update of article(s) when project is moved while article is attached to it
+                    // echo "<pre>"; print_r($params); echo "</pre>";
+                    echo "<br>goes to project<br>";
+                    /*Array $params
+                    (
+                        [wiki_title] => Active_Projects:Planet_of_the_Apes
+                        [search_type] => move24harvest
+                        [wiki_status] => {Active}
+                        [token] => 8edb9ed4f5c5ce50d16c543c7218212f57b461a9+\
+                        [articles] => ForHarvesting:16194361_dbd860482d762327211c39ba89f3e58a
+                    )*/
+                    if($articles = @$params['articles'])
+                    {
+                        $p = array();
+                        $p['articles'] = $articles;
+                        $p['project'] = $params['wiki_title'];
+                        $p['wiki_status'] = $params['wiki_status'];
+                        self::update_articles_when_project_moves($p);
+                    }
+                    // exit("<br>project is moving...<br>");
                 }
-                else {} //project is being moved
-                //end ------------
                 
+                /* temporarily commented - just debugging...
                 ?>
                 <script type="text/javascript">
                 location.href = '<?php echo $wiki_page ?>';
                 </script>
                 <?php
+                */
             }
         }
         else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));
