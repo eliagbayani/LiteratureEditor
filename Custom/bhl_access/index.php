@@ -34,9 +34,18 @@ $(window).load(function () {
 
 if(!$ctrler->user_is_logged_in_wiki()) return;
 
-//start assignment
+//start assignment ------------------------------------------
 if(isset($params['assign'])) $ctrler->make_working_proj($params['wiki_title']);
-//end
+
+// http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?wiki_title=Completed_Projects:Planet_of_the_Apes&search_type=move24harvest&wiki_status={Completed}&articles=
+if($val = @$params['search_type'])
+{
+    if($val == "move24harvest")
+    {
+        if($params['wiki_title'] == $_SESSION['working_proj']) $_SESSION['working_proj'] = false;
+    }
+}
+//end ------------------------------------------
 
 if(isset($params['search2']) || @$params['search_type'] == 'booksearch'
                              || @$params['search_type'] == 'titlelist') require_once("../templates/bhl_access/layout2.php");
