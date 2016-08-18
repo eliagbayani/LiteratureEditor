@@ -21,14 +21,10 @@ if(isset($params['title_id']))    { if(substr($params['title_id'],0,4) == "http"
 
 require_once("../lib/Functions.php");
 require_once("../controllers/bhl_access.php");
-
 $ctrler = new bhl_access_controller($params);
-
 ?>
 <script type="text/javascript">
-$(window).load(function () {
-     $("#loadOverlay").css("display","none");
-});
+$(window).load(function () { $("#loadOverlay").css("display","none"); });
 </script>
 <?php
 
@@ -82,17 +78,15 @@ if(isset($params['search_type']))
     if    ($params['search_type'] == "titlelist")     print $ctrler->render_template('titlelist-result', array('letter' => @$params['radio']));
     elseif($params['search_type'] == "articlelist")   print $ctrler->render_template('articlelist-result', array('params' => @$params));
     elseif($params['search_type'] == "projectsmenu")  print $ctrler->render_template('projectsmenu-result', array('params' => @$params));
-    
+
     elseif($params['search_type'] == "move2wiki")     print $ctrler->render_template('move2wiki-result', array('params' => @$params));
     elseif($params['search_type'] == "reviewexcerpt") print $ctrler->render_template('reviewexcerpt-result', array('params' => @$params));
 
     elseif($params['search_type'] == "deletewiki")         print $ctrler->render_template('deletewiki-result', array('params' => @$params));
     elseif($params['search_type'] == "deletewiki_project") print $ctrler->render_template('deletewiki-result', array('params' => @$params));
-    
 
     elseif($params['search_type'] == "move2wiki_project") print $ctrler->render_template('move2wiki_project-result', array('params' => @$params));
     elseif($params['search_type'] == "reviewproject")     print $ctrler->render_template('reviewproject-result', array('params' => @$params));
-    
 
     elseif($params['search_type'] == "wiki2php")      print $ctrler->render_template('wiki2php-result', array('params' => @$params));
     elseif($params['search_type'] == "wiki2php_project")      print $ctrler->render_template('wiki2php_project-result', array('params' => @$params));
@@ -124,8 +118,6 @@ elseif(@$params['search_type'] == 'movebatch')       print '<script>$( "#tabs_ma
 
 // for layout4
 if    (@$params['search_type'] == 'projectsmenu') print '<script>$( "#tabs_main" ).tabs( "option", "active", 0 );</script>';
-
-
 ?>
 </body>
 </html>
