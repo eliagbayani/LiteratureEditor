@@ -9,17 +9,21 @@
     <h3>Move to Wiki</h3>
     <div>
     <?php
-        if(@$params['new_project'])
+        if($new_project = @$params['new_project'])
         {
-            $params['projects'] = self::adjust_projects($params);
-            /*
-            [new_project] => 
-            [projects] => Active_Projects:project_01
-            [wiki_title] => ForHarvesting:16194361_dbd860482d762327211c39ba89f3e58a
-            */
-            // echo "<pre>"; print_r($params); echo "</pre>"; exit("<br>add article 2 proj<br>");
-            
-            self::add_article_2proj($params);
+            if($new_project != $_SESSION['working_proj']) self::display_message(array('type' => "error", 'msg' => "Cannot proceed. Working project no longer exists."));
+            else
+            {
+                $params['projects'] = self::adjust_projects($params);
+                /*
+                [new_project] => 
+                [projects] => Active_Projects:project_01
+                [wiki_title] => ForHarvesting:16194361_dbd860482d762327211c39ba89f3e58a
+                */
+                // echo "<pre>"; print_r($params); echo "</pre>"; exit("<br>add article 2 proj<br>");
+                self::add_article_2proj($params);
+                self::move2wiki($params);
+            }
         }
         elseif(@$params['remove_project'])
         {
@@ -36,11 +40,11 @@
             */
             self::remove_article_2proj($params);
             $params['projects'] = "";
+            self::move2wiki($params);
         }
         // else exit("<br>not removed<br>");
         
         
-        self::move2wiki($params);
     ?>
     </div>
 </div>
