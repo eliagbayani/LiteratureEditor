@@ -71,10 +71,7 @@ class bhl_access_controller //extends ControllerBase
                 $_SESSION["title_list_cache_YN_completed"] = true;
                 $_SESSION["title_list_cache_YN_all_projects"] = true;
             }
-            if(!isset($_SESSION["working_proj"]))
-            {
-                $_SESSION["working_proj"] = false;
-            }
+            if(!isset($_SESSION["working_proj"])) $_SESSION["working_proj"] = false;
             
             if(self::is_eli())
             {
@@ -159,7 +156,7 @@ class bhl_access_controller //extends ControllerBase
         return "<a href='" . $url . "'>$id</a>";
     }
     
-    public static function index(){}
+    public static function index() {}
 
     function render_template($filename, $variables)
     {
@@ -184,13 +181,8 @@ class bhl_access_controller //extends ControllerBase
                 elseif(@$p['search_type'] == 'pagetaxasearch')  echo self::render_template('pagetaxasearch-result', array('xml' => $xml));
                 elseif(@$p['search_type'] == 'pagesearch')      echo self::render_template('pagesearch-result', array('xml' => $xml, 'params' => $p));
             }
-            else
-            {
-                // print_r($p);
-                // exit("<br>investigate pls.[$template]<br>");
-            }
+            // else exit("<br>investigate pls.[$template]<br>");
         }
-        
         return self::render_template($template, array('book_title' => @$p['book_title'], 'volume' => @$p['volume'], 'lname' => @$p['lname'], 'collectionid' => @$p['collectionid'], 'edition' => @$p['edition'], 'year' => @$p['year'], 'subject' => @$p['subject'], 'language' => @$p['language'],
                                                       'item_id' => @$p['item_id'],
                                                       'title_id' => @$p['title_id'],
@@ -198,8 +190,7 @@ class bhl_access_controller //extends ControllerBase
                                                       'radio' => @$p['radio'],
                                                       'search_type' => @$p['search_type'],
                                                       'pass_title' => @$p['pass_title'],
-                                                      'use_cache' => @$p['use_cache']
-                                                      ));
+                                                      'use_cache' => @$p['use_cache']));
     }
     
     function search_bhl($p)
@@ -236,7 +227,6 @@ class bhl_access_controller //extends ControllerBase
             if($val = $p['page_id']) $url .= "&pageid=$val";
         }
 
-        
         /*
         $json = Functions::lookup_with_cache($url, array('expire_seconds' => false));
         $arr = json_decode($json, true);
@@ -291,10 +281,7 @@ class bhl_access_controller //extends ControllerBase
         }
         
         $title = array();
-        foreach ($rows as $key => $row)
-        {
-            $title[$key] = @$row[1];
-        }
+        foreach($rows as $key => $row) $title[$key] = @$row[1];
         array_multisort($title, SORT_ASC, $rows);
         return $rows;
     }
