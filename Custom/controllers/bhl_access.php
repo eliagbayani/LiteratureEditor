@@ -1,7 +1,7 @@
 <?php
 // namespace php_active_record;
 
-class bhl_access_controller //extends ControllerBase
+class bhl_access_controller extends projects_controller
 {
     function __construct($params)
     {
@@ -1138,11 +1138,13 @@ class bhl_access_controller //extends ControllerBase
         return false;
     }
 
+    /*
     function is_eli()
     {
         if($_COOKIE['wiki_literatureeditorUserName'] == "EAgbayani") return true;
         else return false;
     }
+    */
     
     //======================================================= for Articlelist
     function list_titles_by_type($type, $book_title = false, $projects = false, $username = false)

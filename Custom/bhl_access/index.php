@@ -20,8 +20,10 @@ if(isset($params['title_id']))    { if(substr($params['title_id'],0,4) == "http"
 // print_r($params);// exit;
 
 require_once("../lib/Functions.php");
+require_once("../controllers/projects.php");
 require_once("../controllers/bhl_access.php");
 $ctrler = new bhl_access_controller($params);
+
 ?>
 <script type="text/javascript">
 $(window).load(function () { $("#loadOverlay").css("display","none"); });
