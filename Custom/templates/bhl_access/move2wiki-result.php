@@ -17,6 +17,8 @@
             [projects] => Active_Projects:project_01
             [wiki_title] => ForHarvesting:16194361_dbd860482d762327211c39ba89f3e58a
             */
+            // echo "<pre>"; print_r($params); echo "</pre>"; exit("<br>add article 2 proj<br>");
+            
             self::add_article_2proj($params);
         }
         elseif(@$params['remove_project'])

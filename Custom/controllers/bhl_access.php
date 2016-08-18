@@ -644,7 +644,8 @@ class bhl_access_controller //extends ControllerBase
                 $p['new_article'] = $params['wiki_title'];
                 echo "<pre>"; print_r($p); echo "</pre>";
                 $p['articles'] = self::adjust_articles($p, "add");
-                
+             
+                $p['wiki_title'] = $params['new_project']; //kind a new, but needed since we don't know what is saved in wiki_title in the wiki
                 $p['new_article'] = ""; //value not needed to be saved
                 $p['remove_article'] = ""; //value not needed to be saved
                 self::move2wiki_project($p, false);
@@ -687,6 +688,7 @@ class bhl_access_controller //extends ControllerBase
                 // echo "<pre>"; print_r($p); echo "</pre>"; exit("<br>ditox<br>");
                 $p['articles'] = self::adjust_articles($p, "remove");
 
+                $p['wiki_title'] = $params['projects']; //kind a new, but needed since we don't know what is saved in wiki_title in the wiki
                 $p['new_article'] = ""; //value not needed to be saved
                 $p['remove_article'] = ""; //value not needed to be saved
                 self::move2wiki_project($p, false);
@@ -1298,6 +1300,7 @@ class bhl_access_controller //extends ControllerBase
                     elseif($params['wiki_status'] == "{Approved}") $replace = str_replace("ForHarvesting:", "", $params['wiki_title']);
                     $p['articles'] = str_replace($params['wiki_title'], $replace, $p['articles']);
                     
+                    $p['wiki_title'] = $params['project']; //kind a new, BUT needed since I was not concerned before its value that's saved in the wiki
                     $p['new_article'] = "";
                     $p['remove_article'] = "";
                     self::move2wiki_project($p, false); //saving project
@@ -1337,11 +1340,12 @@ class bhl_access_controller //extends ControllerBase
                         if($params['wiki_status'] == "{Active}")        $replace = str_replace("Active_Projects:", "Completed_Projects:", $params['project']);
                         elseif($params['wiki_status'] == "{Completed}") $replace = str_replace("Completed_Projects:", "Active_Projects:", $params['project']);
 
+                        $p['wiki_title'] = $article; //kind a new, BUT needed since I was not concerned before its value that's saved in the wiki
                         $p['projects'] = $replace;
                         $p['new_project'] = "";
                         $p['remove_project'] = "";
 
-                        // echo "<pre>"; print_r($p); echo "</pre>"; exit("<br>ditox<br>");
+                        // echo "<pre>"; print_r($p); echo "</pre>"; print("<br>ditox<br>");
                         
                         self::move2wiki($p, false); //saving article
                         // exit("<br>-elix-");
