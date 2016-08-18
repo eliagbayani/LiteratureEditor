@@ -644,6 +644,9 @@ class bhl_access_controller //extends ControllerBase
                 $p['new_article'] = $params['wiki_title'];
                 echo "<pre>"; print_r($p); echo "</pre>";
                 $p['articles'] = self::adjust_articles($p, "add");
+                
+                $p['new_article'] = ""; //value not needed to be saved
+                $p['remove_article'] = ""; //value not needed to be saved
                 self::move2wiki_project($p, false);
                 // exit("<br>-elix-");
             }
@@ -683,6 +686,9 @@ class bhl_access_controller //extends ControllerBase
                 $p['remove_article'] = $params['wiki_title'];
                 // echo "<pre>"; print_r($p); echo "</pre>"; exit("<br>ditox<br>");
                 $p['articles'] = self::adjust_articles($p, "remove");
+
+                $p['new_article'] = ""; //value not needed to be saved
+                $p['remove_article'] = ""; //value not needed to be saved
                 self::move2wiki_project($p, false);
                 // exit("<br>-elix-");
             }
@@ -704,7 +710,6 @@ class bhl_access_controller //extends ControllerBase
             {
                 $articles = str_ireplace($params['remove_article'], "", $articles);
             }
-            
             
             $arr = explode(";", $articles);
             if($type == "add") $arr[] = $new_article; //just append new_article, since we will do array_unique() later
@@ -860,6 +865,11 @@ class bhl_access_controller //extends ControllerBase
     
     function move2wiki_project($params, $cont_redirect = true)
     {
+        //this is an assurance that these info is not saved and not needed to be saved in wiki
+        $params['new_article'] = "";
+        $params['remove_article'] = "";
+        
+        
         /*
         if($val = @$params['wiki_title']) $new_title = str_replace(" ", "_", $val);
         else                              $new_title = self::create_title($params);
@@ -964,6 +974,9 @@ class bhl_access_controller //extends ControllerBase
 
     function move2wiki($params, $cont_redirect = true)
     {
+        $params['new_project'] = "";
+        $params['remove_project'] = "";
+        
         if($val = @$params['wiki_title']) $new_title = str_replace(" ", "_", $val);
         else                              $new_title = self::create_title($params);
         
@@ -1284,8 +1297,9 @@ class bhl_access_controller //extends ControllerBase
                     if($params['wiki_status'] == "{Draft}")        $replace = "ForHarvesting:".$params['wiki_title'];
                     elseif($params['wiki_status'] == "{Approved}") $replace = str_replace("ForHarvesting:", "", $params['wiki_title']);
                     $p['articles'] = str_replace($params['wiki_title'], $replace, $p['articles']);
-                    $p['new_article'] = "";
                     
+                    $p['new_article'] = "";
+                    $p['remove_article'] = "";
                     self::move2wiki_project($p, false); //saving project
                     // exit("<br>-elix-");
                 }
