@@ -16,7 +16,6 @@
             [projects] => Active_Projects:Project_02
         )
         
-        
     */
     echo "<pre>"; print_r($params); echo "</pre>";
 
@@ -25,10 +24,6 @@
     elseif($params['wiki_status'] == "{Approved}")  $str = "For Review (draft)";
     elseif($params['wiki_status'] == "{Active}")    $str = "Completed Projects";
     elseif($params['wiki_status'] == "{Completed}") $str = "Active Projects";
-    
-    
-    
-    
 ?>
 <div id="accordion_open2">
     <h3>Move to "<?php echo $str ?>"</h3>

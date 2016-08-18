@@ -1414,13 +1414,13 @@ class bhl_access_controller //extends ControllerBase
                     // exit("<br>project is moving...<br>");
                 }
                 
-                /* temporarily commented - just debugging...
+                // /* temporarily commented - just debugging...
                 ?>
                 <script type="text/javascript">
                 location.href = '<?php echo $wiki_page ?>';
                 </script>
                 <?php
-                */
+                // */
             }
         }
         else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));

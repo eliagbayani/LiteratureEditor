@@ -12,12 +12,11 @@
         <input onClick="spinner_on();submit()" type="radio" id="radio2" name="radio" value="proj_active" <?php if($radio == 'proj_active') echo " checked=\"checked\""; ?>> <label for="radio2">Active projects</label>
         <input onClick="spinner_on();submit()" type="radio" id="radio3" name="radio" value="proj_comp"   <?php if($radio == 'proj_comp')   echo " checked=\"checked\""; ?>> <label for="radio3">Completed projects</label>
         <input onClick="spinner_on();submit()" type="radio" id="radio4" name="radio" value="proj_start"  <?php if($radio == 'proj_start')  echo " checked=\"checked\""; ?>> <label for="radio4">Start a new project</label>
-
         <?php
         if($val = $_SESSION['working_proj'])
         {
             ?>
-            <input onClick="spinner_on();deactivate_proj();" type="radio" id="radio5" name="radio" value="proj_deactivate"  <?php if($radio == 'proj_deactivate')  echo " checked=\"checked\""; ?>> <label for="radio5"><i>Finish article assignment for:</i> <?php echo $val ?></label>
+            <input onClick="spinner_on();deactivate_proj();" type="radio" id="radio5" name="radio" value="proj_deactivate"  <?php if($radio == 'proj_deactivate')  echo " checked=\"checked\""; ?>> <label for="radio5"><i>Finish article assignment for: </i> <?php echo $val ?></label>
             <?php
         }
         ?>
