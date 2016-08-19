@@ -1147,8 +1147,11 @@ class bhl_controller extends projects_controller
     //======================================================= for Articlelist
     function list_titles_by_type($type, $book_title = false, $projects = false, $username = false, $movebatch = false)
     {
+        /* may go back using this if prob occurs
         if($movebatch) $download_params = array("expire_seconds" => true);
         else           $download_params = array("expire_seconds" => false);
+        */
+        $download_params = array("expire_seconds" => false);
         
         $titles = self::get_titles_by_type($type);
         if(self::is_eli()) echo "-- " . count($titles['query']['allpages']) . " --";
