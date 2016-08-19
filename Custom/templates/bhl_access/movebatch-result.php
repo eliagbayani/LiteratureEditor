@@ -20,7 +20,7 @@ $recs = $rek['recs'];
 
 foreach($recs as $rec)
 {
-    echo "<pre>"; print_r($rec); echo "</pre>";
+    // echo "<pre>"; print_r($rec); echo "</pre>";
     /* 1 rec
     Array
             (
@@ -34,8 +34,10 @@ foreach($recs as $rec)
     */
 
     $p = array();
-    $p['wiki_title']  = $rec['title'];
+    $p['wiki_title']  = str_replace(" ", "_", $rec['title']);
     $p['wiki_status'] = $params['wiki_status'];
+    $p['projects']    = $rec['projects'];
+    
     if($p['token'] = self::get_move_token($p['wiki_title']))
     {
         $arr = self::move_file($p);
@@ -47,9 +49,10 @@ foreach($recs as $rec)
         if($new_title = @$arr['move']['to'])
         {
             $wiki_page = "../../wiki/" . $new_title;
-            self::set_cache_2true_accordingly($rec['wiki_status']);
-            
-            self::project_article_adjustments($rec);
+            self::set_cache_2true_accordingly($p['wiki_status']);
+
+            echo "<pre>"; print_r($p); echo "</pre>";
+            self::project_article_adjustments($p);
             
         }
     }
@@ -57,7 +60,7 @@ foreach($recs as $rec)
 }
 ?>
 <div id="accordion_open2">
-    <h3>Move to "<?php echo $str ?>"</h3>
+    <h3>Moved to "<?php echo $str ?>"</h3>
     <div>
     <?php
     $total = count($recs);

@@ -26,7 +26,7 @@
     elseif($params['wiki_status'] == "{Completed}") $str = "Active Projects";
 ?>
 <div id="accordion_open2">
-    <h3>Move to "<?php echo $str ?>"</h3>
+    <h3>Moved to "<?php echo $str ?>"</h3>
     <div>
     <?php
         self::start_move($params);

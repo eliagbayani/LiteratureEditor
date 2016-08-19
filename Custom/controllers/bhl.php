@@ -1147,6 +1147,9 @@ class bhl_controller extends projects_controller
     //======================================================= for Articlelist
     function list_titles_by_type($type, $book_title = false, $projects = false, $username = false, $movebatch = false)
     {
+        if($movebatch) $download_params = array("expire_seconds" => true);
+        else           $download_params = array("expire_seconds" => false);
+        
         $titles = self::get_titles_by_type($type);
         if(self::is_eli()) echo "-- " . count($titles['query']['allpages']) . " --";
         // echo "<pre>"; print_r($titles['query']['allpages']); echo "</pre>";
@@ -1160,7 +1163,7 @@ class bhl_controller extends projects_controller
         foreach($titles['query']['allpages'] as $r)
         {
             // echo "<pre>"; print_r($r); echo "</pre>";
-            $info = self::get_wiki_text($r['title'], array("expire_seconds" => false)); //before cache expires in 24 hrs (86400 seconds), NOW it doesn't expire anymore, each record's cache is refreshed on save.
+            $info = self::get_wiki_text($r['title'], $download_params); //before cache expires in 24 hrs (86400 seconds), NOW it doesn't expire anymore, each record's cache is refreshed on save.
             $params = self::get_void_part($info['content']);
             if(!$projects)
             {
@@ -1293,44 +1296,7 @@ class bhl_controller extends projects_controller
                 $wiki_page = "../../wiki/" . $new_title;
                 self::set_cache_2true_accordingly($params['wiki_status']);
 
-                self::project_article_adjustments($params)
-                /* moved to projects_controller =============================================================== as of Aug 18
-                //start update project when article is moved while the article is assigned to a project ------------
-                if(in_array($params['wiki_status'], array("{Draft}", "{Approved}"))) //meaning an article is being moved, not a project
-                {
-                    echo "<br>goes to aritcle<br>";
-                    if($project = @$params['projects']) //meaning the article is assigned to a project
-                    {
-                        $p = array();
-                        $p['project'] = $project;
-                        $p['wiki_title'] = $params['wiki_title'];
-                        $p['wiki_status'] = $params['wiki_status'];
-                        self::update_proj_when_article_moves($p); //since this article has projects, really it is only project (1)
-                    }
-                }//end ------------
-                else //project is being moved
-                {   //start update of article(s) when project is moved while article is attached to it
-                    // echo "<pre>"; print_r($params); echo "</pre>";
-                    echo "<br>goes to project<br>";
-                    // Array $params
-                    // (
-                    //     [wiki_title] => Active_Projects:Planet_of_the_Apes
-                    //     [search_type] => move24harvest
-                    //     [wiki_status] => {Active}
-                    //     [token] => 8edb9ed4f5c5ce50d16c543c7218212f57b461a9+\
-                    //     [articles] => ForHarvesting:16194361_dbd860482d762327211c39ba89f3e58a
-                    // )
-                    if($articles = @$params['articles'])
-                    {
-                        $p = array();
-                        $p['articles'] = $articles;
-                        $p['project'] = $params['wiki_title'];
-                        $p['wiki_status'] = $params['wiki_status'];
-                        self::update_articles_when_project_moves($p);
-                    }
-                    // exit("<br>project is moving...<br>");
-                }
-                =============================================================== */
+                self::project_article_adjustments($params);
                 
                 //temporarily commented - just debugging...
                 ?>
@@ -1338,7 +1304,6 @@ class bhl_controller extends projects_controller
                 location.href = '<?php echo $wiki_page ?>';
                 </script>
                 <?php
-                //
             }
         }
         else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));

@@ -52,8 +52,8 @@ class projects_controller
     function update_proj_when_article_moves($params)
     {   /*
         [project] => Active_Projects:project_01
-        [wiki_title] => 46306603_f5d670746cdd936d6bc1af1f3cd959a2
-        [wiki_status] => {Draft}
+        [wiki_title] => 46306603_f5d670746cdd936d6bc1af1f3cd959a2   --- of the article
+        [wiki_status] => {Draft}                                    --- of the article
         */
         $info = bhl_controller::get_wiki_text($params['project']);
         if($wiki_text = $info['content'])
@@ -64,9 +64,25 @@ class projects_controller
                 if($articles = $p['articles'])
                 {
                     //start replacing the article's name saved in project with the new moved article name
-                    if($params['wiki_status'] == "{Draft}")        $replace = "ForHarvesting:".$params['wiki_title'];
-                    elseif($params['wiki_status'] == "{Approved}") $replace = str_replace("ForHarvesting:", "", $params['wiki_title']);
-                    $p['articles'] = str_replace($params['wiki_title'], $replace, $p['articles']);
+                    if($params['wiki_status'] == "{Draft}")
+                    {
+                        echo "<br>goes 111<br>";
+                        $str = str_replace("ForHarvesting:", "", $params['wiki_title']); //should not do this but...
+                        $replace = "ForHarvesting:".$str;
+                    }
+                    elseif($params['wiki_status'] == "{Approved}")
+                    {
+                        echo "<br>goes 222<br>";
+                        $replace = str_replace("ForHarvesting:", "", $params['wiki_title']);
+                    }
+                    else
+                    {
+                        echo "<pre>"; print_r($params); echo "</pre>";
+                        exit("<br>investigate 001<br>");
+                    }
+                    
+                    
+                    $p['articles'] = str_ireplace($params['wiki_title'], $replace, $p['articles']);
                     
                     $p['wiki_title'] = $params['project']; //kind a new, BUT needed since I was not concerned before its value that's saved in the wiki
                     $p['new_article'] = "";
@@ -79,6 +95,7 @@ class projects_controller
         else
         {
             bhl_controller::display_message(array('type' => "error", 'msg' => "Project doesn't exist anymore."));
+            echo "<pre>"; print_r($params); echo "</pre>";
             exit("<br>-no wiki text-111");
             return false;
         }
