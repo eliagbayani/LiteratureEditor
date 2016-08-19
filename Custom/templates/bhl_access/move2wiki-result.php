@@ -39,6 +39,7 @@
             $params['projects'] = "";
             self::move2wiki($params);
         }
+        else self::move2wiki($params);
     ?>
     </div>
 </div>

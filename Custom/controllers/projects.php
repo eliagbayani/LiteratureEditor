@@ -16,6 +16,7 @@ class projects_controller
             echo "<br>goes to aritcle<br>";
             if($project = @$params['projects']) //meaning the article is assigned to a project
             {
+                echo " - with project<br>";
                 $p = array();
                 $p['project'] = $project;
                 $p['wiki_title'] = $params['wiki_title'];
@@ -37,6 +38,7 @@ class projects_controller
             // )
             if($articles = @$params['articles'])
             {
+                echo " - with article<br>";
                 $p = array();
                 $p['articles'] = $articles;
                 $p['project'] = $params['wiki_title'];
@@ -76,8 +78,8 @@ class projects_controller
         }
         else
         {
-            // exit("<br>-no wiki text-");
-            self::display_message(array('type' => "error", 'msg' => "Project doesn't exist anymore."));
+            bhl_controller::display_message(array('type' => "error", 'msg' => "Project doesn't exist anymore."));
+            exit("<br>-no wiki text-111");
             return false;
         }
     }
@@ -120,7 +122,7 @@ class projects_controller
             }
             else
             {
-                self::display_message(array('type' => "error", 'msg' => "Article doesn't exist anymore."));
+                bhl_controller::display_message(array('type' => "error", 'msg' => "Article doesn't exist anymore."));
                 exit("<br>-no wiki text 222-");
                 return false;
             }

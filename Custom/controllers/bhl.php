@@ -1145,7 +1145,7 @@ class bhl_controller extends projects_controller
     // }
     
     //======================================================= for Articlelist
-    function list_titles_by_type($type, $book_title = false, $projects = false, $username = false)
+    function list_titles_by_type($type, $book_title = false, $projects = false, $username = false, $movebatch = false)
     {
         $titles = self::get_titles_by_type($type);
         if(self::is_eli()) echo "-- " . count($titles['query']['allpages']) . " --";
@@ -1184,12 +1184,21 @@ class bhl_controller extends projects_controller
             $info['title']        = $r['title'];
             $info['compiler']     = self::disp_compiler($params['compiler']);
 
+            $info['content']      = ""; //erased content, just too big for memory
             if(!$projects)
             {
                 $info['subject_type'] = self::get_subject_desc($params['subject_type']);
                 $info['header_title'] = $params['header_title'];
+                
+                if($movebatch)
+                {
+                    //added
+                    $info['projects'] = @$params['projects'];
+                    $info['wiki_status'] = @$params['wiki_status'];
+                    $info['wiki_title'] = @$params['wiki_title'];
+                    // $info['content'] = @$params['content'];
+                }
             }
-            $info['content']      = ""; //erased content, just too big for memory
             // echo "<pre>"; print_r($info); echo "</pre>";
             $recs[] = $info;
         }
@@ -1267,9 +1276,6 @@ class bhl_controller extends projects_controller
         return array_keys($book_titles);
     }
     //======================================================= moving files
-    
-    
-    
     function start_move($params)
     {
         if($params['token'] = self::get_move_token($params['wiki_title']))
@@ -1288,7 +1294,7 @@ class bhl_controller extends projects_controller
                 self::set_cache_2true_accordingly($params['wiki_status']);
 
                 self::project_article_adjustments($params)
-                /* moved to projects_controller
+                /* moved to projects_controller =============================================================== as of Aug 18
                 //start update project when article is moved while the article is assigned to a project ------------
                 if(in_array($params['wiki_status'], array("{Draft}", "{Approved}"))) //meaning an article is being moved, not a project
                 {
@@ -1324,7 +1330,7 @@ class bhl_controller extends projects_controller
                     }
                     // exit("<br>project is moving...<br>");
                 }
-                */
+                =============================================================== */
                 
                 //temporarily commented - just debugging...
                 ?>

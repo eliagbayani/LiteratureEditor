@@ -14,12 +14,13 @@ else                                    $str = "For Review (draft)";
 
 $type = Functions::get_string_between("{", "}", strtolower($params['wiki_status']));
 
-$rek = self::list_titles_by_type($type, $params['book_title']);
+$rek = self::list_titles_by_type($type, $params['book_title'], false, false, true);
 $recs = $rek['recs'];
 // echo "<pre>"; print_r($recs); echo "</pre>";
 
 foreach($recs as $rec)
 {
+    echo "<pre>"; print_r($rec); echo "</pre>";
     /* 1 rec
     Array
             (
@@ -46,6 +47,10 @@ foreach($recs as $rec)
         if($new_title = @$arr['move']['to'])
         {
             $wiki_page = "../../wiki/" . $new_title;
+            self::set_cache_2true_accordingly($rec['wiki_status']);
+            
+            self::project_article_adjustments($rec);
+            
         }
     }
     else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));
