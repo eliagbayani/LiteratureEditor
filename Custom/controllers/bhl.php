@@ -63,6 +63,13 @@ class bhl_controller extends projects_controller
             $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/User:" . str_replace(" ", "_", $username) . "";
             // $this->compiler = "<span class=\'plainlinks\'>[$url {$realname}]</span>";
             $this->compiler = "[$url {$realname}]";
+
+            if(self::is_eli())
+            {
+                if(!isset($_SESSION["title_list_cache_YN_draft"])) echo "<br>SESSION is set<br>"; //debug
+                else                                               echo "<br>SESSION is ALREADY set<br>"; //debug
+            }
+
             if(!isset($_SESSION["title_list_cache_YN_draft"]))
             {
                 $_SESSION["title_list_cache_YN_draft"] = true;
@@ -73,11 +80,6 @@ class bhl_controller extends projects_controller
             }
             if(!isset($_SESSION["working_proj"])) $_SESSION["working_proj"] = false;
             
-            if(self::is_eli())
-            {
-                if(!isset($_SESSION["title_list_cache_YN_draft"])) echo "<br>SESSION is set<br>"; //debug
-                else                                               echo "<br>SESSION is ALREADY set<br>"; //debug
-            }
             return true;
         }
         /*
@@ -1301,12 +1303,20 @@ class bhl_controller extends projects_controller
 
                 self::project_article_adjustments($params);
                 
+                echo "<br>[$new_title]<br>";
+                
+                //make a fresh cache
+                $no_use = self::get_wiki_text($new_title, array("expire_seconds" => true)); //force cache expires
+                
+                
                 //temporarily commented - just debugging...
+                // /*
                 ?>
                 <script type="text/javascript">
                 location.href = '<?php echo $wiki_page ?>';
                 </script>
                 <?php
+                // */
             }
         }
         else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));
@@ -1430,6 +1440,7 @@ class bhl_controller extends projects_controller
     //=======================================================
     function get_wiki_text($wiki_title, $download_params = array('expire_seconds' => true))
     {
+        $wiki_title = str_replace("_", " ", $wiki_title);
         /*
         $url = "/LiteratureEditor/api.php?action=query&meta=userinfo&uiprop=groups|realname&format=json";
         $json = self::get_api_result($url);
