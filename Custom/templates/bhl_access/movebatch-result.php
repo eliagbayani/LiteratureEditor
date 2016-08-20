@@ -54,6 +54,9 @@ foreach($recs as $rec)
             echo "<pre>"; print_r($p); echo "</pre>";
             self::project_article_adjustments($p);
             
+            //make a fresh cache
+            $no_use = self::get_wiki_text($new_title, array("expire_seconds" => true)); //force cache expires
+            
         }
     }
     else self::display_message(array('type' => "error", 'msg' => "Move failed. Token creation failed."));
