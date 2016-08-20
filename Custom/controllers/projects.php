@@ -64,13 +64,15 @@ class projects_controller
                 if($articles = $p['articles'])
                 {
                     //start replacing the article's name saved in project with the new moved article name
-                    if($params['wiki_status'] == "{Draft}")
+                    if($params['wiki_status'] == "{Draft}") //put ForHarvesting:
                     {
                         echo "<br>goes 111<br>";
                         $str = str_replace("ForHarvesting:", "", $params['wiki_title']); //should not do this but...
                         $replace = "ForHarvesting:".$str;
+                        $replace = str_replace("ForHarvesting:ForHarvesting:", "ForHarvesting:", $replace);
+                        
                     }
-                    elseif($params['wiki_status'] == "{Approved}")
+                    elseif($params['wiki_status'] == "{Approved}") //remove ForHarvesting:
                     {
                         echo "<br>goes 222<br>";
                         $replace = str_replace("ForHarvesting:", "", $params['wiki_title']);
@@ -140,7 +142,7 @@ class projects_controller
             else
             {
                 bhl_controller::display_message(array('type' => "error", 'msg' => "Article doesn't exist anymore."));
-                exit("<br>-no wiki text 222-");
+                exit("<br>-no wiki text 222 [$article]-");
                 return false;
             }
         }
