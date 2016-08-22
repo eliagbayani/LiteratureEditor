@@ -67,6 +67,8 @@ $wgLogo = "$wgResourceBasePath/resources/assets/eol_literature_logo.png";
 $wgDBtype = "mysql";
 $wgDBserver = "localhost";
 $wgDBname = "wiki_literatureeditor";
+// $wgDBname = "wiki_literatureeditor_archive";
+
 $wgDBuser       = $conf['wgDBuser'];//"root";
 $wgDBpassword   = $conf['wgDBpassword'];//"m173";
 

@@ -43,7 +43,7 @@ elseif($params['radio'] == "proj_my")
     }
     */
     
-    $username = $_COOKIE['wiki_literatureeditorUserName'];
+    $username = $_COOKIE[MW_DBNAME.'UserName'];
     $rek = self::list_titles_by_type('all_projects', false, true, $username); //2nd param is book_title, 3rd param is boolean $projects, 4th param is logged-in username
     $rows = $rek['recs'];
     

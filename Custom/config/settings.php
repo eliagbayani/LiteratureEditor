@@ -1,6 +1,11 @@
 <?php
 session_start();
-
+/*
+session_start([
+    'cookie_lifetime' => 86400,
+    'read_and_close'  => true,
+]);
+*/
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -21,4 +26,7 @@ define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT']);
 
 define('DEVELOPER_EMAIL', 'eagbayani@eol.org');
 define('EOL_PHP_CODE', 'http://editors.eol.org/eol_php_code/'); //applications/content_server/resources/
+
+define('MW_DBNAME', 'wiki_literatureeditor');
+// define('MW_DBNAME', 'wiki_literatureeditor_archive');
 ?>
