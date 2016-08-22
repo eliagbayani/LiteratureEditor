@@ -57,9 +57,9 @@ elseif($params['radio'] == "proj_my")
         // echo "<pre>"; print_r($params); echo "</pre>";
         if($params['radio'] == "proj_start")
         {
-            if(isset($params['proj_name']) && !isset($params['overwrite']))
+            if(isset($params['proj_name']) && !isset($params['overwrite'])) //does not go here anymore...
             {
-                exist("<br>goes here...<br>");
+                exit("<br>goes here...<br>");
                 self::move2wiki_project($params);
             }
             else
