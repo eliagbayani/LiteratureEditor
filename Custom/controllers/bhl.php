@@ -1168,7 +1168,7 @@ class bhl_controller extends projects_controller
         foreach($titles['query']['allpages'] as $r)
         {
             // echo "<pre>"; print_r($r); echo "</pre>";
-            echo "<br>" . $r['title'] . "<br>";
+            // echo "<br>" . $r['title'] . "<br>";
             $info = self::get_wiki_text($r['title'], $download_params); //before cache expires in 24 hrs (86400 seconds), NOW it doesn't expire anymore, each record's cache is refreshed on save.
             $params = self::get_void_part($info['content']);
             if(!$projects)
