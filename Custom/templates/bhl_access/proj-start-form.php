@@ -96,8 +96,19 @@ else //this means a form-submit
                         <?php
                     }
                     */
+                    if(@$params['articles'])
+                    {
+                        ?>
+                        <td><input size="100" type="hidden" id="proj_name" name="proj_name" value="<?php echo $proj_name; ?>"><?php echo $proj_name ?></td>
+                        <?php
+                    }
+                    else
+                    {
+                        ?>
+                        <td><input size="100" type="text" id="proj_name" name="proj_name" value="<?php echo $proj_name; ?>"></td>
+                        <?php
+                    }
                     ?>
-                    <td><input size="100" type="text" id="proj_name" name="proj_name" value="<?php echo $proj_name; ?>"></td>
                     
                 </tr>
                 <tr><td><b>Description</b>:</td>
