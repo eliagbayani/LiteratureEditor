@@ -8,7 +8,11 @@ switch ($params['radio']) {
     case "proj_comp":   $str = "Completed projects"; break;
     case "proj_start":
         {
-            if(isset($params['fromReview'])) $str = "Edit an existing project";
+            if(isset($params['fromReview']))
+            {
+                if(@$params['overwrite'] == 1) $str = "Edit an existing project";
+                else                           $str = "Edit new project";
+            }
             else                             $str = "Start a new project";
             break;
         }
