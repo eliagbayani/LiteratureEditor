@@ -7,13 +7,12 @@ class projects_controller
     {
     }
 
-
     function project_article_adjustments($params) //when moving files
     {
         //start update project when article is moved while the article is assigned to a project ------------
         if(in_array($params['wiki_status'], array("{Draft}", "{Approved}"))) //meaning an article is being moved, not a project
         {
-            echo "<br>goes to aritcle<br>";
+            // echo "<br>goes to aritcle<br>";
             if($project = @$params['projects']) //meaning the article is assigned to a project
             {
                 echo " - with project<br>";
@@ -26,8 +25,7 @@ class projects_controller
         }//end ------------
         else //project is being moved
         {   //start update of article(s) when project is moved while article is attached to it
-            // echo "<pre>"; print_r($params); echo "</pre>";
-            echo "<br>goes to project<br>";
+            // echo "<br>goes to project<br>";
             // Array $params
             // (
             //     [wiki_title] => Active_Projects:Planet_of_the_Apes
@@ -148,16 +146,11 @@ class projects_controller
         }
     }
 
-
-
     function is_eli()
     {
         if($_COOKIE[MW_DBNAME.'UserName'] == "EAgbayani") return true;
         else return false;
     }
-    
-    
-    
     
 }
 ?>

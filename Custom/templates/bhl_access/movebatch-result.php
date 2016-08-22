@@ -51,7 +51,7 @@ foreach($recs as $rec)
             $wiki_page = "../../wiki/" . $new_title;
             self::set_cache_2true_accordingly($p['wiki_status']);
 
-            echo "<pre>"; print_r($p); echo "</pre>";
+            // echo "<pre>"; print_r($p); echo "</pre>";
             self::project_article_adjustments($p);
             
             //make a fresh cache
