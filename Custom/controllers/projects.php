@@ -152,7 +152,7 @@ class projects_controller
 
     function is_eli()
     {
-        if($_COOKIE['wiki_literatureeditorUserName'] == "EAgbayani") return true;
+        if($_COOKIE[MW_DBNAME.'UserName'] == "EAgbayani") return true;
         else return false;
     }
     
