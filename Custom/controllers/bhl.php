@@ -99,7 +99,7 @@ class bhl_controller extends projects_controller
     
     function get_api_result($url)
     {
-        $session_cookie = 'wiki_literatureeditor_session';
+        $session_cookie = MW_DBNAME.'_session';
         if(!isset($_COOKIE[$session_cookie])) return false;
         $url = "http://" . $_SERVER['SERVER_NAME'] . $url;
         $ch = curl_init($url);
@@ -113,7 +113,7 @@ class bhl_controller extends projects_controller
     
     function get_api_result_via_post($url, $post)
     {
-        $session_cookie = 'wiki_literatureeditor_session';
+        $session_cookie = MW_DBNAME.'_session';
         if(!isset($_COOKIE[$session_cookie])) return false;
         $url = "http://" . $_SERVER['SERVER_NAME'] . $url;
         $ch = curl_init($url);
@@ -570,7 +570,7 @@ class bhl_controller extends projects_controller
     
     function you_created_this_wiki($compiler)
     {
-        $current_user = str_replace(" ", "_", $_COOKIE['wiki_literatureeditorUserName']);
+        $current_user = str_replace(" ", "_", $_COOKIE[MW_DBNAME.'UserName']);
         // echo "<pre>"; print_r($params); echo "</pre>";
         if($usernames = self::usernames_from_compiler($compiler))
         {
@@ -917,7 +917,7 @@ class bhl_controller extends projects_controller
         }
         
         $temp_wiki_file = DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/Custom/temp/wiki/" . $p['page_id'] . ".wiki";
-        $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -u '" . $_COOKIE['wiki_literatureeditorUserName'] . "' -s 'BHL data to Wiki " . $p['page_id'] . "' -m " . $new_title . " < " . $temp_wiki_file;
+        $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -u '" . $_COOKIE[MW_DBNAME.'UserName'] . "' -s 'BHL data to Wiki " . $p['page_id'] . "' -m " . $new_title . " < " . $temp_wiki_file;
         $status = shell_exec($cmdline . " 2>&1");
         echo "<br>[$status]<br>";
         $status = str_ireplace("done", "done. &nbsp;", $status);
@@ -1077,7 +1077,7 @@ class bhl_controller extends projects_controller
         }
         
         $temp_wiki_file = DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/Custom/temp/wiki/" . $p['page_id'] . ".wiki";
-        $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -u '" . $_COOKIE['wiki_literatureeditorUserName'] . "' -s 'BHL data to Wiki " . $p['page_id'] . "' -m " . $new_title . " < " . $temp_wiki_file;
+        $cmdline = "php -q " . DOC_ROOT . MEDIAWIKI_MAIN_FOLDER . "/maintenance/edit.php -u '" . $_COOKIE[MW_DBNAME.'UserName'] . "' -s 'BHL data to Wiki " . $p['page_id'] . "' -m " . $new_title . " < " . $temp_wiki_file;
         $status = shell_exec($cmdline . " 2>&1");
         $status = str_ireplace("done", "done. &nbsp;", $status);
         $wiki_page = "../../wiki/" . $new_title;
@@ -1149,11 +1149,11 @@ class bhl_controller extends projects_controller
     //======================================================= for Articlelist
     function list_titles_by_type($type, $book_title = false, $projects = false, $username = false, $movebatch = false)
     {
-        // /* may go back using this if prob occurs
+        /* may go back using this if prob occurs
         if($movebatch) $download_params = array("expire_seconds" => true);
         else           $download_params = array("expire_seconds" => false);
-        // */
-        // $download_params = array("expire_seconds" => false);
+        */
+        $download_params = array("expire_seconds" => false); //original; if working then this brings best performance
         
         $titles = self::get_titles_by_type($type);
         if(self::is_eli()) echo "-- " . count($titles['query']['allpages']) . " --";
@@ -1168,6 +1168,7 @@ class bhl_controller extends projects_controller
         foreach($titles['query']['allpages'] as $r)
         {
             // echo "<pre>"; print_r($r); echo "</pre>";
+            echo "<br>" . $r['title'] . "<br>";
             $info = self::get_wiki_text($r['title'], $download_params); //before cache expires in 24 hrs (86400 seconds), NOW it doesn't expire anymore, each record's cache is refreshed on save.
             $params = self::get_void_part($info['content']);
             if(!$projects)
@@ -1303,7 +1304,7 @@ class bhl_controller extends projects_controller
 
                 self::project_article_adjustments($params);
                 
-                echo "<br>[$new_title]<br>";
+                // echo "<br>new title after move: [$new_title]<br>";
                 
                 //make a fresh cache
                 $no_use = self::get_wiki_text($new_title, array("expire_seconds" => true)); //force cache expires
