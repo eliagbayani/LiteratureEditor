@@ -489,11 +489,13 @@ class bhl_controller extends projects_controller
     
     function review_excerpt_project($params)
     {
+        $str = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        
         if(@$params['overwrite'])
         {
             $url = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/wiki/" . $params['wiki_title'];
             // http://editors.eol.xxx/LiteratureEditor/wiki/16194361_5e05173f317d6f9f35dd954c87bef5ce
-            $str = " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | <a href='$url'>View Wiki</a>";
+            $str .= " | <a href='$url'>View Wiki</a>";
             
             //start move24harvest ============
             $wiki_status = self::page_status($params['wiki_title'], true); //true means projects
@@ -532,7 +534,6 @@ class bhl_controller extends projects_controller
             }
             
         }
-        else $str = "";
 
         if($params['search_type'] == "move2wiki") // from wiki OR from article list
         {
@@ -542,13 +543,13 @@ class bhl_controller extends projects_controller
             }
         }
         
+        if(@$params['overwrite'] == 1)
+        {
+            //http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?wiki_title=Active_Projects:My_Project&search_type=wiki2php_project&overwrite=1
+            $str .= " | <a href='index.php?wiki_title=" . $params['wiki_title'] . "&search_type=wiki2php_project&overwrite=1'>Refresh</a>";
+        }
         
-        //http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?wiki_title=Active_Projects:My_Project&search_type=wiki2php_project&overwrite=1
-        $str .= " | <a href='index.php?wiki_title=" . $params['wiki_title'] . "&search_type=wiki2php_project&overwrite=1'>Refresh</a>";
-        
-        
-        
-        $str .= " |";
+        if($str != "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") $str .= " |";
         echo "<u>Project Information</u>" . " <i>$str</i><br><br>";
         echo "<b>Project name</b>: " . $params['proj_name']  . "<br><br>";
         echo "<b>Description</b>: " . $params['proj_desc']  . "<br><br>";

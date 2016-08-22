@@ -7,6 +7,7 @@ class projects_controller
     {
     }
 
+    // ----------------------------------- article-project adjustments -------------------- start
     function project_article_adjustments($params) //when moving files
     {
         //start update project when article is moved while the article is assigned to a project ------------
@@ -145,6 +146,7 @@ class projects_controller
             }
         }
     }
+    // ----------------------------------- article-project adjustments -------------------- end
 
     function is_eli()
     {
