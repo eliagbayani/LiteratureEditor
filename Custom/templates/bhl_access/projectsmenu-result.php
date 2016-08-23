@@ -57,21 +57,9 @@ elseif($params['radio'] == "proj_my")
 <div id="accordion_open">
     <h3><?php echo $str ?></h3>
     <div>
+
         <?php
-        // echo "<pre>"; print_r($params); echo "</pre>";
-        if($params['radio'] == "proj_start")
-        {
-            if(isset($params['proj_name']) && !isset($params['overwrite'])) //does not go here anymore...
-            {
-                exit("<br>goes here...<br>");
-                self::move2wiki_project($params);
-            }
-            else
-            {
-                require_once("../templates/bhl_access/proj-start-form.php"); //print self::render_layout(@$params, 'proj-start-form')
-            }
-        }
-        elseif(in_array($params['radio'], array("proj_active", "proj_comp", "proj_my")))
+        if(in_array($params['radio'], array("proj_active", "proj_comp", "proj_my")))
         {
             if($rows)
             {
@@ -80,6 +68,38 @@ elseif($params['radio'] == "proj_my")
                 print self::render_template('article-table', array('data' => @$data));
             }
         }
+        elseif($params['radio'] == "proj_start")
+        {
+            ?>
+            <div id="tabs">
+                <ul>
+                    <li><a href="#tabs-1">Details</a></li>
+                    <!--- <li><a href="#tabs-2">Articles</a></li> --->
+                </ul>
+                <div id="tabs-1">
+                    <?php
+                    if(isset($params['proj_name']) && !isset($params['overwrite'])) //does not go here anymore...
+                    {
+                        exit("<br>goes here...<br>");
+                        self::move2wiki_project($params);
+                    }
+                    else
+                    {
+                        require_once("../templates/bhl_access/proj-start-form.php"); //print self::render_layout(@$params, 'proj-start-form')
+                    }
+                    ?>
+                </div>
+                <!--- <div id="tabs-2"></div> --->
+            </div>
+            <?php
+            
+        }
         ?>
+
+
+
+
+
+
     </div>
 </div>

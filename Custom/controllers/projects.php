@@ -7,6 +7,49 @@ class projects_controller
     {
     }
 
+    function prepare_proj_articles_list($articles, $wiki_status)
+    {
+        $download_params = array("expire_seconds" => false); //original; if working then this brings best performance
+        $articles = explode(";", $articles);
+        $articles = array_map("trim", $articles);
+        $articles = array_filter($articles);
+        // echo "<pre>"; print_r($articles); echo "</pre>";
+        $recs = array();
+        foreach($articles as $article)
+        {
+            $info = bhl_controller::get_wiki_text($article, $download_params); //before cache expires in 24 hrs (86400 seconds), NOW it doesn't expire anymore, each record's cache is refreshed on save.
+            $params = bhl_controller::get_void_part($info['content']);
+            if(strpos($article, "ForHarvesting")  !== false) $status = "{Approved}";//string is found
+            else                                             $status = "{Draft}";
+
+            if($status != $wiki_status) continue;
+            
+            /*
+            if(!$projects)
+            {
+                if(!$params['header_title']) continue; //to exclude the likes of "Main Page"
+            }
+            if($book_title)
+            {
+                if($book_title != $params['header_title']) continue;
+            }
+            if($username)
+            {
+                if(!in_array($username, self::usernames_from_compiler($params['compiler']))) continue;
+            }
+            */
+            
+            $info['title']        = str_replace("_", " ", $article);
+            $info['title']        = $article;
+            $info['compiler']     = bhl_controller::disp_compiler($params['compiler']);
+            $info['content']      = ""; //erased content, just too big for memory
+            $info['subject_type'] = bhl_controller::get_subject_desc($params['subject_type']);
+            $info['header_title'] = $params['header_title'];
+            $recs[] = $info;
+        }
+        return array("total" => count($articles), "recs" => $recs);
+    }
+
     // ----------------------------------- article-project adjustments -------------------- start
     function project_article_adjustments($params) //when moving files
     {
