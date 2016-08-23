@@ -64,11 +64,13 @@ class bhl_controller extends projects_controller
             // $this->compiler = "<span class=\'plainlinks\'>[$url {$realname}]</span>";
             $this->compiler = "[$url {$realname}]";
 
+            // /*
             if(self::is_eli())
             {
                 if(!isset($_SESSION["title_list_cache_YN_draft"])) echo "<br>SESSION is set<br>"; //debug
                 else                                               echo "<br>SESSION is ALREADY set<br>"; //debug
             }
+            // */
 
             if(!isset($_SESSION["title_list_cache_YN_draft"]))
             {
@@ -554,8 +556,10 @@ class bhl_controller extends projects_controller
         echo "<b>Project name</b>: " . $params['proj_name']  . "<br><br>";
         echo "<b>Description</b>: " . $params['proj_desc']  . "<br><br>";
         echo "<b>Compiler</b>: " . self::disp_compiler(@$params['compiler']) . "<br><br>";
-        echo "<b>Articles</b>: [" . @$params['articles']  . "]<br><br>";
         
+        
+        // /* good debug info!
+        echo "<b>Articles</b>: [" . @$params['articles']  . "]<br><br>";
         // http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php?wiki_title=ForHarvesting:16194405_ae66e9b6f430af7e694cad4cf1d6f295&search_type=wiki2php&overwrite=1
         if($articles = @$params['articles'])
         {
@@ -566,6 +570,7 @@ class bhl_controller extends projects_controller
                 echo "<br><a href='index.php?wiki_title=" . $article . "&search_type=wiki2php&overwrite=1'>$article</a>";
             }
         }
+        // */
         
     }
     
@@ -1141,7 +1146,7 @@ class bhl_controller extends projects_controller
         return false;
     }
 
-    // function is_eli()
+    // function is_eli() --- moved to projects controller
     // {
     //     if($_COOKIE['wiki_literatureeditorUserName'] == "EAgbayani") return true;
     //     else return false;
