@@ -18,7 +18,7 @@
         )
         
     */
-    echo "<pre>"; print_r($params); echo "</pre>"; //exit;
+    // echo "<pre>"; print_r($params); echo "</pre>"; //exit;
     $info = self::get_wiki_text($params['wiki_title']);
     $wiki_text = $info['content'];
     if(!$wiki_text)

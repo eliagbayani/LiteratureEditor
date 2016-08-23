@@ -6,7 +6,6 @@ if($val = @$params['book_title'])
 {
     $rek = self::list_titles_by_type($type, $val);
     // echo "<pre>"; print_r($rek); echo "</pre>";
-
     $rows = $rek['recs'];
 }
 else $rows = array();
