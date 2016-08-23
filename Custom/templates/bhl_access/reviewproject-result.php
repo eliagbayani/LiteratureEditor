@@ -23,7 +23,6 @@
                 $table_id = "approved";
                 require("project_info_articles.php")
             ?></div>
-            
         </div>
     </div>
 </div>

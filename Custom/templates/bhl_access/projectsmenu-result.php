@@ -13,7 +13,7 @@ switch ($params['radio']) {
                 if(@$params['overwrite'] == 1) $str = "Edit an existing project";
                 else                           $str = "Edit new project";
             }
-            else                             $str = "Start a new project";
+            else                               $str = "Start a new project";
             break;
         }
     default: $str = ""; break;
@@ -36,28 +36,15 @@ elseif($params['radio'] == "proj_comp")
 }
 elseif($params['radio'] == "proj_my")
 {
-    /* working but using cookie is shorter
-    // [http://editors.eol.localhost/LiteratureEditor/wiki/User:EAgbayani Eli E. Agbayani]
-    if(preg_match("/User:(.*?) /ims", $this->compiler, $arr))
-    {
-        $username = $arr[1];
-        echo "<br>username is: [$username] " . $_COOKIE['wiki_literatureeditorUserName'] . "<br>";
-        $rows = self::list_titles_by_type('all_projects', false, true, $username); //2nd param is book_title, 3rd param is boolean $projects, 4th param is logged-in username
-        $str .= " = " . count($rows);
-    }
-    */
-    
     $username = $_COOKIE[MW_DBNAME.'UserName'];
     $rek = self::list_titles_by_type('all_projects', false, true, $username); //2nd param is book_title, 3rd param is boolean $projects, 4th param is logged-in username
     $rows = $rek['recs'];
-    
     $str .= " = " . count($rows);
 }
 ?>
 <div id="accordion_open">
     <h3><?php echo $str ?></h3>
     <div>
-
         <?php
         if(in_array($params['radio'], array("proj_active", "proj_comp", "proj_my")))
         {
@@ -92,14 +79,7 @@ elseif($params['radio'] == "proj_my")
                 <!--- <div id="tabs-2"></div> --->
             </div>
             <?php
-            
         }
         ?>
-
-
-
-
-
-
     </div>
 </div>
