@@ -12,7 +12,6 @@ Group _www
 
 --------------------------------------
 
-
 * navigation
 ** mainpage|mainpage-description
 ** http://editors.eol.localhost/LiteratureEditor/Custom/bhl_access/index.php|Search BHL
@@ -35,3 +34,10 @@ Group _www
 * SEARCH
 * TOOLBOX
 * LANGUAGES
+
+--------------------------------------
+
+BHL Google Doc:
+https://docs.google.com/drawings/d/1XN-U069GQ_TsYSBptcvYpgAmc-xoTq0NBUnp7V-vMO0/edit
+
+--------------------------------------
