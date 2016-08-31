@@ -1,5 +1,9 @@
-INSTALLING CKAN from source: Mac OS X Yosemite (ver. 10.10.5) {http://docs.ckan.org/en/latest/maintaining/installing/install-from-source.html}
+login for local CKAN on Mac
+username = eagbayani
+pw = eli3
 
+====================================================================================
+INSTALLING CKAN from source: Mac OS X Yosemite (ver. 10.10.5) {http://docs.ckan.org/en/latest/maintaining/installing/install-from-source.html}
 ====================================================================================
 I. Install the required packages:
 sudo apt-get install python-dev postgresql libpq-dev python-pip python-virtualenv git-core solr-jetty openjdk-6-jdk
@@ -28,6 +32,14 @@ To have launchd start postgresql now and restart at login:
   brew services start postgresql
 Or, if you don't want/need a background service you can just run:
   postgres -D /usr/local/var/postgres
+
+How to get the postgresql version:
+Server version:
+$ pg_config --version
+
+Client version:
+$ psql --version
+
 ————————————————————————————
 3. libpq-dev
 3.1. brew install libpq-dev {X didn’t work, a possible solution here: http://stackoverflow.com/questions/10132274/install-libpq-dev-on-mac-os-x}
@@ -81,19 +93,13 @@ alternative that works: https://github.com/ckan/ckan/wiki/How-to-Install-CKAN-1.
 To have launchd start solr now and restart at login		 : brew services start solr
 Or, if you don't want/need a background service you can just run : solr start
 
-
-these 3 lines were not used, but was tempted since latest solr doesn’t have schema.xml anymore. While CKAN install docs mentions of solr’s schema.xml
-brew tap homebrew/versions
-brew install solr14
-brew untap homebrew/versions
-
 ————————————————————————————
 8. openjdk-6-jdk
-My Mac OS X seems to have Java already.
+My Mac OS X seems to have Java already. Didn’t do anything here as far as CKAN.
+
 You can leverage the java_home helper binary on OS X for what you're looking for.
 To list all versions of installed JDK:	 
 $ /usr/libexec/java_home -V
-
 More here: http://stackoverflow.com/questions/14292698/how-to-check-if-java-jdk-installed-on-mac
 ————————————————————————————
 
@@ -212,6 +218,84 @@ To fix problem of missing sanitizer from html5lib. From backtrace: “ImportErro
 #be sure it has only seven 9’s
 $ pip install html5lib==0.9999999
 ====================================================================================
+VII. Set up the DataStore
+
+1. Enable the plugin. Edit CKAN config file
+ckan.plugins = datastore
+
+2. Set-up the database
+
+a. Create users and databases
+
+a.1 Create a ckan_default user
+$ sudo -u eliagbayani createuser -S -D -R -P ckan_default
+$ sudo -u eliagbayani createuser -S -D -R -P -l ckan_default
+
+a.2 Create a database_user called datastore_default.
+sudo -u eliagbayani createuser -S -D -R -P -l datastore_default
+Enter password for new role: eli
+Enter it again: eli
+
+a.3 Create the database (owned by ckan_default), which we’ll call datastore_default:
+sudo -u eliagbayani createdb -O ckan_default datastore_default -E utf-8
+
+b. Set URLs
+
+b.1 Edit config file:
+ckan.datastore.write_url = postgresql://ckan_default:eli@localhost/datastore_default
+ckan.datastore.read_url = postgresql://datastore_default:eli@localhost/datastore_default
+
+c. Set permissions
+I did a couple of work-arounds here:
+
+c.1 Make eliagbayani as postgres superuser:
+Open psql console:
+$ psql -h localhost -p 5432 -U eliagbayani postgres
+
+Make user a superuser: Login to console then run:
+# ALTER USER eliagbayani WITH SUPERUSER;
+
+Exit from psql
+# \q
+
+c.2 Paste the result of this command:
+$ paster --plugin=ckan datastore set-permissions -c /etc/ckan/default/development.ini
+… to psql console where a superuser is logged-in.
+
+
+
+====================================================================================
+
+====================================================================================
+
+VIII. Link to who.ini
+
+====================================================================================
+IX. You’re done!
+
+cd /usr/lib/ckan/default/src/ckan
+paster serve /etc/ckan/default/development.ini
+
+====================================================================================
+
+
+
+
+Testing CKAN
+
+Back-end tests
+
+Install additional dependencies
+$ . /usr/lib/ckan/default/bin/activate
+$ pip install -r /usr/lib/ckan/default/src/ckan/dev-requirements.txt
+
+Set up the test databases
+sudo -u eliagbayani createdb -O ckan_default ckan_test -E utf-8
+sudo -u eliagbayani createdb -O ckan_default datastore_test -E utf-8
+paster datastore set-permissions -c test-core.ini | sudo -u postgres psql
+
+
+
 
 
 
