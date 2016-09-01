@@ -1,6 +1,20 @@
 login for local CKAN on Mac
-username = eagbayani
+username = eagbayani and eliagbayani
 pw = eli3
+
+
+brew tap homebrew/versions
+brew install solr14
+brew untap homebrew/versions
+
+API Guide:
+http://docs.ckan.org/en/latest/api/index.html
+SysAdmin Guide:
+http://docs.ckan.org/en/latest/sysadmin-guide.html
+
+rebuild solr index:
+paster --plugin=ckan search-index rebuild --config=/etc/ckan/default/development.ini
+
 
 ====================================================================================
 INSTALLING CKAN from source: Mac OS X Yosemite (ver. 10.10.5) {http://docs.ckan.org/en/latest/maintaining/installing/install-from-source.html}
@@ -32,6 +46,9 @@ To have launchd start postgresql now and restart at login:
   brew services start postgresql
 Or, if you don't want/need a background service you can just run:
   postgres -D /usr/local/var/postgres
+Restart postgres
+  brew services restart postgresql
+
 
 How to get the postgresql version:
 Server version:
@@ -40,6 +57,8 @@ $ pg_config --version
 Client version:
 $ psql --version
 
+How to check if postgresql is running: 
+$ lsof -i:5432
 ————————————————————————————
 3. libpq-dev
 3.1. brew install libpq-dev {X didn’t work, a possible solution here: http://stackoverflow.com/questions/10132274/install-libpq-dev-on-mac-os-x}
@@ -220,7 +239,7 @@ $ pip install html5lib==0.9999999
 ====================================================================================
 VII. Set up the DataStore
 
-1. Enable the plugin. Edit CKAN config file
+1. Enable the plugin. Edit CKAN config file (development.ini)
 ckan.plugins = datastore
 
 2. Set-up the database
@@ -241,7 +260,7 @@ sudo -u eliagbayani createdb -O ckan_default datastore_default -E utf-8
 
 b. Set URLs
 
-b.1 Edit config file:
+b.1 Edit config file: development.ini
 ckan.datastore.write_url = postgresql://ckan_default:eli@localhost/datastore_default
 ckan.datastore.read_url = postgresql://datastore_default:eli@localhost/datastore_default
 
@@ -269,6 +288,8 @@ $ paster --plugin=ckan datastore set-permissions -c /etc/ckan/default/developmen
 ====================================================================================
 
 VIII. Link to who.ini
+
+ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
 
 ====================================================================================
 IX. You’re done!
