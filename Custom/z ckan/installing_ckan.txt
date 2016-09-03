@@ -16,6 +16,14 @@ rebuild solr index:
 paster --plugin=ckan search-index rebuild --config=/etc/ckan/default/development.ini
 
 
+sudo port install solr4 	{this didn’t work in Mac OS}
+sudo port install apache-solr4	{this worked OK} -> this helped: All about MacPorts: http://blog.kicaj.com/installing-macports/
+
+
+All about HomeBrew: https://coolestguidesontheplanet.com/installing-homebrew-on-os-x-el-capitan-10-11-package-manager-for-unix-apps/
+
+
+
 ====================================================================================
 INSTALLING CKAN from source: Mac OS X Yosemite (ver. 10.10.5) {http://docs.ckan.org/en/latest/maintaining/installing/install-from-source.html}
 ====================================================================================
@@ -32,6 +40,7 @@ sudo {brew} install 	python-dev
 			git-core 
 			solr-jetty 
 			openjdk-6-jdk
+
 ————————————————————————————
 1. python-dev
 1.1. brew install python
@@ -95,7 +104,7 @@ $ pip install virtualenv
 *I seem to have this already, so I just ignored it.
 ————————————————————————————
 7. solr-jetty
-a. brew install solr-jetty {X didn’t work}
+brew install solr-jetty {X didn’t work}
 
 alternative that works: https://github.com/ckan/ckan/wiki/How-to-Install-CKAN-1.7-on-OS-X-10.7-Lion
 ..that is to install jetty and solr separately:
@@ -183,7 +192,6 @@ site_url
 ====================================================================================
 V. Setup Solr
 
-
 ——————————————— start — didn’t work for me
 1. Edit the Jetty configuration file (/etc/default/jetty) and change the following variables:
 
@@ -198,6 +206,8 @@ sudo ln -s ~/ckan/lib/default/src/ckan/ckan/config/solr/schema.xml /usr/local/Ce
 *Solr 6.1.0 doesn’t have schema.xml. I just copied one from CKAN, then mv it to schema.xml.bak. Then symlink it.
 ——————————————— end — didn’t work for me
 
+
+——————————————— start — almost worked but not quite…
 
 Another way of seeting up Solr: ONE THAT WORKS!
 
@@ -222,7 +232,33 @@ service solr restart
 3. Edit CKAN development.ini
 
 solr_url = http://localhost:8983/solr/ckan1
+——————————————— end — almost worked but not quite…
 
+
+——————————————— start — Finally one that actually works!!!
+5.1 That is installing Solr 4.10.4 using MacPorts:
+$ sudo port install apache-solr4
+Warning: The Xcode Command Line Tools don't appear to be installed; most ports will likely fail to build.
+Warning: Install them by running `xcode-select --install'.
+--->  Fetching archive for apache-solr4
+--->  Attempting to fetch apache-solr4-4.10.4_0.darwin_14.noarch.tbz2 from https://packages.macports.org/apache-solr4
+      [                                        ]   6.7 %        speed: 48.8 KiB/s   
+--->  Attempting to fetch apache-solr4-4.10.4_0.darwin_14.noarch.tbz2 from http://sea.us.packages.macports.org/macports/packages/apache-solr4
+--->  Attempting to fetch apache-solr4-4.10.4_0.darwin_14.noarch.tbz2.rmd160 from http://sea.us.packages.macports.org/macports/packages/apache-solr4
+--->  Installing apache-solr4 @4.10.4_0
+--->  Activating apache-solr4 @4.10.4_0
+To try apache-solr4, run 'sudo solr4' and open http://localhost:8983/solr/collection1/browse.
+To store sample documents, run 'cd /opt/local/share/java/solr-4.10.4/example/exampledocs && ./post.sh *.xml'.
+--->  Cleaning apache-solr4
+--->  Updating database of binaries
+
+5.2 Do the symplink:
+mv /opt/local/share/java/solr-4.10.4/example/solr/collection1/conf/schema.xml /opt/local/share/java/solr-4.10.4/example/solr/collection1/conf/schema.xml.orig
+ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /opt/local/share/java/solr-4.10.4/example/solr/collection1/conf/schema.xml
+
+5.3 Edit CKAN development.ini
+solr_url = http://localhost:8983/solr
+——————————————— end — Finally one that actually works!!!
 
 ====================================================================================
 VI. Create database tables
