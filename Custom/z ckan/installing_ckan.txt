@@ -20,6 +20,23 @@ All about HomeBrew: https://coolestguidesontheplanet.com/installing-homebrew-on-
 
 ———————————————————————————————
 
+
+====================================================================================
+TESTING setup of DataStore
+curl -X GET "http://127.0.0.1:5000/api/3/action/datastore_search?resource_id=_table_metadata"
+
+EliAgbayani API Key: 0b5022e7-2497-4f7e-9541-c02e77c18318
+
+curl -X POST http://127.0.0.1:5000/api/3/action/datastore_create -H "Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318" -d '{"resource": {"package_id": "d7a72876-f994-4bf3-9cf2-216c4fa41138"}, "fields": [ {"id": "sciname"}, {"id": "vernacular"} ], "records": [ { "sciname": "Gadus morhua", "vernacular": "atlantic code"}, {"sciname": "Chanos chanos", "vernacular": "bangus"} ]}'
+
+curl -X POST http://127.0.0.1:5000/api/3/action/datastore_create -H "Authorization: {YOUR-API-KEY}" -d '{"resource": {"package_id": "{PACKAGE-ID}"}, "fields": [ {"id": "a"}, {"id": "b"} ], "records": [ { "a": 1, "b": "xyz"}, {"a": 2, "b": "zzz"} ]}'
+
+http://127.0.0.1:5000/api/3/action/datastore_search?resource_id=ea2cf409-8465-4a09-b48a-30a8ec07288b
+-> use resource_id from result above
+====================================================================================
+
+
+
 ====================================================================================
 INSTALLING DataPusher
 ====================================================================================
@@ -32,10 +49,46 @@ pip install -e .
 3.
 python datapusher/main.py deployment/datapusher_settings.py
 
+FIXES on DataPusher
+https://github.com/bcgov/ckan/commit/241aa38504cc49984cedcd710f8327b3f6eafaab
+-> this will fix the infinite datapushing
+-> this is to edit these 2 files (that is to use str(datetime.datetime.utcnow() instead of str(datetime.datetime.now())
+ckanext/datapusher/logic/action.py
+ckanext/datapusher/tests/test_action.py
+
+
+#added by Eli, edit datapusher_settings.py
+MAX_CONTENT_LENGTH = 10485760 * 10 * 10 #supposedly this is 5 GB
 
 
 ====================================================================================
 INSTALLING FileStore
+sudo mkdir -p /var/lib/ckan/default
+
+ckan.storage_path = /var/lib/ckan/default
+
+sudo chown eliagbayani /var/lib/ckan/default
+->based on my httpd.conf (apache config) my apache user is eliagbayani (not _www)
+
+sudo chgrp _www /var/lib/ckan/default
+-> just me
+
+sudo chmod u+rwx /var/lib/ckan/default
+
+sudo /usr/sbin/apachectl restart
+->restart apache
+
+TESTING FileStore
+
+curl -H'Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318' 'http://127.0.0.1:5000/api/action/resource_create' --form upload=@http://localhost/eol_php_code/applications/content_server/resources/21/taxon.tab --form package_id=d7a72876-f994-4bf3-9cf2-216c4fa41138
+
+curl -H'Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318' 'http://127.0.0.1:5000/api/3/action/resource_create' --form upload=@/var/lib/ckan/default/taxon.tab --form package_id=d7a72876-f994-4bf3-9cf2-216c4fa41138
+
+
+curl -X POST http://127.0.0.1:5000/api/3/action/resource_create -H "Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318" --form upload=@/var/lib/ckan/default/taxon.tab --form package_id=d7a72876-f994-4bf3-9cf2-216c4fa41138 url="http://"
+
+curl -H'Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318' 'http://127.0.0.1:5000/api/3/action/resource_create' --form upload=/var/lib/ckan/default/taxon.tab --form package_id=d7a72876-f994-4bf3-9cf2-216c4fa41138 --form url="http://"
+
 ====================================================================================
 
 
@@ -44,9 +97,7 @@ RUNNING Tests
 
 deactivate
 . /usr/lib/ckan/default/bin/activate
-
 cd /usr/lib/ckan/default/src/ckan
-
 nosetests --ckan --with-pylons=test-core.ini ckan ckanext
 nosetests --ckan --reset-db --with-pylons=test-core.ini ckan
 
