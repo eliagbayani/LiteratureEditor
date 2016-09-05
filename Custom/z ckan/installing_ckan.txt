@@ -1,27 +1,56 @@
 login for local CKAN on Mac
 username = eagbayani and eliagbayani
 pw = eli3
+———————————————————————————————
+API Guide:	http://docs.ckan.org/en/latest/api/index.html
+SysAdmin Guide:	http://docs.ckan.org/en/latest/sysadmin-guide.html
 
-
-brew tap homebrew/versions
-brew install solr14
-brew untap homebrew/versions
-
-API Guide:
-http://docs.ckan.org/en/latest/api/index.html
-SysAdmin Guide:
-http://docs.ckan.org/en/latest/sysadmin-guide.html
-
-rebuild solr index:
-paster --plugin=ckan search-index rebuild --config=/etc/ckan/default/development.ini
-
+rebuild solr index:	paster --plugin=ckan search-index rebuild --config=/etc/ckan/default/development.ini
+———————————————————————————————
 
 sudo port install solr4 	{this didn’t work in Mac OS}
 sudo port install apache-solr4	{this worked OK} -> this helped: All about MacPorts: http://blog.kicaj.com/installing-macports/
 
+———————————————————————————————
 
 All about HomeBrew: https://coolestguidesontheplanet.com/installing-homebrew-on-os-x-el-capitan-10-11-package-manager-for-unix-apps/
 
+———————————————————————————————
+
+
+———————————————————————————————
+
+====================================================================================
+INSTALLING DataPusher
+====================================================================================
+1. 
+git clone https://github.com/ckan/datapusher
+cd datapusher
+2.
+pip install -r requirements.txt
+pip install -e .
+3.
+python datapusher/main.py deployment/datapusher_settings.py
+
+
+
+====================================================================================
+INSTALLING FileStore
+====================================================================================
+
+
+====================================================================================
+RUNNING Tests
+
+deactivate
+. /usr/lib/ckan/default/bin/activate
+
+cd /usr/lib/ckan/default/src/ckan
+
+nosetests --ckan --with-pylons=test-core.ini ckan ckanext
+nosetests --ckan --reset-db --with-pylons=test-core.ini ckan
+
+====================================================================================
 
 
 ====================================================================================
