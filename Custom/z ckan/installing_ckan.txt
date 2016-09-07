@@ -16,9 +16,35 @@ sudo port install apache-solr4	{this worked OK} -> this helped: All about MacPor
 All about HomeBrew: https://coolestguidesontheplanet.com/installing-homebrew-on-os-x-el-capitan-10-11-package-manager-for-unix-apps/
 
 ———————————————————————————————
+Running CKAN:
+-> run solr from anywhere in command-line
+sudo solr4
 
+-> startup CKAN
+. /usr/lib/ckan/default/bin/activate
+cd /usr/lib/ckan/default/src/ckan
+paster serve /etc/ckan/default/development.ini
 
+-> startup DataPusher
+cd ~/datapusher
+python datapusher/main.py deployment/datapusher_settings.py
 ———————————————————————————————
+
+
+1. CKAN: opendata project
+We now have a stats page: - from the Stats extension
+https://dl.dropboxusercontent.com/u/5763406/ckan/screenshots/Stats.png
+
+http://docs.ckan.org/en/latest/maintaining/stats.html
+http://127.0.0.1:5000/stats#most-create
+
+We now have Page View Tracking:
+https://dl.dropboxusercontent.com/u/5763406/ckan/screenshots/PageViewTracking.png
+http://docs.ckan.org/en/latest/maintaining/tracking.html#tracking
+
+This means:
+- Sorting Datasets by Popularity
+- Highlighting Popular Datasets and Resources
 
 
 ====================================================================================
@@ -60,6 +86,9 @@ ckanext/datapusher/tests/test_action.py
 #added by Eli, edit datapusher_settings.py
 MAX_CONTENT_LENGTH = 10485760 * 10 * 10 #supposedly this is 5 GB
 
+#in development.ini; put 400 MB
+ckan.max_resource_size = 400
+
 
 ====================================================================================
 INSTALLING FileStore
@@ -98,8 +127,8 @@ RUNNING Tests
 deactivate
 . /usr/lib/ckan/default/bin/activate
 cd /usr/lib/ckan/default/src/ckan
-nosetests --ckan --with-pylons=test-core.ini ckan ckanext
 nosetests --ckan --reset-db --with-pylons=test-core.ini ckan
+nosetests --ckan --with-pylons=test-core.ini ckan ckanext
 
 ====================================================================================
 
