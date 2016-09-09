@@ -30,11 +30,11 @@ cd ~/datapusher
 python datapusher/main.py deployment/datapusher_settings.py
 ———————————————————————————————
 
+Installed two more extensions:
 
 1. CKAN: opendata project
 We now have a stats page: - from the Stats extension
 https://dl.dropboxusercontent.com/u/5763406/ckan/screenshots/Stats.png
-
 http://docs.ckan.org/en/latest/maintaining/stats.html
 http://127.0.0.1:5000/stats#most-create
 
@@ -55,13 +55,14 @@ EliAgbayani API Key: 0b5022e7-2497-4f7e-9541-c02e77c18318
 
 curl -X POST http://127.0.0.1:5000/api/3/action/datastore_create -H "Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318" -d '{"resource": {"package_id": "d7a72876-f994-4bf3-9cf2-216c4fa41138"}, "fields": [ {"id": "sciname"}, {"id": "vernacular"} ], "records": [ { "sciname": "Gadus morhua", "vernacular": "atlantic code"}, {"sciname": "Chanos chanos", "vernacular": "bangus"} ]}'
 
+curl -X POST http://127.0.0.1:5000/api/3/action/datastore_create -H "Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318" -d '{"resource": {"package_id": "d7a72876-f994-4bf3-9cf2-216c4fa41138"}, "fields": [{"id": "_id"}, {"id": "sciname"}, {"id": "vernacular"} ], "records": [ { "sciname": "Gadus morhua", "vernacular": "atlantic code"}, {"sciname": "Chanos chanos", "vernacular": "bangus"} ]}'
+
+
 curl -X POST http://127.0.0.1:5000/api/3/action/datastore_create -H "Authorization: {YOUR-API-KEY}" -d '{"resource": {"package_id": "{PACKAGE-ID}"}, "fields": [ {"id": "a"}, {"id": "b"} ], "records": [ { "a": 1, "b": "xyz"}, {"a": 2, "b": "zzz"} ]}'
 
 http://127.0.0.1:5000/api/3/action/datastore_search?resource_id=ea2cf409-8465-4a09-b48a-30a8ec07288b
 -> use resource_id from result above
 ====================================================================================
-
-
 
 ====================================================================================
 INSTALLING DataPusher
@@ -109,17 +110,20 @@ sudo /usr/sbin/apachectl restart
 
 TESTING FileStore
 
-curl -H'Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318' 'http://127.0.0.1:5000/api/action/resource_create' --form upload=@http://localhost/eol_php_code/applications/content_server/resources/21/taxon.tab --form package_id=d7a72876-f994-4bf3-9cf2-216c4fa41138
+worked OK: after which go to [DataStore] then click button "Upload to DataStore".
+curl -X POST http://127.0.0.1:5000/api/3/action/resource_create -H "Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318" --form upload=@/var/lib/ckan/default/taxon.tab --form package_id=d7a72876-f994-4bf3-9cf2-216c4fa41138 --form url="http://" --form name="elix"
 
-curl -H'Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318' 'http://127.0.0.1:5000/api/3/action/resource_create' --form upload=@/var/lib/ckan/default/taxon.tab --form package_id=d7a72876-f994-4bf3-9cf2-216c4fa41138
-
-
-curl -X POST http://127.0.0.1:5000/api/3/action/resource_create -H "Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318" --form upload=@/var/lib/ckan/default/taxon.tab --form package_id=d7a72876-f994-4bf3-9cf2-216c4fa41138 url="http://"
-
-curl -H'Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318' 'http://127.0.0.1:5000/api/3/action/resource_create' --form upload=/var/lib/ckan/default/taxon.tab --form package_id=d7a72876-f994-4bf3-9cf2-216c4fa41138 --form url="http://"
+Note: upload=@ -> cannot use http://; should only be directory path not URL
 
 ====================================================================================
+API usage: http://giv-oct.uni-muenster.de/dev-corner/data/storage/datastore-create/
 
+adding of records to an existing resource:
+curl -X POST http://127.0.0.1:5000/api/3/action/datastore_upsert -H "Authorization: 0b5022e7-2497-4f7e-9541-c02e77c18318" -d '{"resource_id": "62801a12-1077-4980-a414-5dbf1f7a5270", "method": "upsert", "records": [ {"sciname": "sciname5", "vernacular": "ver2"}, {"sciname": "sciname2", "vernacular": "ver3"} ],"force": "True", "method": "insert"}'
+
+
+More API usage for resource/dataset maintenance: https://gist.github.com/mheadd/a9bb37a51972cbff8ae0
+Config File Options: http://docs.ckan.org/en/ckan-2.2.3/configuration.html#storage-settings
 
 ====================================================================================
 RUNNING Tests
@@ -156,6 +160,17 @@ sudo {brew} install 	python-dev
 	python --version
 	which python
 1.2. brew linkapps python
+
+* when uploading zip file, I encounterd the need for libmagic.
+I encountered this error in DataPusher:
+ImportError: failed to find libmagic.  Check your installation
+
+Installing libmagic: http://www.brambraakman.com/blog/comments/installing_libmagic_in_mac_os_x_for_python-magic/
+$ brew install libmagic
+
+==> Pouring libmagic-5.28.yosemite.bottle.tar.gz
+  /usr/local/Cellar/libmagic/5.28: 288 files, 5.3M
+
 ————————————————————————————
 2. postgresql
 2.1. brew install postgresql
@@ -181,18 +196,18 @@ $ lsof -i:5432
 3. libpq-dev
 3.1. brew install libpq-dev {X didn’t work, a possible solution here: http://stackoverflow.com/questions/10132274/install-libpq-dev-on-mac-os-x}
 
-*This seems to be installed already using “brew install postgresql” based here: http://superuser.com/questions/296873/install-libpq-dev-on-mac-os
+*This seems to be installed already using "brew install postgresql" based here: http://superuser.com/questions/296873/install-libpq-dev-on-mac-os
 
 ————————————————————————————
 4. python-pip
 4.1. brew install python-pip {X didn’t work.}
 
-alternative that works: ‘sudo easy_install pip’ based on: “http://stackoverflow.com/questions/17271319/installing-pip-on-mac-os-x”
+alternative that works: ‘sudo easy_install pip’ based on: "http://stackoverflow.com/questions/17271319/installing-pip-on-mac-os-x"
 ————————————————————————————
 5. python-virtualenv
 5.1. brew install python-virtualenv {X didn’t work.}
 
-alternative that works: ‘pip install virtualenv’ based on “http://www.marinamele.com/2014/05/install-python-virtualenv-virtualenvwrapper-mavericks.html”
+alternative that works: ‘pip install virtualenv’ based on "http://www.marinamele.com/2014/05/install-python-virtualenv-virtualenvwrapper-mavericks.html"
 
 Install Xcode and Homebrew:
 1. $ xcode-select --install
@@ -321,7 +336,7 @@ sudo ln -s ~/ckan/lib/default/src/ckan/ckan/config/solr/schema.xml /usr/local/Ce
 Another way of seeting up Solr: ONE THAT WORKS!
 
 mkdir /usr/local/Cellar/solr/6.1.0/server/solr/ckan1
--> “ckan1" is an arbitrary name for the (single) solr-"core"
+-> "ckan1" is an arbitrary name for the (single) solr-"core"
 
 touch /usr/local/Cellar/solr/6.1.0/server/solr/ckan1/core.properties
 
@@ -378,7 +393,7 @@ cd /usr/lib/ckan/default/src/ckan
 paster db init -c /etc/ckan/default/development.ini
 
 
-To fix problem of missing sanitizer from html5lib. From backtrace: “ImportError: No module named sanitizer”
+To fix problem of missing sanitizer from html5lib. From backtrace: "ImportError: No module named sanitizer"
 #be sure it has only seven 9’s
 $ pip install html5lib==0.9999999
 ====================================================================================
