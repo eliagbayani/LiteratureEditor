@@ -65,7 +65,7 @@ http://127.0.0.1:5000/api/3/action/datastore_search?resource_id=ea2cf409-8465-4a
 ====================================================================================
 
 ====================================================================================
-INSTALLING DataPusher
+INSTALLING DataPusher (Development purposes)
 ====================================================================================
 1. 
 git clone https://github.com/ckan/datapusher
@@ -181,7 +181,6 @@ Or, if you don't want/need a background service you can just run:
   postgres -D /usr/local/var/postgres
 Restart postgres
   brew services restart postgresql
-
 
 How to get the postgresql version:
 Server version:
@@ -441,12 +440,7 @@ c.2 Paste the result of this command:
 $ paster --plugin=ckan datastore set-permissions -c /etc/ckan/default/development.ini
 … to psql console where a superuser is logged-in.
 
-
-
 ====================================================================================
-
-====================================================================================
-
 VIII. Link to who.ini
 
 ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
@@ -474,30 +468,3 @@ Set up the test databases
 sudo -u eliagbayani createdb -O ckan_default ckan_test -E utf-8
 sudo -u eliagbayani createdb -O ckan_default datastore_test -E utf-8
 paster datastore set-permissions -c test-core.ini | sudo -u postgres psql
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
