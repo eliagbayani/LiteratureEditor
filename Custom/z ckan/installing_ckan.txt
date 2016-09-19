@@ -3,6 +3,7 @@ username = eagbayani and eliagbayani
 pw = eli3
 ———————————————————————————————
 API Guide:	http://docs.ckan.org/en/latest/api/index.html
+API calls examples: https://gist.github.com/mheadd/a9bb37a51972cbff8ae0
 SysAdmin Guide:	http://docs.ckan.org/en/latest/sysadmin-guide.html
 
 rebuild solr index:	paster --plugin=ckan search-index rebuild --config=/etc/ckan/default/development.ini
