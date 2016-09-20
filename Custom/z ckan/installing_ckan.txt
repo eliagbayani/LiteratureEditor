@@ -68,6 +68,34 @@ http://127.0.0.1:5000/api/3/action/datastore_search?resource_id=ea2cf409-8465-4a
 ====================================================================================
 INSTALLING DataPusher (Development purposes)
 ====================================================================================
+sudo apt-get install python-dev 	{done previously}
+                     python-virtualenv 	{done previously}
+		     build-essential libxslt1-dev libxml2-dev 
+		     git		{done previously}
+
+brew install build-essential
+-> didn’t work
+-> this is already installed in Mac when you installed XCode based here:
+http://stackoverflow.com/questions/38086451/how-to-install-brew-essential-library-on-max
+
+These two:
+	brew install libxslt1-dev 
+	brew install libxml2-dev
+…are replaced by these 3:
+
+$ brew install libxslt
+echo /usr/local/opt/libxslt/lib/python2.7/site-packages >> /usr/local/lib/python2.7/site-packages/libxslt.pth
+mkdir -p 
+echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> homebrew.pth
+
+$ brew install libxml2
+
+$ sudo STATIC_DEPS=true sudo pip install lxml
+
+
+————————————————————————
+
+
 1. 
 git clone https://github.com/ckan/datapusher
 cd datapusher
