@@ -32,7 +32,7 @@
     <div id="tabs_main-5">Loading...</div>
     <div id="tabs_main-6">Loading...</div>
     <div id="tabs_main-7">Loading...</div>
-    <div id="tabs_main-8">Loading...</div>
+    <div id="tabs_main-8">-Not yet available-</div>
 </div>
 <?php 
     $back = "http://" . $_SERVER['SERVER_NAME'] . "/" . MEDIAWIKI_MAIN_FOLDER . "/";
@@ -43,7 +43,7 @@
 <script>
 function other_clicked() { location.href = '<?php echo $other ?>'; }
 function tab7_clicked() { location.href = '<?php echo $article_list ?>'; }
-function tab8_clicked() { location.href = '<?php echo $projects ?>'; }
+// works OK function tab8_clicked() { location.href = '<?php echo $projects ?>'; }
 
 function tab4_clicked() 
 { 
