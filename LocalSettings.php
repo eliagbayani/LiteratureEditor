@@ -490,3 +490,5 @@ $wgEnableWriteAPI = true;
 /* helpful cookie variable
 print_r($_COOKIE);
 */
+// $wgShowSQLErrors = 1;
+

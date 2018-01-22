@@ -1,7 +1,7 @@
 <?php
 //=== for archive ===
 // /*
-$conf['wgServer']           = "http://editors.eol.org";
+$conf['wgServer']           = "https://editors.eol.org";
 
 // database
 $conf['wgDBuser']           = "root";

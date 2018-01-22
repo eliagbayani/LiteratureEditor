@@ -26,6 +26,7 @@ define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT']);
 
 define('DEVELOPER_EMAIL', 'eagbayani@eol.org');
 define('EOL_PHP_CODE', 'http://editors.eol.org/eol_php_code/'); //applications/content_server/resources/
+// define('EOL_PHP_CODE', 'http://editors.eol.localhost/eol_php_code/'); //applications/content_server/resources/  //for mac mini
 
 define('MW_DBNAME', 'wiki_literatureeditor');
 // define('MW_DBNAME', 'wiki_literatureeditor_archive');
