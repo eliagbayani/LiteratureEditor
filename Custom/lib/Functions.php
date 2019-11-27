@@ -365,8 +365,12 @@ class Functions
 
     public static function file_rename($oldname, $newname)
     {
+        // return 'eli is here'; //when debugging...
         if($oldname == $newname) return false;
-        if(!self::is_within_folders_where_file_change_is_allowed($oldname)) return false;
+        if(!self::is_within_folders_where_file_change_is_allowed($oldname)) {
+            echo("\nCannot allow file change in this folder ($oldname). Check LiteratureEditor -> Functions lib.\n");
+            return false;
+        }
         
         if(is_file($newname)) unlink($newname);
         elseif(is_dir($newname)) recursive_rmdir($newname);
