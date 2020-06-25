@@ -1,4 +1,5 @@
 <?php require_once("../config/settings.php"); ?>
+<?php exit("<hr>Needs system maintenance.<hr>Contact Eli Agbayani eagbayani@eol.org.<hr>"); ?>
 <!doctype html>
 <html lang="us">
 <head>
@@ -9,7 +10,6 @@
 <body>
 
 <?php
-exit("<hr>Needs system maintenance.<hr>Contact Eli Agbayani eagbayani@eol.org.<hr>");
 $params =& $_GET;
 if(!$params) $params =& $_POST;
 
