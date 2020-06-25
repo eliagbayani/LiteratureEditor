@@ -9,6 +9,7 @@
 <body>
 
 <?php
+exit("<hr>Needs system maintenance.<hr>Contact Eli Agbayani eagbayani@eol.org.<hr>");
 $params =& $_GET;
 if(!$params) $params =& $_POST;
 
