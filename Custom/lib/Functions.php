@@ -388,12 +388,16 @@ class Functions
             self::debug_line("Source file does not exist: [$oldname]");
             return false;
         }
+        return true;
     }
     
     public static function is_within_folders_where_file_change_is_allowed($file)
     {
         $allowed_folders = array('eol_php_code/tmp/', 'eol_php_code/temp/', 'eol_php_code/public/tmp/', 'eol_php_code/applications/content_server/resources/', 
-                                 'eol_php_code/applications/content_server/tmp/'); //allowed folders so far; we can add more.
+                                 'eol_php_code/applications/content_server/tmp/', 
+                                 'Taxonomic_Validation/', 
+                                 'Trait_Data_Import/'
+                                ); //allowed folders so far; we can add more.
         foreach($allowed_folders as $folder)
         {
             if(strpos($file, $folder) !== false) return true;
